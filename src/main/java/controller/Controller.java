@@ -6,6 +6,8 @@
 package controller;
 
 import model.DeckManager;
+import model.GameManager;
+import util.Card;
 
 /**
  *
@@ -14,17 +16,31 @@ import model.DeckManager;
 public class Controller 
 {
     private DeckManager dm;
+    private GameManager gm;
     public Controller()
     {
         dm = new DeckManager();
+        gm = new GameManager();
     }
     
     public void printCards()
     {
         dm.printCards();
     }
-    public int getRandomCard()
+    public int getRandomCard(String who)
     {
-        return dm.getRandomCard();
+        Card c =  dm.getRandomCard();
+        gm.updateScore(c.getValue(), who);
+        return c.getId();
     }
+    public void newGame()
+    {
+        dm.newGame();
+        gm.newGame();
+    }
+    public String getScore(String who)
+    {
+        return gm.getScore(who);
+    }
+            
 }

@@ -40,12 +40,16 @@ public class DeckManager
             c.print();
         }
     }
-    public int getRandomCard()
+    public Card getRandomCard()
     {
         Random rand = new Random();
-        int  n = rand.nextInt(51);
-        int id = deck.getDeck().get(n).getId();
-        deck.deleteCard(id);
-        return id;
+        int  n = rand.nextInt(deck.getDeck().size());
+        Card c = deck.getDeck().get(n);
+        deck.deleteCard(c.getId());
+        return c;
+    }
+    public void newGame()
+    {
+        this.deck = new Deck();
     }
 }

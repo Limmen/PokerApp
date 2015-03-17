@@ -33,17 +33,22 @@ public class MainFrame extends JFrame
     private JPanel Hcard1;
     private JPanel Hcard2;
     private JPanel buttonpanel;
-    private JButton Start;
-    BufferedImage UserCard1;
-    BufferedImage UserCard2;
-    BufferedImage HouseCard1;
-    BufferedImage HouseCard2;
-    JLabel Card1;
-    JLabel Card2;
-    JLabel Card3;
-    JLabel Card4;
-    JLabel House;
-    JLabel You;
+    private JButton Deal;
+    private BufferedImage UserCard1;
+    private BufferedImage UserCard2;
+    private BufferedImage HouseCard1;
+    private BufferedImage HouseCard2;
+    private JLabel Card1;
+    private JLabel Card2;
+    private JLabel Card3;
+    private JLabel Card4;
+    private JLabel House;
+    private JLabel You;
+    private JButton Hit;
+    private JButton Stand;
+    private JButton Restart;
+    private JLabel Score1;
+    private JLabel Score2;
     public MainFrame(Gui gui)
     {
         super("Poker");
@@ -75,37 +80,78 @@ public class MainFrame extends JFrame
         container.add(House, "span 2, align center");
         
         Ucard1 = new JPanel();
-        UserCard1 = getCard();
+        UserCard1 = getCard("user");
         Card1 = new JLabel(new ImageIcon(UserCard1));
         Ucard1.add(Card1);
         container.add(Ucard1, "align center");
         
-        Ucard2 = new JPanel();
-        UserCard2 = getCard();
+        Ucard2 = new JPanel(new MigLayout());
+        UserCard2 = getCard("user");
         Card2 = new JLabel(new ImageIcon(UserCard2));
-        Ucard2.add(Card2);
+        Ucard2.add(Card2, "align center");
+        //Ucard2.add(Card1, "align left, gap 20");
         container.add(Ucard2, "align center");
         
         Hcard1 = new JPanel();
-        HouseCard1 = getCard();
+        HouseCard1 = getCard("house");
         Card3 = new JLabel(new ImageIcon(HouseCard1));
         Hcard1.add(Card3);
-        container.add(Hcard1);
+        container.add(Hcard1, "align center, gap 80");
         
         Hcard2 = new JPanel();
-        HouseCard2 = getCard();
+        HouseCard2 = getBackCard("house");
         Card4 = new JLabel(new ImageIcon(HouseCard2));
         Hcard2.add(Card4);
         container.add(Hcard2, "align center");
         
-        Start = new JButton("Start");
-        Start.setFont(Bold);
-        container.add(Start,"span 4, align center");
-        Start.addActionListener(new ActionListener() 
+        Score1 = new JLabel("0");
+        Score1.setFont(Bold);
+        container.add(Score1, "span 2, align center");
+        Score2 = new JLabel("0");
+        Score2.setFont(Bold);
+        container.add(Score2, "span 2, align center");
+        
+        Hit = new JButton("Hit");
+        Hit.setFont(Bold);
+        container.add(Hit,"span 1, align center");
+        
+        Stand = new JButton("Stand");
+        Stand.setFont(Bold);
+        container.add(Stand,"span 1, align center");
+        
+        Deal = new JButton("Deal");
+        Deal.setFont(Bold);
+        container.add(Deal,"span 2, align center");
+        
+        Restart = new JButton("New Game");
+        Restart.setFont(Bold);
+        container.add(Restart, "span4, align center");
+        updateScore();
+        Deal.addActionListener(new ActionListener() 
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    printCards();
+                    newGame();
+                    UserCard1 = getCard("user");
+                    UserCard2 = getCard("user");
+                    HouseCard1 = getCard("house");
+                    HouseCard2 = getBackCard("house");
+                    Card1.setIcon(new ImageIcon(UserCard1));
+                    Card2.setIcon(new ImageIcon(UserCard2));
+                    Card3.setIcon(new ImageIcon(HouseCard1));
+                    Card4.setIcon(new ImageIcon(HouseCard2));
+                    updateScore();
+	        }
+	});
+        
+        Hit.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    BufferedImage newCard1 = getCard("user");
+                    BufferedImage newCard12 = getCard("house");
+                    Card1.setIcon(new ImageIcon(UserCard1));
+                    Card2.setIcon(new ImageIcon(UserCard2));
 	        }
 	});
         
@@ -116,10 +162,13 @@ public class MainFrame extends JFrame
         setLocationRelativeTo(null);    // centers on screen
         setVisible(true);
     }
-    
-    public BufferedImage getCard()
+    public void newGame()
     {
-        int id = gui.getRandomCard();
+        gui.newGame();
+    }
+    public BufferedImage getCard(String who)
+    {
+        int id = gui.getRandomCard(who);
         try
         {
             return readImage(id);
@@ -135,8 +184,49 @@ public class MainFrame extends JFrame
     {
         return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
     }
+    public BufferedImage readImage(String id) throws Exception
+    {
+        return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+    }
+    public BufferedImage getBackCard(String who)
+    {
+        gui.getRandomCard(who);
+        try
+        {
+            return readImage("back");
+        }
+        catch(Exception e)
+        {
+            System.out.println("Could not read image");
+            return null;
+        }
+    }
     public void printCards()
     {
         this.gui.printCards();
+    }
+    public void updateScore()
+    {
+        String user = gui.getScore("user");
+        String house = gui.getScore("house");
+        if(user.equalsIgnoreCase("Busted!") && house.equalsIgnoreCase("Busted!"))
+        {
+            Score1.setText("Tie");
+            Score2.setText("Tie");
+        }
+        if(user.equalsIgnoreCase("Busted!"))
+        {
+            Score1.setText(user);
+            Score2.setText("House wins!");
+            return;
+        }
+        if(house.equalsIgnoreCase("Busted!"))
+        {
+            Score1.setText("You win!");
+            Score2.setText(user);
+            return;
+        }
+        Score1.setText(user);
+        Score2.setText(house);
     }
 }

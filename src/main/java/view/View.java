@@ -24,9 +24,16 @@ public class View
     {
         contr.printCards();
     }
-    public int getRandomCard()
+    public int getRandomCard(String who)
     {
-        return contr.getRandomCard();
+        return contr.getRandomCard(who);
     }
-    
+    public void newGame()
+    {
+        contr.newGame();
+    }
+    public String getScore(String who)
+    {
+        return contr.getScore(who);
+    }
 }

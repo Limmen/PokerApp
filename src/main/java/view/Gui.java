@@ -23,10 +23,17 @@ public class Gui
     {
         view.printCards();
     }
-    public int getRandomCard()
+    public int getRandomCard(String who)
     {
-        return view.getRandomCard();
+        return view.getRandomCard(who);
     }
-    
+    public void newGame()
+    {
+        view.newGame();
+    }
+    public String getScore(String who)
+    {
+        return view.getScore(who);
+    }
    
 }
