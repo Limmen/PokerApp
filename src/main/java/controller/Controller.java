@@ -5,15 +5,26 @@
  */
 package controller;
 
+import model.DeckManager;
+
 /**
  *
  * @author kim
  */
 public class Controller 
 {
+    private DeckManager dm;
     public Controller()
     {
-        
+        dm = new DeckManager();
     }
     
+    public void printCards()
+    {
+        dm.printCards();
+    }
+    public int getRandomCard()
+    {
+        return dm.getRandomCard();
+    }
 }

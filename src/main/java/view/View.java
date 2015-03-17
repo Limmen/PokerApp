@@ -20,6 +20,13 @@ public class View
         this.gui = new Gui(this);
     }
     
-    
+    public void printCards()
+    {
+        contr.printCards();
+    }
+    public int getRandomCard()
+    {
+        return contr.getRandomCard();
+    }
     
 }

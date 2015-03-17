@@ -19,5 +19,14 @@ public class Gui
         this.main = new MainFrame(this);
     }
     
+    public void printCards()
+    {
+        view.printCards();
+    }
+    public int getRandomCard()
+    {
+        return view.getRandomCard();
+    }
+    
    
 }

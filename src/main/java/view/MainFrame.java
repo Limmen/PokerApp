@@ -7,6 +7,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -99,6 +101,13 @@ public class MainFrame extends JFrame
         Start = new JButton("Start");
         Start.setFont(Bold);
         container.add(Start,"span 4, align center");
+        Start.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    printCards();
+	        }
+	});
         
         add(container);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,9 +119,10 @@ public class MainFrame extends JFrame
     
     public BufferedImage getCard()
     {
+        int id = gui.getRandomCard();
         try
         {
-            return readImage();
+            return readImage(id);
         }
         catch(Exception e)
         {
@@ -121,8 +131,12 @@ public class MainFrame extends JFrame
         }
             
     }
-    public BufferedImage readImage() throws Exception
+    public BufferedImage readImage(int id) throws Exception
     {
-        return ImageIO.read(new File("src/main/resources/images/card_00.png"));
+        return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+    }
+    public void printCards()
+    {
+        this.gui.printCards();
     }
 }
