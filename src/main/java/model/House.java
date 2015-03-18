@@ -24,6 +24,7 @@ public class House
         this.value = 0;
         this.score = 0;
         this.aces = 0;
+        this.cards = new ArrayList<Card> ();
     }
     public String getValue()
     {
