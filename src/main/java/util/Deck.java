@@ -31,6 +31,7 @@ public class Deck
         {
             C.add(new Card(id,"spade",Value));
             id++;
+            if(Value <10)
             Value++;
         }
         return C;
@@ -43,6 +44,7 @@ public class Deck
         {
             C.add(new Card(id,"club",Value));
             id++;
+            if(Value <10)
             Value++;
         }
         return C;   
@@ -55,6 +57,7 @@ public class Deck
         {
             C.add(new Card(id,"heart",Value));
             id++;
+            if(Value <10)
             Value++;
         }
         return C;
@@ -67,6 +70,7 @@ public class Deck
         {
             C.add(new Card(id,"diamond",Value));
             id++;
+            if(Value <10)
             Value++;
         }
         return C;

@@ -5,6 +5,8 @@
  */
 package model;
 
+import util.Card;
+
 /**
  *
  * @author kim
@@ -20,14 +22,33 @@ public class GameManager
         this.house = new House();
     }
     
-    public void updateScore(int n, String who)
+    public void updateValue(Card c, String who)
     {
         if(who.equalsIgnoreCase("user"))
         {
-            user.updateScore(n);
+            user.updateValue(c);
         }
         else
-            house.updateScore(n);
+            house.updateValue(c);
+    }
+    public String getValue(String who)
+    {
+         if(who.equalsIgnoreCase("user"))
+        {
+            return user.getValue();
+        }
+        else
+            return house.getValue();
+    }
+    
+        public void updateScore(String who)
+    {
+        if(who.equalsIgnoreCase("user"))
+        {
+            user.updateScore();
+        }
+        else
+            house.updateScore();
     }
     public String getScore(String who)
     {
@@ -38,9 +59,42 @@ public class GameManager
         else
             return house.getScore();
     }
+ 
     public void newGame()
     {
         user = new User();
         house = new House();
+    }
+    public void newDeck()
+    {
+        user.setValue(0);
+        house.setValue(0);
+    }
+    public boolean checkChoice(String who)
+    {
+        if(who.equalsIgnoreCase("user"))
+            return user.check();
+        else
+            return house.check();
+    }
+    public String getResult()
+    {
+        if(Integer.parseInt(user.getValue())> Integer.parseInt(house.getValue()))
+        {
+            return "user";
+        }
+        if(Integer.parseInt(user.getValue()) < Integer.parseInt(house.getValue()))
+        {
+            return "house";
+        }
+        else
+            return "tie";
+    }
+    public void addAce(Card c, String who)
+    {
+        if(who.equalsIgnoreCase("user"))
+            user.addAce(c);
+        else
+            house.addAce(c);
     }
 }

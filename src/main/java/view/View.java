@@ -28,6 +28,10 @@ public class View
     {
         return contr.getRandomCard(who);
     }
+    public void newDeck()
+    {
+        contr.newDeck();
+    }
     public void newGame()
     {
         contr.newGame();
@@ -35,5 +39,17 @@ public class View
     public String getScore(String who)
     {
         return contr.getScore(who);
+    }
+    public String getValue(String who)
+    {
+        return contr.getValue(who);
+    }
+    public void updateScore(String who)
+    {
+        contr.updateScore(who);
+    }
+    public String getResult()
+    {
+        return contr.getResult();
     }
 }

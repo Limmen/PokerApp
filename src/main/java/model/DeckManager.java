@@ -21,6 +21,7 @@ public class DeckManager
     public DeckManager()
     {
         this.deck = generateDeck();
+        shuffle();
     }
     public Deck generateDeck()
     {
@@ -28,13 +29,6 @@ public class DeckManager
     }
     public void printCards()
     {
-        for(Card c : deck.getDeck())
-        {
-            c.print();
-        }
-        //Knuth shuffle
-        Collections.shuffle(deck.getDeck());
-        System.out.println("Shuffled: ");
         for(Card c : deck.getDeck())
         {
             c.print();
@@ -48,8 +42,13 @@ public class DeckManager
         deck.deleteCard(c.getId());
         return c;
     }
-    public void newGame()
+    public void newDeck()
     {
         this.deck = new Deck();
+        shuffle();
+    }
+    public void shuffle()
+    {
+        Collections.shuffle(deck.getDeck());
     }
 }

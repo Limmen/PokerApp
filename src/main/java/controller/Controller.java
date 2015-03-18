@@ -29,18 +29,45 @@ public class Controller
     }
     public int getRandomCard(String who)
     {
-        Card c =  dm.getRandomCard();
-        gm.updateScore(c.getValue(), who);
-        return c.getId();
+            if(gm.checkChoice(who))
+            {
+                Card c =  dm.getRandomCard();
+                int id = c.getId();
+                if(id == 12 || id == 25 || id == 38 || id == 51)
+                {
+                    gm.addAce(c,who);
+                }
+                else
+                    gm.updateValue(c, who);
+                return c.getId();
+            }
+            else
+                return -1;
+    }
+    public void newDeck()
+    {
+        dm.newDeck();
+        gm.newDeck();
     }
     public void newGame()
     {
-        dm.newGame();
+        dm.newDeck();
         gm.newGame();
     }
     public String getScore(String who)
     {
         return gm.getScore(who);
     }
-            
+    public String getValue(String who)
+    {
+        return gm.getValue(who);
+    }
+    public void updateScore(String who)
+    {
+        gm.updateScore(who);
+    }
+    public String getResult()
+    {
+        return gm.getResult();
+    }
 }

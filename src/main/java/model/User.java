@@ -5,27 +5,80 @@
  */
 package model;
 
+import java.util.ArrayList;
+import util.Card;
+
 /**
  *
  * @author kim
  */
 public class User 
 {
+    private int value;
     private int score;
-    
+    private int aces;
+    private ArrayList<Card> cards;
     public User()
     {
+        this.value = 0;
         this.score = 0;
+        this.aces = 0;
+    }
+    public String getValue()
+    {
+        for(int i = 0; i<aces; i++)
+        {
+            ace();
+        }
+        if(value > 21)
+            return "Busted!";
+        else
+            return Integer.toString(value);
     }
     public String getScore()
     {
-        if(score > 21)
-            return "Busted!";
-        else
-            return Integer.toString(score);
+        return Integer.toString(score);
     }
-    public void updateScore(int n)
+    public void updateValue(Card c)
     {
-        score = score + n;
+        cards.add(c);
+        if(value < 22)
+        {
+            value = value + c.getValue();
+        }
+    }
+    public void updateScore()
+    {
+        score = score +1;
+    }
+    public void setValue(int n)
+    {
+        this.value = n;
+    }
+    public void setScore(int n)
+    {
+        this.score = n;
+    }
+    public boolean check()
+    {
+        if(value > 21)
+        {
+            return false;
+        }
+        else
+            return true;
+    }
+    public void addAce(Card c)
+    {
+        cards.add(c);
+        this.aces++;
+    }
+    public void ace()
+    {
+        if((value + 11) < 22)
+        {
+            value = value+11;
+        }
+        else value = value +1;
     }
 }

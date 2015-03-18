@@ -27,6 +27,10 @@ public class Gui
     {
         return view.getRandomCard(who);
     }
+    public void newDeck()
+    {
+        view.newDeck();
+    }
     public void newGame()
     {
         view.newGame();
@@ -34,6 +38,18 @@ public class Gui
     public String getScore(String who)
     {
         return view.getScore(who);
+    }
+    public String getValue(String who)
+    {
+        return view.getValue(who);
+    }
+    public void updateScore(String who)
+    {
+        view.updateScore(who);
+    }
+    public String getResult()
+    {
+        return view.getResult();
     }
    
 }
