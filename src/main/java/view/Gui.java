@@ -16,10 +16,12 @@ public class Gui
 {
     private View view;
     private MainFrame main;
+    private BlackJackFrame bjf;
     public Gui(View view)
     {
         this.view = view;
         this.main = new MainFrame(this);
+        //this.bjf = new BlackJackFrame(this);
     }
     
     public void printCards()
@@ -57,5 +59,9 @@ public class Gui
     public ArrayList<Card> getCards(String who)
     {
         return view.getCards(who);
+    }
+    public int getVisible()
+    {
+        return view.getVisible();
     }
 }

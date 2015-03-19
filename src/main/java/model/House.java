@@ -28,11 +28,12 @@ public class House
     }
     public int getValue()
     {
+        int aceVal = 0;
         for(int i = 0; i<aces; i++)
         {
-            ace();
+            aceVal = aceVal + ace();
         }
-        return value;
+        return value + aceVal;
     }
     public String getScore()
     {
@@ -72,13 +73,13 @@ public class House
         else
             return false;
     }
-    public void ace()
+    public int ace()
     {
         if((value + 11) < 22)
         {
-            value = value+11;
+            return 11;
         }
-        else value = value +1;
+        else return 1;
     }
     public void addAce(Card c)
     {
@@ -92,6 +93,10 @@ public class House
     public void resetHand()
     {
         cards = new ArrayList<Card>();
+    }
+    public int getVisible()
+    {
+        return cards.get(0).getValue();
     }
 }
 

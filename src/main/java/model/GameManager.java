@@ -111,4 +111,8 @@ public class GameManager
         else
             return house.getCards();
     }
+    public int getVisible()
+    {
+        return house.getVisible();
+    }
 }

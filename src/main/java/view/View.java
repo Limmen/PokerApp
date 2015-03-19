@@ -58,4 +58,8 @@ public class View
     {
         return contr.getCards(who);
     }
+    public int getVisible()
+    {
+        return contr.getVisible();
+    }
 }

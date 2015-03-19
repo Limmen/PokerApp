@@ -27,11 +27,12 @@ public class User
     }
     public int getValue()
     {
+        int aceVal = 0;
         for(int i = 0; i<aces; i++)
         {
-            ace();
+            aceVal = aceVal + ace();
         }
-        return value;
+        return value + aceVal;
     }
     public String getScore()
     {
@@ -40,10 +41,8 @@ public class User
     public void updateValue(Card c)
     {
         cards.add(c);
-        if(value < 22)
-        {
-            value = value + c.getValue();
-        }
+        value = value + c.getValue();
+        
     }
     public void updateScore()
     {
@@ -75,13 +74,13 @@ public class User
         cards.add(c);
         this.aces++;
     }
-    public void ace()
+    public int ace()
     {
         if((value + 11) < 22)
         {
-            value = value+11;
+            return 11;
         }
-        else value = value +1;
+        else return 1;
     }
     public ArrayList<Card> getCards()
     {

@@ -75,4 +75,8 @@ public class Controller
     {
         return gm.getCards(who);
     }
+        public int getVisible()
+    {
+        return gm.getVisible();
+    }
 }
