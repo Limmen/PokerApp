@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.ArrayList;
 import util.Card;
 
 /**
@@ -31,7 +32,7 @@ public class GameManager
         else
             house.updateValue(c);
     }
-    public String getValue(String who)
+    public int getValue(String who)
     {
          if(who.equalsIgnoreCase("user"))
         {
@@ -69,6 +70,10 @@ public class GameManager
     {
         user.setValue(0);
         house.setValue(0);
+        user.setAce(0);
+        house.setAce(0);
+        user.resetHand();
+        house.resetHand();
     }
     public boolean checkChoice(String who)
     {
@@ -79,11 +84,11 @@ public class GameManager
     }
     public String getResult()
     {
-        if(Integer.parseInt(user.getValue())> Integer.parseInt(house.getValue()))
+        if(user.getValue() > house.getValue())
         {
             return "user";
         }
-        if(Integer.parseInt(user.getValue()) < Integer.parseInt(house.getValue()))
+        if(user.getValue() < house.getValue())
         {
             return "house";
         }
@@ -96,5 +101,14 @@ public class GameManager
             user.addAce(c);
         else
             house.addAce(c);
+    }
+        public ArrayList<Card> getCards(String who)
+    {
+        if(who.equalsIgnoreCase("user"))
+        {
+            return user.getCards();
+        }
+        else
+            return house.getCards();
     }
 }

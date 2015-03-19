@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import model.DeckManager;
 import model.GameManager;
 import util.Card;
@@ -58,7 +59,7 @@ public class Controller
     {
         return gm.getScore(who);
     }
-    public String getValue(String who)
+    public int getValue(String who)
     {
         return gm.getValue(who);
     }
@@ -69,5 +70,9 @@ public class Controller
     public String getResult()
     {
         return gm.getResult();
+    }
+    public ArrayList<Card> getCards(String who)
+    {
+        return gm.getCards(who);
     }
 }

@@ -25,16 +25,13 @@ public class User
         this.aces = 0;
         this.cards = new ArrayList<Card> ();
     }
-    public String getValue()
+    public int getValue()
     {
         for(int i = 0; i<aces; i++)
         {
             ace();
         }
-        if(value > 21)
-            return "Busted!";
-        else
-            return Integer.toString(value);
+        return value;
     }
     public String getScore()
     {
@@ -55,6 +52,10 @@ public class User
     public void setValue(int n)
     {
         this.value = n;
+    }
+    public void setAce(int n)
+    {
+        this.aces = n;
     }
     public void setScore(int n)
     {
@@ -81,5 +82,13 @@ public class User
             value = value+11;
         }
         else value = value +1;
+    }
+    public ArrayList<Card> getCards()
+    {
+        return cards;
+    }
+    public void resetHand()
+    {
+        cards = new ArrayList<Card>();
     }
 }

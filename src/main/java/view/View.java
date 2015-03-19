@@ -6,6 +6,8 @@
 package view;
 
 import controller.Controller;
+import java.util.ArrayList;
+import util.Card;
 /**
  *
  * @author kim
@@ -40,7 +42,7 @@ public class View
     {
         return contr.getScore(who);
     }
-    public String getValue(String who)
+    public int getValue(String who)
     {
         return contr.getValue(who);
     }
@@ -51,5 +53,9 @@ public class View
     public String getResult()
     {
         return contr.getResult();
+    }
+        public ArrayList<Card> getCards(String who)
+    {
+        return contr.getCards(who);
     }
 }

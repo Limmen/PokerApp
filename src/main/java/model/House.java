@@ -26,16 +26,13 @@ public class House
         this.aces = 0;
         this.cards = new ArrayList<Card> ();
     }
-    public String getValue()
+    public int getValue()
     {
         for(int i = 0; i<aces; i++)
         {
             ace();
         }
-        if(value > 21)
-            return "Busted!";
-        else
-            return Integer.toString(value);
+        return value;
     }
     public String getScore()
     {
@@ -54,12 +51,20 @@ public class House
     {
         this.value = n;
     }
+    public void setAce(int n)
+    {
+        this.aces = n;
+    }
     public void setScore(int n)
     {
         this.score = n;
     }
     public boolean check()
     {
+        for(int i = 0; i<aces; i++)
+        {
+            ace();
+        }
         if(value < 17)
         {
             return true;
@@ -79,6 +84,14 @@ public class House
     {
         cards.add(c);
         this.aces++;
+    }
+    public ArrayList<Card> getCards()
+    {
+        return cards;
+    }
+    public void resetHand()
+    {
+        cards = new ArrayList<Card>();
     }
 }
 

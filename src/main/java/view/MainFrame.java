@@ -20,8 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import net.coobird.thumbnailator.Thumbnails;
 import net.miginfocom.swing.MigLayout;
+import util.Card;
 
 /**
  *
@@ -200,23 +200,28 @@ public class MainFrame extends JFrame
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
+                    Boolean houseHit = true;
                     if(gameover != true)
                     {
-                        BufferedImage image = test();
                         JLabel Card;
-                        while(image != null)
+                        while(houseHit != false)
                         {
+                            houseHit = false;
                             image = getBackCard("house");
                             if(image != null)
                             {
+                                //letsWait();
                                 Card = new JLabel(new ImageIcon(image));
                                 hCards.add(Card);
                                 Housecards.add(Card);
+                                updateValue();
+                                pack();
+                                houseHit = true;
                             }
-                            updateValue();
-                            pack();
+                            
                         }
                         updateValue();
+                        //letsWait();
                         pack();
                         getResult();
                     }
@@ -228,7 +233,8 @@ public class MainFrame extends JFrame
                 {   
                     gameover = false;
                     removeCards();
-                    pack();
+                    
+                    pack(); 
                     newGame();
                     BufferedImage image;
                     JLabel Card; 
@@ -251,7 +257,7 @@ public class MainFrame extends JFrame
                     Housecards.add(Card);
                     hCards.add(Card);
                     updateValue();
-                    pack(); 
+                    pack();  
 	        }
 	});
         
@@ -271,30 +277,26 @@ public class MainFrame extends JFrame
         int id = gui.getRandomCard(who);
         if(id == -1)
             return null;
+            return readImage(id);
+       
+    }
+    public BufferedImage readImage(int id)
+    {
         try
         {
-            return readImage(id);
+            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {
             System.out.println("Could not read image");
             return null;
         }
-            
     }
-    public BufferedImage readImage(int id) throws Exception
+    public BufferedImage readImage(String id)
     {
-        return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
-    }
-    public BufferedImage readImage(String id) throws Exception
-    {
-        return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
-    }
-    public BufferedImage test()
-    {
-        try
+         try
         {
-            return readImage("back");
+            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {
@@ -307,15 +309,8 @@ public class MainFrame extends JFrame
         int id = gui.getRandomCard(who);
         if(id == -1)
             return null;
-        try
-        {
+        
             return readImage("back");
-        }
-        catch(Exception e)
-        {
-            System.out.println("Could not read image");
-            return null;
-        }
     }
     public void printCards()
     {
@@ -323,34 +318,37 @@ public class MainFrame extends JFrame
     }
     public void updateValue()
     {
-        String user = gui.getValue("user");
-        String house = gui.getValue("house");
-        if(user.equalsIgnoreCase("Busted!") && house.equalsIgnoreCase("Busted!"))
+        int user = gui.getValue("user");
+        int house = gui.getValue("house");
+        if(user > 21 && house > 21)
         {
-            Value1.setText("Tie");
-            Value2.setText("Tie");
-            gui.newDeck();
+            Value1.setText("Busted! (" + user + ")");
+            Value2.setText("Busted! House wins (" + house + ")");
+            showCards();
+            gameover = true;
         }
-        if(user.equalsIgnoreCase("Busted!"))
+        if(user > 21)
         {
-            Value1.setText(user);
+            Value1.setText("Busted! (" + user + ")");
             Value2.setText("House wins!" + " (" + house + ")");
             updateScore("house");
             setScore("house");
-            gui.newDeck();
+            showCards();
+            gameover = true;
             return;
         }
-        if(house.equalsIgnoreCase("Busted!"))
+        if(house > 21)
         {
             Value1.setText("You win!" + " (" + user + ")");
-            Value2.setText(house);
+            Value2.setText("Busted! (" + house + ")");
             updateScore("user");
             setScore("user");
-            gui.newDeck();
+            showCards();
+            gameover = true;
             return;
         }
-        Value1.setText(user);
-        Value2.setText(house);
+        Value1.setText(Integer.toString(user));
+        Value2.setText(Integer.toString(house));
     }
     public void updateScore(String who)
     {
@@ -380,30 +378,31 @@ public class MainFrame extends JFrame
     public void getResult()
     {
         gameover = true;
-        String winner = gui.getResult();
-        if(winner.equalsIgnoreCase("user"))
+        int user = gui.getValue("user");
+        int house = gui.getValue("house");
+        if(user > house)
         {
-            Value1.setText("You win!");
-            Value2.setText("Looser");
+            Value1.setText("You win! (" + user + ")");
+            Value2.setText("Looser (" + house + ")");
             updateScore("user");
             setScore("user");
-            gui.newDeck();
+            showCards();
             return;
         }
-        if(winner.equalsIgnoreCase("house"))
+        if(house > user)
         {
-            Value1.setText("Looser");
-            Value2.setText("House wins!");
+            Value1.setText("Looser (" + user + ")");
+            Value2.setText("House wins! (" + house + ")");
             updateScore("house");
             setScore("house");
-            gui.newDeck();
+            showCards();
             return;
         }
-        if(winner.equalsIgnoreCase("tie"))
+        if(user == house)
         {
-            Value1.setText("Tie");
-            Value2.setText("Tie");
-            gui.newDeck();
+            Value1.setText("Tie (" + user + ")");
+            Value2.setText("Tie, House wins! (" + house + ")");
+            showCards();
         }
     }
 
@@ -417,7 +416,36 @@ public class MainFrame extends JFrame
         {
             Housecards.remove(hCards.get(i));
         }
-        
+        hCards = new ArrayList<JLabel>();
+        uCards = new ArrayList<JLabel>();
+    }
+    public void showCards()
+    {
+        ArrayList<Card> house = gui.getCards("house");
+        for(int i = 0; i < hCards.size(); i++)
+        {
+            Housecards.remove(hCards.get(i));
+        }
+        hCards = new ArrayList<JLabel>();
+        for(int i = 0; i < house.size(); i++)
+        {
+            image = readImage(house.get(i).getId());
+            JLabel Card = new JLabel(new ImageIcon(image));
+            Housecards.add(Card);
+            hCards.add(Card);
+        }
+        pack();
+    }
+    public void letsWait()
+    {
+        try 
+        {    
+            Thread.sleep(1500);             //1000 milliseconds is one second.
+        } 
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        } 
     }
     
 }

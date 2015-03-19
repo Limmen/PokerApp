@@ -5,6 +5,9 @@
  */
 package view;
 
+import java.util.ArrayList;
+import util.Card;
+
 /**
  *
  * @author kim
@@ -39,7 +42,7 @@ public class Gui
     {
         return view.getScore(who);
     }
-    public String getValue(String who)
+    public int getValue(String who)
     {
         return view.getValue(who);
     }
@@ -51,5 +54,8 @@ public class Gui
     {
         return view.getResult();
     }
-   
+    public ArrayList<Card> getCards(String who)
+    {
+        return view.getCards(who);
+    }
 }
