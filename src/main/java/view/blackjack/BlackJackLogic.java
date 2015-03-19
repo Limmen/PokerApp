@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package view.blackjack;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -15,17 +15,17 @@ import util.Card;
  *
  * @author kim
  */
-public class TexasLogic 
+public class BlackJackLogic 
 {
-    Gui gui;
-    TexasFrame tf;
+    BlackJackGui gui;
+    BlackJackFrame bjf;
     BufferedImage image;
-    ReadCards rc;
-    public TexasLogic(Gui gui, TexasFrame tf, ReadCards rc)
+    BlackJackCards bc;
+    public BlackJackLogic(BlackJackGui gui, BlackJackFrame bjf, BlackJackCards bc)
     {
         this.gui = gui;
-        this.tf = tf;
-        this.rc = rc;
+        this.bjf = bjf;
+        this.bc = bc;
     }
     public void newDeck()
     {
@@ -37,39 +37,39 @@ public class TexasLogic
         int house = gui.getValue("house");
         if(user > 21 && house > 21)
         {
-            tf.Value1.setText("Busted! (" + user + ")");
-            tf.Value2.setText("Busted! House wins (" + house + ")");
+            bjf.Value1.setText("Busted! (" + user + ")");
+            bjf.Value2.setText("Busted! House wins (" + house + ")");
             updateScore("house");
             setScore("house");
             showCards();
-            tf.gameover = true;
+            bjf.gameover = true;
         }
         if(user > 21)
         {
-            tf.Value1.setText("Busted! (" + user + ")");
-            tf.Value2.setText("House wins!" + " (" + house + ")");
+            bjf.Value1.setText("Busted! (" + user + ")");
+            bjf.Value2.setText("House wins!" + " (" + house + ")");
             updateScore("house");
             setScore("house");
             showCards();
-            tf.gameover = true;
+            bjf.gameover = true;
             return;
         }
         if(house > 21)
         {
-            tf.Value1.setText("You win!" + " (" + user + ")");
-            tf.Value2.setText("Busted! (" + house + ")");
+            bjf.Value1.setText("You win!" + " (" + user + ")");
+            bjf.Value2.setText("Busted! (" + house + ")");
             updateScore("user");
             setScore("user");
             showCards();
-            tf.gameover = true;
+            bjf.gameover = true;
             return;
         }
-        tf.Value1.setText(Integer.toString(user));
-        tf.Value2.setText(Integer.toString(getVisible()));
+        bjf.Value1.setText(Integer.toString(user));
+        bjf.Value2.setText(Integer.toString(getVisible()));
     }
     public void updateScore(String who)
     {
-        tf.gameover = true;
+        bjf.gameover = true;
         gui.updateScore(who);
     }
     public void setScore(String who)
@@ -77,12 +77,12 @@ public class TexasLogic
         if(who.equalsIgnoreCase("user"))
         {
             String userScore = gui.getScore(who);
-            tf.Score1.setText("Score: " + userScore);
+            bjf.Score1.setText("Score: " + userScore);
         }
         else
         {
             String houseScore = gui.getScore(who);
-            tf.Score2.setText("Score: " + houseScore);
+            bjf.Score2.setText("Score: " + houseScore);
         }
     }
 
@@ -94,13 +94,13 @@ public class TexasLogic
     }
     public void getResult()
     {
-        tf.gameover = true;
+        bjf.gameover = true;
         int user = gui.getValue("user");
         int house = gui.getValue("house");
         if(user > house)
         {
-            tf.Value1.setText("You win! (" + user + ")");
-            tf.Value2.setText("Looser (" + house + ")");
+            bjf.Value1.setText("You win! (" + user + ")");
+            bjf.Value2.setText("Looser (" + house + ")");
             updateScore("user");
             setScore("user");
             showCards();
@@ -108,8 +108,8 @@ public class TexasLogic
         }
         if(house > user)
         {
-            tf.Value1.setText("Looser (" + user + ")");
-            tf.Value2.setText("House wins! (" + house + ")");
+            bjf.Value1.setText("Looser (" + user + ")");
+            bjf.Value2.setText("House wins! (" + house + ")");
             updateScore("house");
             setScore("house");
             showCards();
@@ -117,8 +117,8 @@ public class TexasLogic
         }
         if(user == house)
         {
-            tf.Value1.setText("Tie (" + user + ")");
-            tf.Value2.setText("Tie, House wins! (" + house + ")");
+            bjf.Value1.setText("Tie (" + user + ")");
+            bjf.Value2.setText("Tie, House wins! (" + house + ")");
             updateScore("house");
             setScore("house");
             showCards();
@@ -127,33 +127,33 @@ public class TexasLogic
 
     public void removeCards()
     {
-        for(int i = 0; i < tf.uCards.size(); i++)
+        for(int i = 0; i < bjf.uCards.size(); i++)
         {
-            tf.Usercards.remove(tf.uCards.get(i));
+            bjf.Usercards.remove(bjf.uCards.get(i));
         }
-        for(int i = 0; i < tf.hCards.size(); i++)
+        for(int i = 0; i < bjf.hCards.size(); i++)
         {
-             tf.Housecards.remove(tf.hCards.get(i));
+            bjf.Housecards.remove(bjf.hCards.get(i));
         }
-        tf.hCards = new ArrayList<JLabel>();
-        tf.uCards = new ArrayList<JLabel>();
+        bjf.hCards = new ArrayList<JLabel>();
+        bjf.uCards = new ArrayList<JLabel>();
     }
     public void showCards()
     {
         ArrayList<Card> house = gui.getCards("house");
-        for(int i = 0; i < tf.hCards.size(); i++)
+        for(int i = 0; i < bjf.hCards.size(); i++)
         {
-            tf.Housecards.remove(tf.hCards.get(i));
+            bjf.Housecards.remove(bjf.hCards.get(i));
         }
-        tf.hCards = new ArrayList<JLabel>();
+        bjf.hCards = new ArrayList<JLabel>();
         for(int i = 0; i < house.size(); i++)
         {
-            BufferedImage image = rc.readImage(house.get(i).getId());
+            BufferedImage image = bc.readImage(house.get(i).getId());
             JLabel Card = new JLabel(new ImageIcon(image));
-            tf.Housecards.add(Card);
-            tf.hCards.add(Card);
+            bjf.Housecards.add(Card);
+            bjf.hCards.add(Card);
         }
-        tf.pack();
+        bjf.pack();
     }
     public int getVisible()
     {

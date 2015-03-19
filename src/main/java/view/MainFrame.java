@@ -5,23 +5,18 @@
  */
 package view;
 
+import view.texas.TexasFrame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
-import util.Card;
+import view.blackjack.BlackJackGui;
 
 /**
  *
@@ -33,7 +28,9 @@ public class MainFrame extends JFrame
     private final JPanel container;
     private final JButton BlackJack;
     private final JButton Texas;
-    private BlackJackFrame bjf;
+    private BlackJackGui bgui;
+    private TexasFrame tf;
+    private JLabel title;
     
     public MainFrame(Gui gui)
     {
@@ -56,25 +53,40 @@ public class MainFrame extends JFrame
         }
         this.setLayout(new MigLayout());
         container = new JPanel(new MigLayout("wrap 4"));
+        Font Plain = new Font("Serif", Font.PLAIN, 16);
         Font Italic = new Font("Serif", Font.ITALIC, 16);
         Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+        Font PlainBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+        
+        
+        title = new JLabel("Welcome to the casino, select a table you would like to visit");
+        title.setFont(PlainBold);
+        container.add(title,"span 4");
         
         BlackJack = new JButton("BlackJack");
         BlackJack.setFont(Bold);
-        container.add(BlackJack, "span");
+        container.add(BlackJack, "span 4, align center");
         
         Texas = new JButton("Texas hold'em");
         Texas.setFont(Bold);
-        container.add(Texas,"wrap");
+        container.add(Texas,"span 4, align center");
         
         BlackJack.addActionListener(new ActionListener() 
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    bjf = blackJack();
+                    //newGame();
+                    blackjack();
                 }
 	});
-        
+        Texas.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    //newGame();
+                    texas();
+                }
+	});
         
         add(container);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,8 +95,12 @@ public class MainFrame extends JFrame
         setLocationRelativeTo(null);    // centers on screen
         setVisible(true);
     }
-    public BlackJackFrame blackJack()
+    public void blackjack()
     {
-        return new BlackJackFrame(gui);
+        gui.blackjack();
+    }
+    public void texas()
+    {
+        gui.texas();
     }
 }

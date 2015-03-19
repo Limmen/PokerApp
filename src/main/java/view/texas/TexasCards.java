@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package view.texas;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,20 +13,32 @@ import javax.imageio.ImageIO;
  *
  * @author kim
  */
-public class ReadCards 
+public class TexasCards 
 {
-    Gui gui;
-    public ReadCards(Gui gui)
+    TexasGui gui;
+    public TexasCards(TexasGui gui)
     {
         this.gui = gui;
     }
-    public BufferedImage getCard(String who)
+   /* public BufferedImage getCard(String who)
     {
         int id = gui.getRandomCard(who);
         if(id == -1)
             return null;
             return readImage(id);
        
+    }
+    public BufferedImage getBackCard(String who)
+    {
+        int id = gui.getRandomCard(who);
+        if(id == -1)
+            return null;
+        
+            return readImage("back"); 
+    } */
+    public BufferedImage getTableCard()
+    {   
+            return readImage("placeholder");
     }
     public BufferedImage readImage(int id)
     {
@@ -52,12 +64,7 @@ public class ReadCards
             return null;
         }
     }
-    public BufferedImage getBackCard(String who)
-    {
-        int id = gui.getRandomCard(who);
-        if(id == -1)
-            return null;
-        
-            return readImage("back");
-    }
+
 }
+
+

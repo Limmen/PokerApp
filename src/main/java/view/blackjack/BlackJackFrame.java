@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package view.blackjack;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,7 +29,7 @@ import util.Card;
  */
 public class BlackJackFrame extends JFrame
 {
-    private Gui gui;
+    private BlackJackGui gui;
     private final JPanel container;
     JPanel Usercards;
     JPanel Housecards;
@@ -47,17 +47,16 @@ public class BlackJackFrame extends JFrame
     ArrayList<JLabel> hCards;
     private BufferedImage image;
     BlackJackLogic bl;
-    ReadCards rc;
-    public BlackJackFrame(Gui gui)
+    BlackJackCards bc;
+    public BlackJackFrame(BlackJackGui gui)
     {
         super("BlackJack");
         gameover = false;
         this.gui = gui;
         uCards = new ArrayList();
         hCards = new ArrayList();
-        bl.newGame();
-        this.rc = new ReadCards(gui);
-        bl = new BlackJackLogic(gui, this,rc);
+        this.bc = new BlackJackCards(gui);
+        bl = new BlackJackLogic(gui, this,bc);
         try 
         {
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
@@ -82,7 +81,7 @@ public class BlackJackFrame extends JFrame
         container.add(text, "span 1, align center");
         Score1 = new JLabel("score: 0");
         Score1.setFont(Bold);
-        container.add(Score1, "span1, align center");
+        container.add(Score1, "span 1, align center");
         text = new JLabel("House");
         text.setFont(Bold);
         container.add(text, "span 1, align center, gap 80");
@@ -91,24 +90,24 @@ public class BlackJackFrame extends JFrame
         container.add(Score2, "span1, align center");
         
         Usercards = new JPanel();
-        image = rc.getCard("user");
+        image = bc.getCard("user");
         JLabel Card = new JLabel(new ImageIcon(image));
         uCards.add(Card);
         Usercards.add(Card);
         
-        image = rc.getCard("user");
+        image = bc.getCard("user");
         Card = new JLabel(new ImageIcon(image));
         uCards.add(Card);
         Usercards.add(Card);
         container.add(Usercards, "span 2, align center");
         
         Housecards = new JPanel();
-        image = rc.getCard("house");
+        image = bc.getCard("house");
         Card = new JLabel(new ImageIcon(image));
         Housecards.add(Card);
         hCards.add(Card);
         
-        image = rc.getBackCard("house");
+        image = bc.getBackCard("house");
         Card = new JLabel(new ImageIcon(image));
         Housecards.add(Card);
         hCards.add(Card);
@@ -154,19 +153,19 @@ public class BlackJackFrame extends JFrame
                     JLabel Card;
                     uCards = new ArrayList<JLabel>();
                     hCards = new ArrayList<JLabel>();
-                    image = rc.getCard("user");
+                    image = bc.getCard("user");
                     Card = new JLabel(new ImageIcon(image));
                     Usercards.add(Card);
                     uCards.add(Card);
-                    image = rc.getCard("user");
+                    image = bc.getCard("user");
                     Card = new JLabel(new ImageIcon(image));
                     Usercards.add(Card);
                     uCards.add(Card);
-                    image = rc.getCard("house");
+                    image = bc.getCard("house");
                     Card = new JLabel(new ImageIcon(image));
                     Housecards.add(Card);
                     hCards.add(Card);
-                    image = rc.getBackCard("house");
+                    image = bc.getBackCard("house");
                     Card = new JLabel(new ImageIcon(image));
                     Housecards.add(Card);
                     hCards.add(Card);
@@ -183,11 +182,11 @@ public class BlackJackFrame extends JFrame
                     {
                         JLabel Card;
                         BufferedImage image ;
-                        image = rc.getCard("user");
+                        image = bc.getCard("user");
                         Card = new JLabel(new ImageIcon(image));
                         Usercards.add(Card);
                         uCards.add(Card);
-                        image = rc.getBackCard("house");
+                        image = bc.getBackCard("house");
                         if(image != null)
                         {
                             Card = new JLabel(new ImageIcon(image));
@@ -210,7 +209,7 @@ public class BlackJackFrame extends JFrame
                         while(houseHit != false)
                         {
                             houseHit = false;
-                            image = rc.getBackCard("house");
+                            image = bc.getBackCard("house");
                             if(image != null)
                             {
                                 Card = new JLabel(new ImageIcon(image));
@@ -245,19 +244,19 @@ public class BlackJackFrame extends JFrame
                     JLabel Card; 
                     uCards = new ArrayList<JLabel>();
                     hCards = new ArrayList<JLabel>();
-                    image = rc.getCard("user");
+                    image = bc.getCard("user");
                     Card = new JLabel(new ImageIcon(image));
                     Usercards.add(Card);
                     uCards.add(Card);
-                    image = rc.getCard("user");
+                    image = bc.getCard("user");
                     Card = new JLabel(new ImageIcon(image));
                     Usercards.add(Card);
                     uCards.add(Card);
-                    image = rc.getCard("house");
+                    image = bc.getCard("house");
                     Card = new JLabel(new ImageIcon(image));
                     Housecards.add(Card);
                     hCards.add(Card);
-                    image = rc.getBackCard("house");
+                    image = bc.getBackCard("house");
                     Card = new JLabel(new ImageIcon(image));
                     Housecards.add(Card);
                     hCards.add(Card);

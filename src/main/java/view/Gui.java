@@ -5,8 +5,8 @@
  */
 package view;
 
-import java.util.ArrayList;
-import util.Card;
+import controller.Controller;
+import view.blackjack.BlackJackGui;
 
 /**
  *
@@ -16,52 +16,22 @@ public class Gui
 {
     private View view;
     private MainFrame main;
-    private BlackJackFrame bjf;
-    public Gui(View view)
+    private Controller contr;
+    private BlackJackGui bgui;
+    
+    public Gui(View view, Controller contr)
     {
         this.view = view;
         this.main = new MainFrame(this);
+        this.contr = contr;
         //this.bjf = new BlackJackFrame(this);
     }
-    
-    public void printCards()
+    public void blackjack()
     {
-        view.printCards();
+        view.blackjack();
     }
-    public int getRandomCard(String who)
+    public void texas()
     {
-        return view.getRandomCard(who);
-    }
-    public void newDeck()
-    {
-        view.newDeck();
-    }
-    public void newGame()
-    {
-        view.newGame();
-    }
-    public String getScore(String who)
-    {
-        return view.getScore(who);
-    }
-    public int getValue(String who)
-    {
-        return view.getValue(who);
-    }
-    public void updateScore(String who)
-    {
-        view.updateScore(who);
-    }
-    public String getResult()
-    {
-        return view.getResult();
-    }
-    public ArrayList<Card> getCards(String who)
-    {
-        return view.getCards(who);
-    }
-    public int getVisible()
-    {
-        return view.getVisible();
+        view.texas();
     }
 }

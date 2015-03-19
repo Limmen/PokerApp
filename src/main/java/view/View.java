@@ -5,9 +5,9 @@
  */
 package view;
 
+import view.texas.TexasGui;
 import controller.Controller;
-import java.util.ArrayList;
-import util.Card;
+import view.blackjack.BlackJackGui;
 /**
  *
  * @author kim
@@ -16,50 +16,20 @@ public class View
 {
     private Controller contr;
     private Gui gui;
+    private BlackJackGui bgui;
+    private TexasGui tgui;
     public View(Controller contr)
     {
         this.contr = contr;
-        this.gui = new Gui(this);
+        this.gui = new Gui(this, contr);
     }
     
-    public void printCards()
+    public void blackjack()
     {
-        contr.printCards();
+        bgui = new BlackJackGui(contr);
     }
-    public int getRandomCard(String who)
+    public void texas()
     {
-        return contr.getRandomCard(who);
-    }
-    public void newDeck()
-    {
-        contr.newDeck();
-    }
-    public void newGame()
-    {
-        contr.newGame();
-    }
-    public String getScore(String who)
-    {
-        return contr.getScore(who);
-    }
-    public int getValue(String who)
-    {
-        return contr.getValue(who);
-    }
-    public void updateScore(String who)
-    {
-        contr.updateScore(who);
-    }
-    public String getResult()
-    {
-        return contr.getResult();
-    }
-        public ArrayList<Card> getCards(String who)
-    {
-        return contr.getCards(who);
-    }
-    public int getVisible()
-    {
-        return contr.getVisible();
+        tgui = new TexasGui(contr);
     }
 }

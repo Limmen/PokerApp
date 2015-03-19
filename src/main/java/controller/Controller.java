@@ -6,9 +6,11 @@
 package controller;
 
 import java.util.ArrayList;
-import model.DeckManager;
-import model.GameManager;
+import model.blackjack.BlackJackManager;
+import model.blackjack.DeckManager;
+import model.texas.TexasManager;
 import util.Card;
+import view.blackjack.BlackJackGui;
 
 /**
  *
@@ -17,66 +19,68 @@ import util.Card;
 public class Controller 
 {
     private DeckManager dm;
-    private GameManager gm;
+    private BlackJackManager bm;
+    private TexasManager tm;
     public Controller()
     {
         dm = new DeckManager();
-        gm = new GameManager();
+        bm = new BlackJackManager();
+        tm = new TexasManager();
     }
     
     public void printCards()
     {
         dm.printCards();
     }
-    public int getRandomCard(String who)
+    public int getRandomCard(String who, BlackJackGui g)
     {
-            if(gm.checkChoice(who))
+            if(bm.checkChoice(who))
             {
                 Card c =  dm.getRandomCard();
                 int id = c.getId();
                 if(id == 12 || id == 25 || id == 38 || id == 51)
                 {
-                    gm.addAce(c,who);
+                    bm.addAce(c,who);
                 }
                 else
-                    gm.updateValue(c, who);
+                    bm.updateValue(c, who);
                 return c.getId();
             }
             else
                 return -1;
     }
-    public void newDeck()
+    public void newDeck(BlackJackGui g)
     {
         dm.newDeck();
-        gm.newDeck();
+        bm.newDeck();
     }
-    public void newGame()
+    public void newGame(BlackJackGui g)
     {
         dm.newDeck();
-        gm.newGame();
+        bm.newGame();
     }
-    public String getScore(String who)
+    public String getScore(String who, BlackJackGui g)
     {
-        return gm.getScore(who);
+        return bm.getScore(who);
     }
-    public int getValue(String who)
+    public int getValue(String who, BlackJackGui g)
     {
-        return gm.getValue(who);
+        return bm.getValue(who);
     }
-    public void updateScore(String who)
+    public void updateScore(String who,BlackJackGui g)
     {
-        gm.updateScore(who);
+        bm.updateScore(who);
     }
-    public String getResult()
+    public String getResult(BlackJackGui g)
     {
-        return gm.getResult();
+        return bm.getResult();
     }
-    public ArrayList<Card> getCards(String who)
+    public ArrayList<Card> getCards(String who, BlackJackGui g)
     {
-        return gm.getCards(who);
+        return bm.getCards(who);
     }
-        public int getVisible()
+        public int getVisible(BlackJackGui g)
     {
-        return gm.getVisible();
+        return bm.getVisible();
     }
 }

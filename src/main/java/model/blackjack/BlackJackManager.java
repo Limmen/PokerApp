@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.blackjack;
 
 import java.util.ArrayList;
 import util.Card;
@@ -12,12 +12,12 @@ import util.Card;
  *
  * @author kim
  */
-public class GameManager 
+public class BlackJackManager 
 {
     private User user;
     private House house;
     
-    public GameManager()
+    public BlackJackManager()
     {
         this.user = new User();
         this.house = new House();
