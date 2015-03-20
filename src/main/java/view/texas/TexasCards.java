@@ -20,23 +20,7 @@ public class TexasCards
     {
         this.gui = gui;
     }
-   /* public BufferedImage getCard(String who)
-    {
-        int id = gui.getRandomCard(who);
-        if(id == -1)
-            return null;
-            return readImage(id);
-       
-    }
-    public BufferedImage getBackCard(String who)
-    {
-        int id = gui.getRandomCard(who);
-        if(id == -1)
-            return null;
-        
-            return readImage("back"); 
-    } */
-    public BufferedImage getTableCard()
+    public BufferedImage getPlaceholder()
     {   
             return readImage("placeholder");
     }

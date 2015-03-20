@@ -7,13 +7,19 @@ package view.texas;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
+import util.TexasPlayer;
+import util.TexasTable;
 
 /**
  *
@@ -22,33 +28,29 @@ import net.miginfocom.swing.MigLayout;
 public class TexasFrame extends JFrame
 {
     private TexasGui gui;
-    private final JPanel container;
-    private JPanel table;
-    private JPanel you;
-    private JPanel bot1;
-    private JPanel bot2;
-    private JPanel bot3;
+    private JPanel container;
     private JLabel text;
-    private JButton raise;
-    private JButton fold;
-    private JButton call;
+    private JPanel buttons;
+    private JButton deal;
+    private JButton restart;
     private BufferedImage image;
-    private JLabel cash1;
-    private JLabel cash2;
-    private JLabel cash3;
-    private JLabel cash4;
-    private JLabel bet1;
-    private JLabel bet2;
-    private JLabel bet3;
-    private JLabel bet4;
+    private TexasTable table;
     TexasLogic tl;
     TexasCards tc;
+    private ArrayList<TexasTable> tableCards;
+    private TexasPlayer user;
+    private ArrayList<TexasPlayer> bots;
+    private ArrayList<TexasPlayer> players;
+    private ArrayList<TexasPlayer> folded;
+    private Font Italic = new Font("Serif", Font.ITALIC, 12);
+    private Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     public TexasFrame(TexasGui gui)
     {
         super("Texas Hold'em");
         this.gui = gui;
         this.tc = new TexasCards(gui);
         tl = new TexasLogic(gui, this,tc);
+        players = new ArrayList();
         try 
         {
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
@@ -64,51 +66,55 @@ public class TexasFrame extends JFrame
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
         this.setLayout(new MigLayout());
-        container = new JPanel(new MigLayout("wrap 4"));
-        Font Italic = new Font("Serif", Font.ITALIC, 12);
-        Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
         
-        text = new JLabel("Table:");
-        text.setFont(Bold);
-        container.add(text, "span 4, align center");
+        newGame();
         
-        table = new JPanel();
-        table = tl.addTableCards(5, table);
-        container.add(table, "span 4, align center");
-        
-        you = new JPanel(new MigLayout("wrap 2"));
-        JLabel text = new JLabel("You");
-        text.setFont(Bold);
-        you.add(text, "span, align center");
-        you = tl.generateTemplate(you, cash1, bet1);
-        container.add(you,"span 1, align center");
-        
-        bot1 = new JPanel(new MigLayout("wrap 2"));
-        text = new JLabel("Bot1");
-        text.setFont(Bold);
-        bot1.add(text, "span, align center");
-        bot1 = tl.generateTemplate(bot1, cash2, bet2);
-        container.add(bot1,"span 1, align center");
-        
-        bot2 = new JPanel(new MigLayout("wrap 2"));
-        text = new JLabel("Bot2");
-        text.setFont(Bold);
-        bot2.add(text, "span, align center");
-        bot2 = tl.generateTemplate(bot2, cash3, bet3);
-        container.add(bot2,"span 1, align center");
-        
-        bot3 = new JPanel(new MigLayout("wrap 2"));
-        text = new JLabel("Bot3");
-        text.setFont(Bold);
-        bot3.add(text, "span, align center");
-        bot3 = tl.generateTemplate(bot3, cash4, bet4);
-        container.add(bot3,"span 1, align center");
-        
+        deal.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    tl.newDeck(players);
+                    tl.playersDeal(players);
+                    pack();
+	        }
+	});
+       
         add(container);
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.BLACK);
         pack();
         setLocationRelativeTo(null);    // centers on screen
         setVisible(true);
     }
+    
+    public void newGame()
+    {
+        container = new JPanel(new MigLayout("wrap 4"));
+        text = new JLabel("Table:");
+        text.setFont(Bold);
+        container.add(text, "span 4, align center");
+        
+        table = tl.generateTable();
+        container.add(table.getPanel(), "span 4, align center");
+        
+        user = tl.generateUser();
+        bots = tl.generateBots(3);
+        players.add(user);
+        for(TexasPlayer p : bots)
+        {
+            players.add(p);
+        }
+        for(TexasPlayer p: players)
+        {
+            container.add(p.getPanel(),"span 1, align center");
+        }
+        buttons = new JPanel(new MigLayout("wrap 2"));
+        deal = new JButton("Deal");
+        deal.setFont(Bold);
+        buttons.add(deal,"span 1");
+        restart = new JButton("New game");
+        restart.setFont(Bold);
+        buttons.add(restart, "span 1");
+        container.add(buttons,"span, align center");
+    }
+
 }

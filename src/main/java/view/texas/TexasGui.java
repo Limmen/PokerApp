@@ -7,7 +7,11 @@ package view.texas;
 
 import controller.Controller;
 import java.util.ArrayList;
-import util.Card;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import util.TexasPlayer;
+import util.TexasTable;
+import util.TexasTableCard;
 import view.MainFrame;
 
 /**
@@ -23,6 +27,26 @@ public class TexasGui
     {
         this.contr = contr;
         this.tf = new TexasFrame(this);
+    }
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards)
+    {
+        return contr.newPlayer(id,cards,this);
+    }
+    public TexasTableCard newTableCard(int id, JLabel card)
+    {
+        return contr.newTableCard(id, card, this);
+    }
+    public TexasTable newTable(ArrayList<TexasTableCard> cards)
+    {
+        return contr.newTable(cards, this);
+    }
+    public void playersDeal(ArrayList<TexasPlayer> players)
+    {
+        contr.playersDeal(players,this);
+    }
+    public void newDeck(ArrayList<TexasPlayer> players)
+    {
+        contr.newDeck(players, this);
     }
     
     

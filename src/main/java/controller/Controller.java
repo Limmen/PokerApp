@@ -6,11 +6,18 @@
 package controller;
 
 import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import model.blackjack.BlackJackManager;
 import model.blackjack.DeckManager;
+import model.texas.Player;
 import model.texas.TexasManager;
 import util.Card;
+import util.TexasPlayer;
+import util.TexasTable;
+import util.TexasTableCard;
 import view.blackjack.BlackJackGui;
+import view.texas.TexasGui;
 
 /**
  *
@@ -54,6 +61,11 @@ public class Controller
         dm.newDeck();
         bm.newDeck();
     }
+    public void newDeck(ArrayList<TexasPlayer> players, TexasGui g)
+    {
+        dm.newDeck();
+        tm.newDeck(players);
+    }
     public void newGame(BlackJackGui g)
     {
         dm.newDeck();
@@ -82,5 +94,37 @@ public class Controller
         public int getVisible(BlackJackGui g)
     {
         return bm.getVisible();
+    }
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasGui gui)
+    {
+        Player player;
+        if(id == -1)
+        {
+            player = tm.newUser();
+        }
+        else
+            player = tm.newBot(id);
+        return new TexasPlayer(player,cards);
+    }
+    public TexasTableCard newTableCard(int id, JLabel card, TexasGui gui)
+    {
+        return new TexasTableCard(id, card);
+    }
+    public TexasTable newTable(ArrayList<TexasTableCard> cards, TexasGui gui)
+    {
+        return new TexasTable(cards);
+    }
+    public void playersDeal(ArrayList<TexasPlayer> players, TexasGui gui)
+    {
+        //ArrayList<ArrayList<Card>> allCards = new ArrayList();
+        for (TexasPlayer p : players)
+        {
+            ArrayList<Card> cards = new ArrayList();
+            cards.add(dm.getRandomCard());
+            cards.add(dm.getRandomCard()); 
+            tm.newCard(cards, p.getPlayer());
+            //allCards.add(cards);
+        }
+       //return allCards;
     }
 }

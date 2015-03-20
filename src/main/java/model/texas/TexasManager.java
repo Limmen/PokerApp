@@ -5,6 +5,10 @@
  */
 package model.texas;
 
+import java.util.ArrayList;
+import util.Card;
+import util.TexasPlayer;
+
 /**
  *
  * @author kim
@@ -12,16 +16,30 @@ package model.texas;
 public class TexasManager 
 {
     private User user;
-    private Bot bot1;
-    private Bot bot2;
-    private Bot bot3;
+    private ArrayList<Bot> bots;
     
     public TexasManager()
     {
         this.user = new User();
-        this.bot1 = new Bot();
-        this.bot2 = new Bot();
-        this.bot3 = new Bot();
+        this.bots = new ArrayList();
     }
-    
+    public Player newBot(int id)
+    {
+        return new Bot(id);
+    }
+    public Player newUser()
+    {
+        return new User();
+    }
+    public void newCard(ArrayList<Card> cards, Player p)
+    {
+        p.newCards(cards);
+    }
+    public void newDeck(ArrayList<TexasPlayer> players)
+    {
+        for(TexasPlayer p : players)
+        {
+            p.newDeal();
+        }
+    }
 }
