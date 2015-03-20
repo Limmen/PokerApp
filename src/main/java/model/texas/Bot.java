@@ -6,6 +6,7 @@
 package model.texas;
 
 import java.util.ArrayList;
+import javax.swing.JButton;
 import util.Card;
 
 /**
@@ -62,5 +63,10 @@ public class Bot implements Player
     {
         currentbet = 0;
         hand = new ArrayList();
+    }
+    @Override
+    public int bet()
+    {
+        return 2;
     }
 }

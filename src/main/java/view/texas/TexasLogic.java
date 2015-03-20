@@ -57,7 +57,9 @@ public class TexasLogic
     }
        public TexasPlayer generateUser()
     {
-        return gui.newPlayer(-1, getPlaceholder(2));
+        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2));
+        user.setTexasLogic(this);
+        return user;
         
     }
     public ArrayList<JLabel>  getPlaceholder(int n)
@@ -91,5 +93,45 @@ public class TexasLogic
     {
         gui.newDeck(players);
     }
+    public void userBet(int bet,int playersLeft, TexasPlayer user)
+    {
+        image = tc.getDealer();
+        JLabel deal = new JLabel(new ImageIcon(image));
+        user.bet(deal, bet, playersLeft-1);
+    }
+    public void bet(int dealer, int bet, int playersLeft)
+    {
+        ArrayList<TexasPlayer> players = tf.getPlayers();
+        JLabel deal;
+        while(playersLeft > 0)
+        {
+            System.out.println("while, dealer: " + dealer);
+            image = tc.getDealer();
+            deal = new JLabel(new ImageIcon(image));
+            if(dealer > players.size()-1)
+                dealer = 0;
+            if(dealer == 0)
+            {
+                userBet(bet, playersLeft, players.get(0));
+                return;
+            }
+            bet = players.get(dealer).bet(deal, bet, playersLeft);
+            playersLeft--;
+            dealer++;
+            pack();
+            /*
+            try {
+                //thread to sleep for the specified number of milliseconds
+                Thread.sleep(3000);
+            } catch ( java.lang.InterruptedException ie) {
+                System.out.println(ie);
+            } */
+        }
+    }
+    public void pack()
+    {
+        tf.pack();
+    }
+    
    
 }

@@ -24,6 +24,10 @@ public class TexasCards
     {   
             return readImage("placeholder");
     }
+    public BufferedImage getDealer()
+    {   
+            return readImage("dealer");
+    }
     public BufferedImage readImage(int id)
     {
         try

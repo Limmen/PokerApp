@@ -44,6 +44,8 @@ public class TexasFrame extends JFrame
     private ArrayList<TexasPlayer> folded;
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    int bet;
+    int dealer;
     public TexasFrame(TexasGui gui)
     {
         super("Texas Hold'em");
@@ -76,6 +78,11 @@ public class TexasFrame extends JFrame
                     tl.newDeck(players);
                     tl.playersDeal(players);
                     pack();
+                    if(dealer == 0)
+                    tl.userBet(bet, players.size(),user);
+                    else
+                        tl.bet(dealer, bet, players.size());
+                    pack();
 	        }
 	});
        
@@ -88,6 +95,8 @@ public class TexasFrame extends JFrame
     
     public void newGame()
     {
+        int bet = 0;
+        int dealer = 0;
         container = new JPanel(new MigLayout("wrap 4"));
         text = new JLabel("Table:");
         text.setFont(Bold);
@@ -116,5 +125,8 @@ public class TexasFrame extends JFrame
         buttons.add(restart, "span 1");
         container.add(buttons,"span, align center");
     }
-
+    public ArrayList<TexasPlayer> getPlayers()
+    {
+        return players;
+    }
 }

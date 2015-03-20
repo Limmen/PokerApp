@@ -5,8 +5,12 @@
  */
 package model.texas;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import net.miginfocom.swing.MigLayout;
 import util.Card;
 
 /**
@@ -19,18 +23,12 @@ public class User implements Player
     private int currentbet;
     private ArrayList<Card> hand;
     private String name;
-    private JButton call;
-    private JButton fold;
-    private JButton raise;
     public User()
     {
         this.cash = 500;
         this.currentbet = 0;
         this.hand = new ArrayList<Card>();
         this.name = "You";
-        this.call = new JButton("Call");
-        this.fold = new JButton("Fold");
-        this.raise = new JButton("Raise");
     }
     @Override
     public String getName() 
@@ -68,17 +66,10 @@ public class User implements Player
         currentbet = 0;
         hand = new ArrayList();
     }
-    public JButton getCall()
+    @Override
+    public int bet()
     {
-        return call;
+        return 1;
     }
-        public JButton getRaise()
-    {
-        return raise;
-    }
-    public JButton getFold()
-    {
-        return fold;
-    }
-
+    
 }
