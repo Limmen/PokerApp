@@ -33,20 +33,14 @@ public class TexasTable
    {
        return this.cards;
    }
-   public void firstDeal(ArrayList<JLabel> dealcards)
+   public void Deal(ArrayList<JLabel> dealcards, ArrayList<Card> dcards)
     {
-        int i = 0;
-        for(TexasTableCard tbc: this.cards)
+        panel.removeAll();
+        for(int i = 0; i<cards.size(); i++)
         {
-           if(i == 2)
-           {
-               return;
-           }
-           if(tbc.getId() == i)
-           {
-               tbc.updateVCard(dealcards.get(i));
-               i++;
-           }
+            cards.get(i).setCard(dcards.get(i));
+            cards.get(i).setVCard(dealcards.get(i));
+            panel.add(cards.get(i).getVCard());
         }
         
     }
@@ -81,5 +75,6 @@ public class TexasTable
             panel.add(t.getVCard());
         }
     }
+
 
 }

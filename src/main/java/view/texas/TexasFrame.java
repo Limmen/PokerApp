@@ -34,10 +34,9 @@ public class TexasFrame extends JFrame
     private JButton deal;
     private JButton restart;
     private BufferedImage image;
-    private TexasTable table;
+    public TexasTable table;
     TexasLogic tl;
     TexasCards tc;
-    private ArrayList<TexasTable> tableCards;
     private TexasPlayer user;
     public ArrayList<TexasPlayer> bots;
     public ArrayList<TexasPlayer> players;
@@ -77,12 +76,9 @@ public class TexasFrame extends JFrame
                 {   
                     tl.newDeck(players);
                     tl.playersDeal(players);
+                    tl.bet(dealer, bet, players.size());
                     pack();
-                    if(dealer == 0)
-                    tl.userBet(bet, players.size(),user);
-                    else
-                        tl.bet(dealer, bet, players.size());
-                    pack();
+                    //tl.firstTableDeal(table);
 	        }
 	});
        

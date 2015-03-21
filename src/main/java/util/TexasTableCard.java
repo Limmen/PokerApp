@@ -21,6 +21,7 @@ public class TexasTableCard
     {
         this.id = id;
         this.Vcard = Vcard;
+        this.card = null;
     }
     public int getId()
     {
@@ -30,6 +31,10 @@ public class TexasTableCard
     {
         return Vcard;
     }
+    public Card getCard()
+    {
+        return card;
+    }
     public void updateVCard(JLabel Vcard)
     {
         this.Vcard = Vcard;
@@ -37,5 +42,9 @@ public class TexasTableCard
     public void setCard(Card c)
     {
         this.card = c;
+    }
+    public void setVCard(JLabel c)
+    {
+        this.Vcard = c;
     }
 }

@@ -116,15 +116,25 @@ public class Controller
     }
     public void playersDeal(ArrayList<TexasPlayer> players, TexasGui gui)
     {
-        //ArrayList<ArrayList<Card>> allCards = new ArrayList();
         for (TexasPlayer p : players)
         {
             ArrayList<Card> cards = new ArrayList();
             cards.add(dm.getRandomCard());
             cards.add(dm.getRandomCard()); 
             tm.newCard(cards, p.getPlayer());
-            //allCards.add(cards);
         }
-       //return allCards;
+    }
+    public String botBet(Player p,ArrayList<TexasTableCard> table, int callAmount,TexasGui gui)
+    {
+        return tm.botBet(p, table, callAmount);
+    }
+    public ArrayList<Card> tableDeal(int nr, TexasGui gui)
+    {
+        ArrayList<Card> cards = new ArrayList();
+        for(int i = 0; i< nr; i++)
+        {
+            cards.add(dm.getRandomCard());
+        }
+        return cards;
     }
 }

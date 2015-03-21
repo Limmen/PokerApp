@@ -5,8 +5,10 @@
  */
 package model.texas;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.JButton;
+import javax.swing.Timer;
 import util.Card;
 
 /**
@@ -76,5 +78,25 @@ public class Bot implements Player
         currentbet = currentbet + val;
         cash = cash - val;
     }
+    public void raise(int raise)
+    {
+        if(raise > cash)
+            raise = cash;
+        
+        currentbet = currentbet + raise;
+        cash = cash - raise;
+        
+    }
+    public void call(int callAmount)
+    {
+        int call;
+        if(callAmount > cash)
+            call = cash;
+        else
+            call = callAmount;
+        currentbet = currentbet + call;
+        cash = cash - call;
+    }
+
     
 }

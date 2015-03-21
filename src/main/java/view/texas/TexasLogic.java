@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import model.texas.Player;
 import util.Card;
 import util.TexasPlayer;
 import util.TexasTable;
@@ -92,34 +93,17 @@ public class TexasLogic
     {
         gui.newDeck(players);
     }
-    public void userBet(int bet,int playersLeft, TexasPlayer user)
-    {
-        user.bet(bet, playersLeft-1);
-    }
     public void bet(int dealer, int bet, int playersLeft)
     {
         ArrayList<TexasPlayer> players = tf.getPlayers();
-        while(playersLeft > 0)
+        if(playersLeft > 0)
         {
             if(dealer > players.size()-1)
                 dealer = 0;
-            if(players.get(dealer).isUser())
-            {
-                userBet(bet, playersLeft, players.get(0));
-                return;
-            }
-            bet = players.get(dealer).bet(bet, playersLeft);
-            playersLeft--;
-            dealer++;
-            pack();
-            /*
-            try {
-                //thread to sleep for the specified number of milliseconds
-                Thread.sleep(3000);
-            } catch ( java.lang.InterruptedException ie) {
-                System.out.println(ie);
-            } */
+            players.get(dealer).bet(bet, playersLeft-1,dealer+1);
         }
+        else
+            firstTableDeal();
     }
     public void pack()
     {
@@ -134,6 +118,33 @@ public class TexasLogic
     {
         image = tc.getDealer();
         return new JLabel(new ImageIcon(image));
+    }
+    public String botBet(TexasPlayer p, int callAmount)
+    {
+        return gui.botBet(p.getPlayer(), tf.table.getCards(), callAmount);
+    }
+    public void firstTableDeal()
+    {
+        TexasTable table = tf.table;
+        ArrayList<Card> cards = gui.tableDeal(3);
+        ArrayList<JLabel> Vcards = new ArrayList();
+        for(Card c : cards)
+            {
+                image = tc.readImage(c.getId());
+                JLabel Card = new JLabel(new ImageIcon(image));
+                Vcards.add(Card);
+            }
+        for(int i = 0; i<2; i++)
+        {
+            image = tc.getPlaceholder();
+            JLabel Card = new JLabel(new ImageIcon(image));
+            Vcards.add(Card);
+            cards.add(null);
+        }
+        table.Deal(Vcards, cards);
+        System.out.println("ello");
+        pack();
+        
     }
    
 }

@@ -8,7 +8,8 @@ package view.texas;
 import controller.Controller;
 import java.util.ArrayList;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import model.texas.Player;
+import util.Card;
 import util.TexasPlayer;
 import util.TexasTable;
 import util.TexasTableCard;
@@ -48,7 +49,14 @@ public class TexasGui
     {
         contr.newDeck(players, this);
     }
-    
+    public String botBet(Player p, ArrayList<TexasTableCard> table, int callAmount)
+    {
+        return contr.botBet(p, table,callAmount, this);
+    }
+    public ArrayList<Card> tableDeal(int nr)
+    {
+        return contr.tableDeal(nr, this);
+    }
     
 }
 

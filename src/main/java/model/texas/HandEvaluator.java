@@ -67,59 +67,151 @@ public class HandEvaluator
     }
     public boolean straightFlush(ArrayList<Card> hand)
     {
-        if(flush(hand))
+        if(flush(hand) && straight(hand))
         {
-            Collections.sort(hand);
-            int prev = hand.get(0).value;
-            for(int i = 1; i<hand.size(); i++)
-            {
-                if((hand.get(i).value - prev) != 1)
-                    return false;
-            }
             return true;
         }
                 return false;
     }
     public boolean fourOfAKind(ArrayList<Card> hand)
     {
-        ArrayList<Card> handCopy = new ArrayList();
-        for(Card c: hand)
-        {
-            handCopy.add(c);
-        }
+        int count = 0;
         for(Card c : hand)
         {
-            handCopy.remove(c);
-            if(threeOfAKind(handCopy))
+            for(int i = 0; i<hand.size(); i++)
             {
-                return true;
+                if(count == 4)
+                {
+                    return true;
+                }
+                if(c.value == hand.get(i).value)
+                {
+                    count = count + 1;
+                }
             }
         }
         return false;
     }
     public boolean fullHouse(ArrayList<Card> hand)
     {
+        int count = 0;
+        for(Card c : hand)
+        {
+            for(int i = 0; i<hand.size(); i++)
+            {
+                if(count == 3)
+                {
+                    for(Card g: hand)
+                    {
+                        if(c.value == g.value)
+                        {
+                            hand.remove(g);
+                        }
+                    }
+                    if(pair(hand))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                if(c.value == hand.get(i).value)
+                {
+                    count = count + 1;
+                }
+            }
+        }
                 return false;
     }
     public boolean flush(ArrayList<Card> hand)
     {
+        String flush = hand.get(0).color;
+        for(int i = 1; i < hand.size(); i++)
+        {
+            if(hand.get(i).color.equals(flush) != true)
+            {
                 return false;
+            }
+        }
+        return true;
     }
     public boolean straight(ArrayList<Card> hand)
     {
-                return false;
+        Collections.sort(hand);
+        int prev = hand.get(0).value;
+        for(int i = 1; i<hand.size(); i++)
+        {
+            if((hand.get(i).value - prev) != 1)
+            return false;
+        }
+            return true;
     }
     public boolean threeOfAKind(ArrayList<Card> hand)
     {
-                return false;
+        int count = 0;
+        for(Card c : hand)
+        {
+            for(int i = 0; i<hand.size(); i++)
+            {
+                if(count == 3)
+                {
+                    return true;
+                }
+                if(c.value == hand.get(i).value)
+                {
+                    count = count + 1;
+                }
+            }
+        }
+        return false;
     }
     public boolean twoPair(ArrayList<Card> hand)
     {
+        int count = 0;
+        for(Card c : hand)
+        {
+            for(int i = 0; i<hand.size(); i++)
+            {
+                if(count == 2)
+                {
+                    for(Card g: hand)
+                    {
+                        if(c.value == g.value)
+                        {
+                            hand.remove(g);
+                        }
+                    }
+                    if(pair(hand))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                if(c.value == hand.get(i).value)
+                {
+                    count = count + 1;
+                }
+            }
+        }
                 return false;
     }
     public boolean pair(ArrayList<Card> hand)
     {
-                return false;
+        int count = 0;
+        for(Card c : hand)
+        {
+            for(int i = 0; i<hand.size(); i++)
+            {
+                if(count == 2)
+                {
+                    return true;
+                }
+                if(c.value == hand.get(i).value)
+                {
+                    count = count + 1;
+                }
+            }
+        }
+        return false;
     }
         
 }

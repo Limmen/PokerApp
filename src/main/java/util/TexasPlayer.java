@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import model.blackjack.User;
 import model.texas.Player;
 import net.miginfocom.swing.MigLayout;
@@ -40,6 +41,7 @@ public class TexasPlayer
     private int playersLeft;
     private TexasLogic tl;
     private int callAmount = 0;
+    private int dealer;
     public TexasPlayer(Player player, ArrayList<JLabel> cards, TexasLogic tl)
     {
         this.player = player;
@@ -78,7 +80,7 @@ public class TexasPlayer
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    addBet(callAmount);
+                    userBet(callAmount);
                     cleanUp();
 	        }
            });
@@ -145,35 +147,41 @@ public class TexasPlayer
     {
         player.init();
     }
-    public int bet(int bet, int playersLeft)
+    public void bet(int bet, int playersLeft, int dealer)
     {
         this.playersLeft = playersLeft;
         this.callAmount = bet;
+        this.dealer = dealer;
         if(isUser())
         {   
             panel.add(buttons, "span, align center");
             show();
-            return 0;
         }
         else
         {
             show();
-            return bet + 0;
+            update(tl.botBet(this, callAmount));
+            delay();
         }
     }
-    public void addBet(int val)
+    public void userBet(int val)
     {
         player.addBet(val);
         cash.setText(Integer.toString(player.getCash()));
         bet.setText(Integer.toString(player.getBet()));
         tl.pack();
     }
+    public void botBet()
+    {
+        cash.setText(Integer.toString(player.getCash()));
+        bet.setText(Integer.toString(player.getBet()));
+        tl.pack();
+    }
     public void cleanUp()
     {
-        panel.remove(buttons);
         hide();
         tl.pack();
-        tl.bet(1, getBet(), playersLeft);
+        tl.bet(dealer, getBet(), playersLeft);
     }
     public boolean isUser()
     {
@@ -189,5 +197,33 @@ public class TexasPlayer
         deal.setVisible(true);
         if(isUser())
             buttons.setVisible(true);
+    }
+    public void update(String res)
+    {
+        if(res.equalsIgnoreCase("fold"))
+        {
+            bet.setText("folded");
+        }
+        if(res.equalsIgnoreCase("call"))
+        {
+            botBet();
+        }
+        if(res.equalsIgnoreCase("raise"))
+        {
+            botBet();
+        }
+    }
+    public void delay()
+    {
+        int delay = 2000;
+        Timer timer = new Timer( delay, new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent e ){
+                System.out.println("timer went off");
+                cleanUp();
+            }
+        });
+        timer.setRepeats( false );
+        timer.start();
     }
 }
