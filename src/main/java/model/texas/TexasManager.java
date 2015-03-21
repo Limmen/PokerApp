@@ -42,4 +42,8 @@ public class TexasManager
             p.newDeal();
         }
     }
+    public void botBet(Player p)
+    {
+        ArrayList<Card> hand = p.getHand();
+    }
 }

@@ -23,11 +23,13 @@ import view.texas.TexasLogic;
  */
 public class TexasPlayer 
 {
+    private TexasPlayer me;
     private Player player;
     private JPanel panel;
     private JLabel cash;
     private JLabel bet;
     private JLabel deal;
+    private JPanel dealpanel;
     private ArrayList<JLabel> cards;
     Font Italic = new Font("Serif", Font.ITALIC, 12);
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
@@ -37,12 +39,14 @@ public class TexasPlayer
     JPanel buttons;
     private int playersLeft;
     private TexasLogic tl;
-    public TexasPlayer(Player player, ArrayList<JLabel> cards)
+    private int callAmount = 0;
+    public TexasPlayer(Player player, ArrayList<JLabel> cards, TexasLogic tl)
     {
         this.player = player;
         this.cards = cards;
-        init();
-        updateCards();
+        this.me = this;
+        this.tl = tl;
+        this.deal = tl.getDeal();
         this.call = new JButton("Call");
         call.setFont(Bold);
         this.fold = new JButton("Fold");
@@ -53,31 +57,29 @@ public class TexasPlayer
         buttons.add(call, "span 1, align center");
         buttons.add(fold, "span 1, align center");
         buttons.add(raise, "span 1, align center");
+        init();
         
             raise.addActionListener(new ActionListener() 
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    panel.remove(buttons);
-                    panel.remove(deal);
-                    tl.pack();
-                    tl.bet(1, getBet(), playersLeft);
+                    RaiseFrame rf = new RaiseFrame(me);
 	        }
            });
             fold.addActionListener(new ActionListener() 
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    bet.setText("Folded");
-                    tl.bet(1, getBet(), playersLeft);
+                    bet.setText("folded");
+                    cleanUp();
 	        }
            });
            call.addActionListener(new ActionListener() 
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    bet.setText("Call");
-                    tl.bet(1, getBet(), playersLeft);
+                    addBet(callAmount);
+                    cleanUp();
 	        }
            });
     }
@@ -90,15 +92,16 @@ public class TexasPlayer
             text = new JLabel("Cash");
             text.setFont(Bold);
             panel.add(text, "span 1, align center");
-            JLabel cash = new JLabel("500");
-            cash.setFont(Bold);
+            cash = new JLabel("500");
+            this.cash.setFont(Bold);
             panel.add(cash, "span 1, align center");
             text = new JLabel("Bet");
             text.setFont(Bold);
             panel.add(text, "span 1, align center");
             bet = new JLabel("0");
-            bet.setFont(Bold);
+            this.bet.setFont(Bold);
             panel.add(bet, "span 1, align center");
+            updateCards();
     }
     public JPanel getPanel()
     {
@@ -128,6 +131,11 @@ public class TexasPlayer
         {
             panel.add(c);
         }
+            dealpanel = new JPanel(new MigLayout());
+            dealpanel.add(deal, "span, align center");
+            panel.add(dealpanel, "wrap, span, align center");
+            panel.add(buttons, "wrap, span, align center");
+            hide();
     }
     public ArrayList<Card> getCards()
     {
@@ -137,24 +145,49 @@ public class TexasPlayer
     {
         player.init();
     }
-    public int bet(JLabel deal, int bet, int playersLeft)
+    public int bet(int bet, int playersLeft)
     {
-        System.out.println("Name: " + player.getName());
-        this.deal = deal;
         this.playersLeft = playersLeft;
-        int res = player.bet();
-        if(res == 1)
+        this.callAmount = bet;
+        if(isUser())
         {   
             panel.add(buttons, "span, align center");
-            panel.add(deal, "span, align center");
+            show();
             return 0;
         }
-        panel.add(deal, "span, align center");
-        return bet + 0;
+        else
+        {
+            show();
+            return bet + 0;
+        }
     }
-    public void setTexasLogic(TexasLogic tl)
+    public void addBet(int val)
     {
-        this.tl = tl;
+        player.addBet(val);
+        cash.setText(Integer.toString(player.getCash()));
+        bet.setText(Integer.toString(player.getBet()));
+        tl.pack();
     }
-
+    public void cleanUp()
+    {
+        panel.remove(buttons);
+        hide();
+        tl.pack();
+        tl.bet(1, getBet(), playersLeft);
+    }
+    public boolean isUser()
+    {
+        return player.isUser();
+    }
+    public void hide()
+    {
+        deal.setVisible(false);
+        buttons.setVisible(false);
+    }
+    public void show()
+    {
+        deal.setVisible(true);
+        if(isUser())
+            buttons.setVisible(true);
+    }
 }

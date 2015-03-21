@@ -44,7 +44,7 @@ public class TexasTable
            }
            if(tbc.getId() == i)
            {
-               tbc.updateCard(dealcards.get(i));
+               tbc.updateVCard(dealcards.get(i));
                i++;
            }
         }
@@ -56,7 +56,7 @@ public class TexasTable
         {
            if(tbc.getId() == n)
            {
-               tbc.updateCard(dealcard);
+               tbc.updateVCard(dealcard);
                return;
            }
         }
@@ -67,18 +67,18 @@ public class TexasTable
 
         for(TexasTableCard c : cards)
         {
-            panel.remove(c.getCard());
+            panel.remove(c.getVCard());
         }
         for(TexasTableCard t: placeholders)
         {
-            panel.add(t.getCard());
+            panel.add(t.getVCard());
         }
     }
     public void addCards()
     {
         for(TexasTableCard t: cards)
         {
-            panel.add(t.getCard());
+            panel.add(t.getVCard());
         }
     }
 

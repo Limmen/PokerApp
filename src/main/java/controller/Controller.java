@@ -7,7 +7,6 @@ package controller;
 
 import java.util.ArrayList;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import model.blackjack.BlackJackManager;
 import model.blackjack.DeckManager;
 import model.texas.Player;
@@ -18,6 +17,7 @@ import util.TexasTable;
 import util.TexasTableCard;
 import view.blackjack.BlackJackGui;
 import view.texas.TexasGui;
+import view.texas.TexasLogic;
 
 /**
  *
@@ -95,7 +95,7 @@ public class Controller
     {
         return bm.getVisible();
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasGui gui)
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl, TexasGui gui)
     {
         Player player;
         if(id == -1)
@@ -104,7 +104,7 @@ public class Controller
         }
         else
             player = tm.newBot(id);
-        return new TexasPlayer(player,cards);
+        return new TexasPlayer(player,cards, tl);
     }
     public TexasTableCard newTableCard(int id, JLabel card, TexasGui gui)
     {

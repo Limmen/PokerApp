@@ -7,6 +7,7 @@ This is going to be a desktop java application for different poker games. The ap
 Currently the game consists of a menu where u can choose between BlackJack and Texas Hold'em.
 
 BlackJack is a complete game with GUI. The game  got some restrictions though: you can't bet (simply play for score), you can only play 1 player vs the house.
+
 Texas Hold'em is still just a prototype and not playable.
 
 ##Stuff to do

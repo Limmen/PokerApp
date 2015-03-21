@@ -51,14 +51,13 @@ public class TexasLogic
         ArrayList<TexasPlayer> bots = new ArrayList();
         for(int i = 0; i<number; i++)
         {
-            bots.add(gui.newPlayer(i,getPlaceholder(2)));
+            bots.add(gui.newPlayer(i,getPlaceholder(2), this));
         }
         return bots;
     }
        public TexasPlayer generateUser()
     {
-        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2));
-        user.setTexasLogic(this);
+        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this);
         return user;
         
     }
@@ -95,27 +94,21 @@ public class TexasLogic
     }
     public void userBet(int bet,int playersLeft, TexasPlayer user)
     {
-        image = tc.getDealer();
-        JLabel deal = new JLabel(new ImageIcon(image));
-        user.bet(deal, bet, playersLeft-1);
+        user.bet(bet, playersLeft-1);
     }
     public void bet(int dealer, int bet, int playersLeft)
     {
         ArrayList<TexasPlayer> players = tf.getPlayers();
-        JLabel deal;
         while(playersLeft > 0)
         {
-            System.out.println("while, dealer: " + dealer);
-            image = tc.getDealer();
-            deal = new JLabel(new ImageIcon(image));
             if(dealer > players.size()-1)
                 dealer = 0;
-            if(dealer == 0)
+            if(players.get(dealer).isUser())
             {
                 userBet(bet, playersLeft, players.get(0));
                 return;
             }
-            bet = players.get(dealer).bet(deal, bet, playersLeft);
+            bet = players.get(dealer).bet(bet, playersLeft);
             playersLeft--;
             dealer++;
             pack();
@@ -132,6 +125,15 @@ public class TexasLogic
     {
         tf.pack();
     }
-    
+    public void fold(TexasPlayer p)
+    {
+        tf.players.remove(p);
+        tf.folded.add(p);
+    }
+    public JLabel getDeal()
+    {
+        image = tc.getDealer();
+        return new JLabel(new ImageIcon(image));
+    }
    
 }

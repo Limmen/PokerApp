@@ -65,8 +65,16 @@ public class Bot implements Player
         hand = new ArrayList();
     }
     @Override
-    public int bet()
+    public boolean isUser()
     {
-        return 2;
+        return false;
     }
+    @Override
+    public void addBet(int val)
+    {
+        //getChoice();
+        currentbet = currentbet + val;
+        cash = cash - val;
+    }
+    
 }

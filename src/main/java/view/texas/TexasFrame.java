@@ -39,9 +39,9 @@ public class TexasFrame extends JFrame
     TexasCards tc;
     private ArrayList<TexasTable> tableCards;
     private TexasPlayer user;
-    private ArrayList<TexasPlayer> bots;
-    private ArrayList<TexasPlayer> players;
-    private ArrayList<TexasPlayer> folded;
+    public ArrayList<TexasPlayer> bots;
+    public ArrayList<TexasPlayer> players;
+    public ArrayList<TexasPlayer> folded;
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     int bet;

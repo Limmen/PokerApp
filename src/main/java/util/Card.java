@@ -9,11 +9,11 @@ package util;
  *
  * @author kim
  */
-public class Card 
+public class Card implements Comparable
 {
-    private int id;
-    private String color;
-    private int value;
+    public int id;
+    public String color;
+    public int value;
     
     public Card(int id, String color, int value)
     {
@@ -39,4 +39,17 @@ public class Card
         System.out.println("Card: " + "Id: " + this.id + " color: " 
                     + this.color + " value: " + this.value);
     }
+
+    @Override
+    public int compareTo(Object o) 
+    {
+        Card c = (Card) o;
+        if(this.value > c.value)
+            return 1;
+        if(this.value < c.value)
+            return -1;
+        else
+            return 0;
+    }
+ 
 }

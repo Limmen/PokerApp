@@ -44,6 +44,7 @@ public class User implements Player
     @Override
     public int getBet() 
     {
+         System.out.println("Returning current bet: " + currentbet);
          return currentbet;
     }
     @Override
@@ -67,9 +68,15 @@ public class User implements Player
         hand = new ArrayList();
     }
     @Override
-    public int bet()
+    public void addBet(int val)
     {
-        return 1;
+        currentbet = currentbet + val;
+        cash = cash - val;
+    }
+    @Override
+    public boolean isUser()
+    {
+        return true;
     }
     
 }

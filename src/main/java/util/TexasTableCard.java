@@ -14,23 +14,28 @@ import javax.swing.JLabel;
 public class TexasTableCard
 {
     private int id;
-    private JLabel card;
+    private JLabel Vcard;
+    private Card card;
     
-    public TexasTableCard(int id, JLabel card)
+    public TexasTableCard(int id, JLabel Vcard)
     {
         this.id = id;
-        this.card = card;
+        this.Vcard = Vcard;
     }
     public int getId()
     {
         return id;
     }
-    public JLabel getCard()
+    public JLabel getVCard()
     {
-        return card;
+        return Vcard;
     }
-    public void updateCard(JLabel card)
+    public void updateVCard(JLabel Vcard)
     {
-        this.card = card;
+        this.Vcard = Vcard;
+    }
+    public void setCard(Card c)
+    {
+        this.card = c;
     }
 }

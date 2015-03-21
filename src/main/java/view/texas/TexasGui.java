@@ -28,9 +28,9 @@ public class TexasGui
         this.contr = contr;
         this.tf = new TexasFrame(this);
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards)
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl)
     {
-        return contr.newPlayer(id,cards,this);
+        return contr.newPlayer(id,cards,tl,this);
     }
     public TexasTableCard newTableCard(int id, JLabel card)
     {
