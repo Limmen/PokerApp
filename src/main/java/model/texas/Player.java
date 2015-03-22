@@ -21,6 +21,7 @@ public interface Player
     public String getName();
     public void newCards(ArrayList<Card> c);
     public void init();
-    public void addBet(int val);
+    public void call(int val);
+    public void raise(int val);
     public boolean isUser();
 }

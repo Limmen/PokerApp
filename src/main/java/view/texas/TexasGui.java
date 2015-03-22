@@ -8,6 +8,7 @@ package view.texas;
 import controller.Controller;
 import java.util.ArrayList;
 import javax.swing.JLabel;
+import model.texas.Bet;
 import model.texas.Player;
 import util.Card;
 import util.TexasPlayer;
@@ -29,9 +30,9 @@ public class TexasGui
         this.contr = contr;
         this.tf = new TexasFrame(this);
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl)
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards,TexasLogic tl, Bet bets)
     {
-        return contr.newPlayer(id,cards,tl,this);
+        return contr.newPlayer(id,cards,tl,bets,this);
     }
     public TexasTableCard newTableCard(int id, JLabel card)
     {

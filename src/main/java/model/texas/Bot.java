@@ -72,12 +72,6 @@ public class Bot implements Player
         return false;
     }
     @Override
-    public void addBet(int val)
-    {
-        //getChoice();
-        currentbet = currentbet + val;
-        cash = cash - val;
-    }
     public void raise(int raise)
     {
         if(raise > cash)
@@ -87,15 +81,14 @@ public class Bot implements Player
         cash = cash - raise;
         
     }
-    public void call(int callAmount)
+    @Override
+    public void call(int val)
     {
-        int call;
-        if(callAmount > cash)
-            call = cash;
-        else
-            call = callAmount;
-        currentbet = currentbet + call;
-        cash = cash - call;
+        if(val > currentbet)
+        {
+            cash = cash - (val-currentbet);
+            currentbet = currentbet + val;
+        }
     }
 
     

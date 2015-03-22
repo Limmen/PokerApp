@@ -25,7 +25,7 @@ public class RaiseFrame extends JFrame
         Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
 	public RaiseFrame(TexasPlayer player) 
 	{
-	super("New book");
+	super("Raise bet");
         this.player = player;
         try 
         {
@@ -68,7 +68,7 @@ public class RaiseFrame extends JFrame
         
         public void addBet(String val)
         {
-            player.userBet(Integer.parseInt(val));
+            player.userRaise(Integer.parseInt(val));
         }
         public void cleanUp()
         {

@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import model.blackjack.User;
+import model.texas.Bet;
 import model.texas.Player;
 import net.miginfocom.swing.MigLayout;
 import view.texas.TexasLogic;
@@ -42,13 +42,15 @@ public class TexasPlayer
     private TexasLogic tl;
     private int callAmount = 0;
     private int dealer;
-    public TexasPlayer(Player player, ArrayList<JLabel> cards, TexasLogic tl)
+    private Bet bets;
+    public TexasPlayer(Player player, ArrayList<JLabel> cards, TexasLogic tl, Bet bets)
     {
         this.player = player;
         this.cards = cards;
         this.me = this;
         this.tl = tl;
         this.deal = tl.getDeal();
+        this.bets = bets;
         this.call = new JButton("Call");
         call.setFont(Bold);
         this.fold = new JButton("Fold");
@@ -73,6 +75,7 @@ public class TexasPlayer
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
                     bet.setText("folded");
+                    fold();
                     cleanUp();
 	        }
            });
@@ -80,7 +83,7 @@ public class TexasPlayer
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    userBet(callAmount);
+                    userCall(callAmount);
                     cleanUp();
 	        }
            });
@@ -150,7 +153,7 @@ public class TexasPlayer
     public void bet(int bet, int playersLeft, int dealer)
     {
         this.playersLeft = playersLeft;
-        this.callAmount = bet;
+        this.callAmount = bets.getBet();
         this.dealer = dealer;
         if(isUser())
         {   
@@ -164,11 +167,20 @@ public class TexasPlayer
             delay();
         }
     }
-    public void userBet(int val)
+    public void userCall(int val)
     {
-        player.addBet(val);
+        player.call(val);
         cash.setText(Integer.toString(player.getCash()));
         bet.setText(Integer.toString(player.getBet()));
+        bets.setBet(val);
+        tl.pack();
+    }
+    public void userRaise(int val)
+    {
+        player.raise(val);
+        cash.setText(Integer.toString(player.getCash()));
+        bet.setText(Integer.toString(player.getBet()));
+        bets.setBet(val);
         tl.pack();
     }
     public void botBet()
@@ -203,6 +215,7 @@ public class TexasPlayer
         if(res.equalsIgnoreCase("fold"))
         {
             bet.setText("folded");
+            fold();
         }
         if(res.equalsIgnoreCase("call"))
         {
@@ -211,6 +224,7 @@ public class TexasPlayer
         if(res.equalsIgnoreCase("raise"))
         {
             botBet();
+            bets.setBet(player.getBet());
         }
     }
     public void delay()
@@ -225,5 +239,9 @@ public class TexasPlayer
         });
         timer.setRepeats( false );
         timer.start();
+    }
+    public void fold()
+    {
+        tl.fold(me);
     }
 }

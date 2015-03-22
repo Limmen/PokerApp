@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import model.texas.Player;
+import model.texas.Bet;
 import util.Card;
 import util.TexasPlayer;
 import util.TexasTable;
@@ -26,6 +26,7 @@ public class TexasLogic
     TexasFrame tf;
     BufferedImage image;
     TexasCards tc;
+    Bet bets;
     Font Italic = new Font("Serif", Font.ITALIC, 12);
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc)
@@ -33,6 +34,7 @@ public class TexasLogic
         this.gui = gui;
         this.tf = tf;
         this.tc = tc;
+        this.bets = new Bet();
     }
     public TexasTable generateTable()
     {
@@ -52,13 +54,13 @@ public class TexasLogic
         ArrayList<TexasPlayer> bots = new ArrayList();
         for(int i = 0; i<number; i++)
         {
-            bots.add(gui.newPlayer(i,getPlaceholder(2), this));
+            bots.add(gui.newPlayer(i,getPlaceholder(2), this, bets));
         }
         return bots;
     }
        public TexasPlayer generateUser()
     {
-        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this);
+        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this, bets);
         return user;
         
     }
@@ -103,7 +105,23 @@ public class TexasLogic
             players.get(dealer).bet(bet, playersLeft-1,dealer+1);
         }
         else
-            firstTableDeal();
+        {
+            Boolean newRound = false;
+            for(TexasPlayer p : players)
+            {
+                if (p.getPlayer().getBet() < bets.getBet() && p.getPlayer().getCash() > 0)
+                {
+                    newRound = true;
+                }
+            }
+            if(newRound)
+            {
+                bet(0, bets.getBet(), players.size());
+            }
+            else
+                firstTableDeal();
+        }
+            
     }
     public void pack()
     {
@@ -142,7 +160,6 @@ public class TexasLogic
             cards.add(null);
         }
         table.Deal(Vcards, cards);
-        System.out.println("ello");
         pack();
         
     }

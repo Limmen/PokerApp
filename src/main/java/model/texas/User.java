@@ -68,10 +68,19 @@ public class User implements Player
         hand = new ArrayList();
     }
     @Override
-    public void addBet(int val)
+    public void raise(int val)
     {
-        currentbet = currentbet + val;
         cash = cash - val;
+        currentbet = currentbet + val;
+    }
+    @Override
+    public void call(int val)
+    {
+        if(val > currentbet)
+        {
+            cash = cash - (val-currentbet);
+            currentbet = currentbet + val;
+        }
     }
     @Override
     public boolean isUser()
