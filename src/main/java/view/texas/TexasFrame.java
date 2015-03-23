@@ -33,7 +33,6 @@ public class TexasFrame extends JFrame
     private JPanel buttons;
     private JButton deal;
     private JButton restart;
-    private BufferedImage image;
     public TexasTable table;
     TexasLogic tl;
     TexasCards tc;
@@ -49,9 +48,7 @@ public class TexasFrame extends JFrame
     {
         super("Texas Hold'em");
         this.gui = gui;
-        this.tc = new TexasCards(gui);
-        tl = new TexasLogic(gui, this,tc);
-        players = new ArrayList();
+        container = new JPanel(new MigLayout("wrap 4"));
         try 
         {
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
@@ -70,19 +67,8 @@ public class TexasFrame extends JFrame
         
         newGame();
         
-        deal.addActionListener(new ActionListener() 
-        {
-	    public void actionPerformed(ActionEvent arg0) 
-                {   
-                    tl.newDeck(players);
-                    tl.playersDeal(players);
-                    tl.bet(dealer, bet, players.size());
-                    pack();
-                    //tl.firstTableDeal(table);
-	        }
-	});
-       
-        add(container);
+        
+               
         setBackground(Color.BLACK);
         pack();
         setLocationRelativeTo(null);    // centers on screen
@@ -91,6 +77,10 @@ public class TexasFrame extends JFrame
     
     public void newGame()
     {
+        remove(container);
+        this.tc = new TexasCards(gui);
+        tl = new TexasLogic(gui, this,tc);
+        players = new ArrayList();
         int bet = 0;
         int dealer = 0;
         container = new JPanel(new MigLayout("wrap 4"));
@@ -120,9 +110,33 @@ public class TexasFrame extends JFrame
         restart.setFont(Bold);
         buttons.add(restart, "span 1");
         container.add(buttons,"span, align center");
+        deal.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    System.out.println("deal");
+                    tl.newDeck(players);
+                    tl.playersDeal(players);
+                    bet();
+                    pack();
+	        }
+	});
+        restart.addActionListener(new ActionListener() 
+        {
+	    public void actionPerformed(ActionEvent arg0) 
+                {   
+                    newGame();
+                    pack();
+	        }
+	});
+        add(container);
     }
     public ArrayList<TexasPlayer> getPlayers()
     {
         return players;
+    }
+    public void bet()
+    {
+        tl.bet(dealer, bet, players.size());
     }
 }

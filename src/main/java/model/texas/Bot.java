@@ -87,7 +87,7 @@ public class Bot implements Player
         if(val > currentbet)
         {
             cash = cash - (val-currentbet);
-            currentbet = currentbet + val;
+            currentbet = val;
         }
     }
 
