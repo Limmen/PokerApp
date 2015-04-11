@@ -32,8 +32,12 @@ public class TexasPlayer
     private JLabel deal;
     private JPanel dealpanel;
     private ArrayList<JLabel> cards;
-    Font Italic = new Font("Serif", Font.ITALIC, 12);
-    Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font Title = new Font("Serif", Font.PLAIN, 20);
+    private Font Italic = new Font("Serif", Font.ITALIC, 12);
+    private Font Plain = new Font("Serif", Font.PLAIN, 12);
+    private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+    private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     private JButton raise;
     private JButton call;
     private JButton fold;
@@ -52,11 +56,11 @@ public class TexasPlayer
         this.deal = tl.getDeal();
         this.bets = bets;
         this.call = new JButton("Call");
-        call.setFont(Bold);
+        call.setFont(PBold);
         this.fold = new JButton("Fold");
-        fold.setFont(Bold);
+        fold.setFont(PBold);
         this.raise = new JButton("Raise");
-        raise.setFont(Bold);
+        raise.setFont(PBold);
         buttons = new JPanel(new MigLayout("wrap 3"));
         buttons.add(call, "span 1, align center");
         buttons.add(fold, "span 1, align center");
@@ -92,19 +96,19 @@ public class TexasPlayer
     {
             panel = new JPanel(new MigLayout("wrap 2"));
             JLabel text = new JLabel(player.getName());
-            text.setFont(Bold);
+            text.setFont(PBold);
             panel.add(text, "span, align center");
             text = new JLabel("Cash");
-            text.setFont(Bold);
+            text.setFont(PBold);
             panel.add(text, "span 1, align center");
             cash = new JLabel("500");
-            this.cash.setFont(Bold);
+            this.cash.setFont(PBold);
             panel.add(cash, "span 1, align center");
             text = new JLabel("Bet");
-            text.setFont(Bold);
+            text.setFont(PBold);
             panel.add(text, "span 1, align center");
             bet = new JLabel("0");
-            this.bet.setFont(Bold);
+            this.bet.setFont(PBold);
             panel.add(bet, "span 1, align center");
             updateCards();
     }

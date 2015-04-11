@@ -31,7 +31,12 @@ public class MainFrame extends JFrame
     private BlackJackGui bgui;
     private TexasFrame tf;
     private JLabel title;
-    
+    private Font Title = new Font("Serif", Font.PLAIN, 20);
+    private Font Italic = new Font("Serif", Font.ITALIC, 12);
+    private Font Plain = new Font("Serif", Font.PLAIN, 12);
+    private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+    private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     public MainFrame(Gui gui)
     {
         super("Poker");
@@ -53,22 +58,17 @@ public class MainFrame extends JFrame
         }
         this.setLayout(new MigLayout());
         container = new JPanel(new MigLayout("wrap 4"));
-        Font Plain = new Font("Serif", Font.PLAIN, 16);
-        Font Italic = new Font("Serif", Font.ITALIC, 16);
-        Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
-        Font PlainBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
-        
         
         title = new JLabel("Welcome to the casino, select a table you would like to visit");
-        title.setFont(PlainBold);
+        title.setFont(Title);
         container.add(title,"span 4");
         
         BlackJack = new JButton("BlackJack");
-        BlackJack.setFont(Bold);
+        BlackJack.setFont(TBold);
         container.add(BlackJack, "span 4, align center");
         
         Texas = new JButton("Texas hold'em");
-        Texas.setFont(Bold);
+        Texas.setFont(TBold);
         container.add(Texas,"span 4, align center");
         
         BlackJack.addActionListener(new ActionListener() 
@@ -87,7 +87,9 @@ public class MainFrame extends JFrame
                     texas();
                 }
 	});
-        
+        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt.setFont(Plain);
+        container.add(txt, "span 1, gaptop 20");
         add(container);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.BLACK);

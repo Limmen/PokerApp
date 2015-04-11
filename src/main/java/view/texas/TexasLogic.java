@@ -29,6 +29,7 @@ public class TexasLogic
     Bet bets;
     Font Italic = new Font("Serif", Font.ITALIC, 12);
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    int nrCards = 0;
     public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc)
     {
         this.gui = gui;
@@ -97,6 +98,7 @@ public class TexasLogic
     }
     public void bet(int dealer, int bet, int playersLeft)
     {
+        Boolean newRound = false;
         ArrayList<TexasPlayer> players = tf.getPlayers();
         if(playersLeft > 0)
         {
@@ -106,7 +108,6 @@ public class TexasLogic
         }
         else
         {
-            Boolean newRound = false;
             for(TexasPlayer p : players)
             {
                 if (p.getPlayer().getBet() < bets.getBet() && p.getPlayer().getCash() > 0)
@@ -119,7 +120,17 @@ public class TexasLogic
                 bet(0, bets.getBet(), players.size());
             }
             else
-                firstTableDeal();
+            {
+                if(nrCards > 0)
+                {
+                    deal(1);
+                }
+                if(nrCards == 0)
+                {
+                    deal(3);
+                }
+            }
+            
         }
             
     }
@@ -141,10 +152,10 @@ public class TexasLogic
     {
         return gui.botBet(p.getPlayer(), tf.table.getCards(), callAmount);
     }
-    public void firstTableDeal()
+    public void deal(int nr)
     {
         TexasTable table = tf.table;
-        ArrayList<Card> cards = gui.tableDeal(3);
+        ArrayList<Card> cards = gui.tableDeal(nr);
         ArrayList<JLabel> Vcards = new ArrayList();
         for(Card c : cards)
             {
@@ -152,14 +163,12 @@ public class TexasLogic
                 JLabel Card = new JLabel(new ImageIcon(image));
                 Vcards.add(Card);
             }
-        for(int i = 0; i<2; i++)
+        for(int i = 0; i < cards.size(); i++)
         {
-            image = tc.getPlaceholder();
-            JLabel Card = new JLabel(new ImageIcon(image));
-            Vcards.add(Card);
-            cards.add(null);
+            table.Deal(Vcards,cards, nrCards +1, i);
+            nrCards++;
         }
-        table.Deal(Vcards, cards);
+        table.addCards();
         pack();
         
     }

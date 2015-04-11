@@ -21,8 +21,12 @@ public class RaiseFrame extends JFrame
         private JLabel amount;
         private JTextField enter = new JTextField(40);
         private JButton commit;
-        Font Italic = new Font("Serif", Font.ITALIC, 12);
-        Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+        private Font Title = new Font("Serif", Font.PLAIN, 20);
+        private Font Italic = new Font("Serif", Font.ITALIC, 12);
+        private Font Plain = new Font("Serif", Font.PLAIN, 12);
+        private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+        private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+        private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
 	public RaiseFrame(TexasPlayer player) 
 	{
 	super("Raise bet");
@@ -43,12 +47,12 @@ public class RaiseFrame extends JFrame
         }
         container = new JPanel(new MigLayout("wrap 2"));
         amount = new JLabel("Amount");
-        amount.setFont(Bold);
+        amount.setFont(PBold);
         enter.setFont(Italic);
         container.add(amount, "span 1, align center");
         container.add(enter, "span 1, align center");
         commit = new JButton("Commit bet");
-        commit.setFont(Bold);
+        commit.setFont(PBold);
         container.add(commit, "span 2, align center");
     
         commit.addActionListener(new ActionListener() 
@@ -60,6 +64,9 @@ public class RaiseFrame extends JFrame
          	   dispose();    
             }
         });
+        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt.setFont(Plain);
+        container.add(txt, "span 1, gaptop 20");
         add(container);
         pack();
         setLocationRelativeTo(null);    // centers on screen

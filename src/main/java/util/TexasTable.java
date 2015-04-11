@@ -33,16 +33,10 @@ public class TexasTable
    {
        return this.cards;
    }
-   public void Deal(ArrayList<JLabel> dealcards, ArrayList<Card> dcards)
+   public void Deal(ArrayList<JLabel> dealcards, ArrayList<Card> dcards, int i, int j)
     {
-        panel.removeAll();
-        for(int i = 0; i<cards.size(); i++)
-        {
-            cards.get(i).setCard(dcards.get(i));
-            cards.get(i).setVCard(dealcards.get(i));
-            panel.add(cards.get(i).getVCard());
-        }
-        
+            cards.get(i-1).setCard(dcards.get(j));
+            cards.get(i-1).setVCard(dealcards.get(j));
     }
       public void secondDeal(JLabel dealcard, int n)
     {
@@ -70,6 +64,7 @@ public class TexasTable
     }
     public void addCards()
     {
+        panel.removeAll();
         for(TexasTableCard t: cards)
         {
             panel.add(t.getVCard());

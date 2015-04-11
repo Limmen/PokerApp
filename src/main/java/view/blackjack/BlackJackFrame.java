@@ -5,15 +5,13 @@
  */
 package view.blackjack;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
-import util.Card;
 
 /**
  *
@@ -48,6 +45,12 @@ public class BlackJackFrame extends JFrame
     private BufferedImage image;
     BlackJackLogic bl;
     BlackJackCards bc;
+    private Font Title = new Font("Serif", Font.PLAIN, 20);
+    private Font Italic = new Font("Serif", Font.ITALIC, 12);
+    private Font Plain = new Font("Serif", Font.PLAIN, 12);
+    private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+    private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     public BlackJackFrame(BlackJackGui gui)
     {
         super("BlackJack");
@@ -71,22 +74,19 @@ public class BlackJackFrame extends JFrame
         {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        this.setLayout(new MigLayout());
         container = new JPanel(new MigLayout("wrap 4"));
-        Font Italic = new Font("Serif", Font.ITALIC, 12);
-        Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
         
         text = new JLabel("You");
-        text.setFont(Bold);
+        text.setFont(PBold);
         container.add(text, "span 1, align center");
         Score1 = new JLabel("score: 0");
-        Score1.setFont(Bold);
+        Score1.setFont(PBold);
         container.add(Score1, "span 1, align center");
         text = new JLabel("House");
-        text.setFont(Bold);
+        text.setFont(PBold);
         container.add(text, "span 1, align center, gap 80");
         Score2 = new JLabel("score: 0");
-        Score2.setFont(Bold);
+        Score2.setFont(PBold);
         container.add(Score2, "span1, align center");
         
         Usercards = new JPanel();
@@ -114,26 +114,26 @@ public class BlackJackFrame extends JFrame
         container.add(Housecards, "gap 80, span 2,align center");
         
         Value1 = new JLabel("0");
-        Value1.setFont(Bold);
+        Value1.setFont(PBold);
         container.add(Value1, "span 2, align center");
         Value2 = new JLabel("0");
-        Value2.setFont(Bold);
+        Value2.setFont(PBold);
         container.add(Value2, "span 2, align center, gap 80");
         
         Hit = new JButton("Hit");
-        Hit.setFont(Bold);
+        Hit.setFont(PBold);
         container.add(Hit,"span 1, align center");
         
         Stand = new JButton("Stand");
-        Stand.setFont(Bold);
+        Stand.setFont(PBold);
         container.add(Stand,"span 1, align center");
         
         Deal = new JButton("Deal");
-        Deal.setFont(Bold);
+        Deal.setFont(PBold);
         container.add(Deal,"span 2, align center, gap 80");
         
         Restart = new JButton("New Game");
-        Restart.setFont(Bold);
+        Restart.setFont(PBold);
         container.add(Restart, "span4, align center");
         bl.updateValue();
         Deal.addActionListener(new ActionListener() 
@@ -264,8 +264,12 @@ public class BlackJackFrame extends JFrame
                     pack();  
 	        }
 	});
-        
-        add(container);
+        JPanel panel = new JPanel(new MigLayout("wrap 1"));
+        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt.setFont(Plain);
+        panel.add(txt, "span");
+        container.add(panel, "span, gaptop 20");
+        add(container, BorderLayout.CENTER);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.BLACK);
         pack();

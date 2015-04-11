@@ -5,13 +5,12 @@
  */
 package view.texas;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,8 +39,12 @@ public class TexasFrame extends JFrame
     public ArrayList<TexasPlayer> bots;
     public ArrayList<TexasPlayer> players;
     public ArrayList<TexasPlayer> folded;
+    private Font Title = new Font("Serif", Font.PLAIN, 20);
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
-    private Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font Plain = new Font("Serif", Font.PLAIN, 12);
+    private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+    private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+    private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     int bet;
     int dealer;
     public TexasFrame(TexasGui gui)
@@ -63,7 +66,6 @@ public class TexasFrame extends JFrame
         {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        this.setLayout(new MigLayout());
         
         newGame();
         
@@ -85,7 +87,7 @@ public class TexasFrame extends JFrame
         int dealer = 0;
         container = new JPanel(new MigLayout("wrap 4"));
         text = new JLabel("Table:");
-        text.setFont(Bold);
+        text.setFont(PBold);
         container.add(text, "span 4, align center");
         
         table = tl.generateTable();
@@ -104,10 +106,10 @@ public class TexasFrame extends JFrame
         }
         buttons = new JPanel(new MigLayout("wrap 2"));
         deal = new JButton("Deal");
-        deal.setFont(Bold);
+        deal.setFont(PBold);
         buttons.add(deal,"span 1");
         restart = new JButton("New game");
-        restart.setFont(Bold);
+        restart.setFont(PBold);
         buttons.add(restart, "span 1");
         container.add(buttons,"span, align center");
         deal.addActionListener(new ActionListener() 
@@ -129,7 +131,10 @@ public class TexasFrame extends JFrame
                     pack();
 	        }
 	});
-        add(container);
+        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt.setFont(Plain);
+        container.add(txt, "span 1, gaptop 20");
+        add(container, BorderLayout.CENTER);
     }
     public ArrayList<TexasPlayer> getPlayers()
     {
