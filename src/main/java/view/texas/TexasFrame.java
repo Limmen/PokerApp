@@ -33,12 +33,13 @@ public class TexasFrame extends JFrame
     private JButton deal;
     private JButton restart;
     public TexasTable table;
+    public JLabel total;
     TexasLogic tl;
     TexasCards tc;
     private TexasPlayer user;
     public ArrayList<TexasPlayer> bots;
-    public ArrayList<TexasPlayer> players;
-    public ArrayList<TexasPlayer> folded;
+    public ArrayList<TexasPlayer> players = new ArrayList();
+    public ArrayList<TexasPlayer> folded = new ArrayList();
     private Font Title = new Font("Serif", Font.PLAIN, 20);
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Plain = new Font("Serif", Font.PLAIN, 12);
@@ -47,6 +48,7 @@ public class TexasFrame extends JFrame
     private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     int bet;
     int dealer;
+    boolean playersdeal = false;
     public TexasFrame(TexasGui gui)
     {
         super("Texas Hold'em");
@@ -93,6 +95,15 @@ public class TexasFrame extends JFrame
         table = tl.generateTable();
         container.add(table.getPanel(), "span 4, align center");
         
+        JPanel pp = new JPanel(new MigLayout("wrap 2"));
+        JLabel txt = new JLabel("Total money at stake: ");
+        txt.setFont(PBold);
+        pp.add(txt, "span 1, align center");
+        total = new JLabel(Integer.toString(gui.getTotal(players)));
+        total.setFont(PBold);
+        pp.add(total, "span 1, align center");
+        container.add(pp, "span, gaptop 20, gapbottom 20, align center");
+        
         user = tl.generateUser();
         bots = tl.generateBots(3);
         players.add(user);
@@ -116,22 +127,26 @@ public class TexasFrame extends JFrame
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    System.out.println("deal");
-                    tl.newDeck(players);
-                    tl.playersDeal(players);
-                    bet();
-                    pack();
+                    if(!playersdeal)
+                    {
+                        playersdeal = true;
+                        tl.newDeck(players);
+                        tl.playersDeal(players);
+                        bet();
+                        pack();
+                    }
 	        }
 	});
         restart.addActionListener(new ActionListener() 
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
+                    playersdeal = false;
                     newGame();
                     pack();
 	        }
 	});
-        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
         txt.setFont(Plain);
         container.add(txt, "span 1, gaptop 20");
         add(container, BorderLayout.CENTER);
@@ -142,6 +157,12 @@ public class TexasFrame extends JFrame
     }
     public void bet()
     {
+        tl.chooseDealer();
         tl.bet(dealer, bet, players.size());
+    }
+    public void updateTotal()
+    {
+         total.setText(Integer.toString(gui.getTotal(players)));
+         pack();
     }
 }

@@ -8,6 +8,7 @@ package model.texas;
 import java.util.ArrayList;
 import util.Card;
 import util.TexasPlayer;
+import util.TexasTable;
 import util.TexasTableCard;
 
 /**
@@ -16,14 +17,10 @@ import util.TexasTableCard;
  */
 public class TexasManager 
 {
-    private User user;
-    private ArrayList<Bot> bots;
     private HandEvaluator he;
     
     public TexasManager()
     {
-        this.user = new User();
-        this.bots = new ArrayList();
         this.he = new HandEvaluator();
     }
     public Player newBot(int id)
@@ -48,23 +45,28 @@ public class TexasManager
     public String botBet(Player p, ArrayList<TexasTableCard> table, int callAmount)
     {
         ArrayList<Card> hand = p.getHand();
+        ArrayList<Card> evaluate = new ArrayList();
+        for(Card k : hand)
+        {
+            evaluate.add(k);
+        }
         Bot b = (Bot) p;
         for(TexasTableCard c : table)
         {
             Card g = c.getCard();
             if(g != null)
             {
-                hand.add(g);
+                evaluate.add(g);
             }
         }
-        int res = he.evaluate(hand);
-        if(res == 1 && hand.size()> 2) //fold
+        int res = he.evaluate(evaluate);
+        if(res == 1 && evaluate.size()> 2) //fold
         {
             return "fold";
         }
-        if((res > 1 && hand.size() < 3) || (res > 2)) //raise
+        if((res > 1 && evaluate.size() < 3) || (res > 2)) //raise
         {
-            if(callAmount > b.getCash()/5 && hand.size() < 3)
+            if(callAmount > b.getCash()/5 && evaluate.size() < 3)
             {
                 b.call(callAmount);
                 return "call";
@@ -81,7 +83,62 @@ public class TexasManager
         }
         b.call(callAmount);
         return "call";
+    }
+    public int getTotal(ArrayList<TexasPlayer> players)
+    {
+        int total = 0;
+        for(TexasPlayer p : players)
+        {
+            total = total + p.getPlayer().getBet();
+        }
+        return total;
+    }
+    public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
+    {
+        TexasPlayer winner = null;
+        int win = 0;
+        int res = 0;
+        for(TexasPlayer p: players)
+        {
+            ArrayList<Card> hand = p.getCards();
+            ArrayList<Card> evaluate = new ArrayList();
+            for(Card k : hand)
+            {
+                evaluate.add(k);
+            }
+            for(TexasTableCard c : table)
+            {
+            Card g = c.getCard();
+            if(g != null)
+            {
+                evaluate.add(g);
+            }
+            }
+            System.out.println("Hand+table size: " + evaluate.size());
+            System.out.println("Hand to evaluate: ");
+            for (Card l : evaluate)
+            {
+                System.out.println(l.getNr() +"  " + l.getColor());
+            }
+            res = he.evaluate(evaluate);
             
-        
+            System.out.println("res = " + res);
+            System.out.println("win = " + win);
+            if(res > win)
+            {
+                winner = p;
+                win = res;
+            }
+            res = 0;
+            hand = null;
+        }
+        winner.cash.setText(Integer.toString(getTotal(players)));
+        winner.getPlayer().winCash(getTotal(players));
+        winner.bet.setText("Congratulations! you won: " + winner.getPlayer().getCash());
+        for(TexasPlayer p: players)
+        {
+            if(p != winner)
+                p.bet.setText("you lost: " + p.getPlayer().getBet());
+        }
     }
 }

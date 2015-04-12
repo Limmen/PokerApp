@@ -6,10 +6,13 @@
 package view.texas;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 import model.texas.Bet;
 import util.Card;
 import util.TexasPlayer;
@@ -30,6 +33,7 @@ public class TexasLogic
     Font Italic = new Font("Serif", Font.ITALIC, 12);
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     int nrCards = 0;
+    int dealer;
     public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc)
     {
         this.gui = gui;
@@ -96,15 +100,22 @@ public class TexasLogic
     {
         gui.newDeck(players);
     }
-    public void bet(int dealer, int bet, int playersLeft)
+    public void bet(int turn, int bet, int playersLeft)
     {
         Boolean newRound = false;
         ArrayList<TexasPlayer> players = tf.getPlayers();
+        if(turn == -1)
+            turn = dealer;
+        if(nrCards > 4)
+        {
+            delay();
+            return;
+        }
         if(playersLeft > 0)
         {
-            if(dealer > players.size()-1)
-                dealer = 0;
-            players.get(dealer).bet(bet, playersLeft-1,dealer+1);
+            if(turn > players.size()-1)
+                turn = 0;
+            players.get(turn).bet(bet, playersLeft-1,turn+1);
         }
         else
         {
@@ -117,18 +128,13 @@ public class TexasLogic
             }
             if(newRound)
             {
-                bet(0, bets.getBet(), players.size());
+                bet(-1, bets.getBet(), players.size());
             }
             else
             {
-                if(nrCards > 0)
-                {
-                    deal(1);
-                }
-                if(nrCards == 0)
-                {
-                    deal(3);
-                }
+                nextDealer();
+                tf.updateTotal();
+                delay();
             }
             
         }
@@ -146,6 +152,16 @@ public class TexasLogic
     public JLabel getDeal()
     {
         image = tc.getDealer();
+        return new JLabel(new ImageIcon(image));
+    }
+    public JLabel getTurn()
+    {
+        image = tc.getTurn();
+        return new JLabel(new ImageIcon(image));
+    }
+    public JLabel getBackCard()
+    {
+        image = tc.getBackCard();
         return new JLabel(new ImageIcon(image));
     }
     public String botBet(TexasPlayer p, int callAmount)
@@ -170,7 +186,56 @@ public class TexasLogic
         }
         table.addCards();
         pack();
+        bet(-1, bets.getBet(), tf.getPlayers().size());
         
     }
+    public void nextDealer()
+    {
+        tf.getPlayers().get(dealer).nextDeal();
+        if(dealer == 4)
+            dealer = 0;
+        else
+            dealer++;
+        chooseDealer();
+    }
+    public void chooseDealer()
+    {
+        tf.getPlayers().get(dealer).youDeal();
+    }
+    public void delay()
+    {
+        int delay = 3000;
+        Timer timer = new Timer( delay, new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent e ){
+                whatsNext();
+            }        
+        });
+        timer.setRepeats( false );
+        timer.start();
+    }
+    public void whatsNext()
+    {
+        if(nrCards == 5)
+        {
+            gui.whoWins(tf.getPlayers(), tf.table.getCards());
+            for(TexasPlayer tp : tf.players)
+            {
+                tp.showCards();
+            }
+            pack();
+            tf.playersdeal = false;
+        }
+        if(nrCards > 0 && nrCards != 5)
+        {
+            deal(1);
+        }
+        if(nrCards == 0)
+        {
+            deal(3);
+        }
+    }
+    
+
    
 }

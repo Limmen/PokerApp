@@ -20,6 +20,10 @@ public class TexasCards
     {
         this.gui = gui;
     }
+    public BufferedImage getBackCard()
+    {
+        return readImage("back");
+    }
     public BufferedImage getPlaceholder()
     {   
             return readImage("placeholder");
@@ -27,6 +31,10 @@ public class TexasCards
     public BufferedImage getDealer()
     {   
             return readImage("dealer");
+    }
+    public BufferedImage getTurn()
+    {   
+            return readImage("turn");
     }
     public BufferedImage readImage(int id)
     {

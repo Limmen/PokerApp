@@ -138,4 +138,12 @@ public class Controller
         }
         return cards;
     }
+    public int getTotal(ArrayList<TexasPlayer> players)
+    {
+        return tm.getTotal(players);
+    }
+    public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
+    {
+        tm.whoWins(players, table);
+    }
 }

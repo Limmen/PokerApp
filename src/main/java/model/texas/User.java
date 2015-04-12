@@ -44,7 +44,6 @@ public class User implements Player
     @Override
     public int getBet() 
     {
-         System.out.println("Returning current bet: " + currentbet);
          return currentbet;
     }
     @Override
@@ -86,6 +85,11 @@ public class User implements Player
     public boolean isUser()
     {
         return true;
+    }
+    @Override
+    public void winCash(int val)
+    {
+        cash = cash + val;
     }
     
 }

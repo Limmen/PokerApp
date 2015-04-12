@@ -27,11 +27,14 @@ public class TexasPlayer
     private TexasPlayer me;
     private Player player;
     private JPanel panel;
-    private JLabel cash;
-    private JLabel bet;
+    private JPanel cardPanel;
+    public JLabel cash;
+    public JLabel bet;
     private JLabel deal;
+    private JLabel turn;
     private JPanel dealpanel;
     private ArrayList<JLabel> cards;
+    private ArrayList<JLabel> backCards;
     private Font Title = new Font("Serif", Font.PLAIN, 20);
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Plain = new Font("Serif", Font.PLAIN, 12);
@@ -53,7 +56,11 @@ public class TexasPlayer
         this.cards = cards;
         this.me = this;
         this.tl = tl;
+        this.backCards = new ArrayList();
+        backCards.add(tl.getBackCard());
+        backCards.add(tl.getBackCard());
         this.deal = tl.getDeal();
+        this.turn = tl.getTurn();
         this.bets = bets;
         this.call = new JButton("Call");
         call.setFont(PBold);
@@ -65,6 +72,8 @@ public class TexasPlayer
         buttons.add(call, "span 1, align center");
         buttons.add(fold, "span 1, align center");
         buttons.add(raise, "span 1, align center");
+        dealpanel = new JPanel(new MigLayout("wrap 2"));
+        cardPanel = new JPanel(new MigLayout("wrap 2"));
         init();
         
             raise.addActionListener(new ActionListener() 
@@ -110,7 +119,7 @@ public class TexasPlayer
             bet = new JLabel("0");
             this.bet.setFont(PBold);
             panel.add(bet, "span 1, align center");
-            updateCards();
+            placeholders();
     }
     public JPanel getPanel()
     {
@@ -126,22 +135,40 @@ public class TexasPlayer
     }
     public void setCards(ArrayList<JLabel> cards)
     {
-        for(JLabel c : this.cards)
-        {
-            panel.remove(c);
-        }
+        cardPanel.removeAll();
         this.cards = cards;
         updateCards();
         
     }
-    public void updateCards()
+    public void placeholders()
     {
         for(JLabel c : cards)
         {
-            panel.add(c);
+            cardPanel.add(c);
         }
-            dealpanel = new JPanel(new MigLayout());
-            dealpanel.add(deal, "span, align center");
+        panel.add(cardPanel,  "span");
+    }
+    public void updateCards()
+    {
+        if(!isUser())
+        {
+         for(JLabel c : backCards)
+        {
+            cardPanel.add(c);
+        }
+        }
+        if(isUser())
+        {
+        for(JLabel c : cards)
+        {
+            cardPanel.add(c);
+        }
+        }
+            dealpanel = new JPanel(new MigLayout("wrap 2"));
+            dealpanel.add(deal, "span 1, align center");
+            dealpanel.add(turn, "span 1, align center");
+            deal.setVisible(false);
+            panel.add(cardPanel, "span");
             panel.add(dealpanel, "wrap, span, align center");
             panel.add(buttons, "wrap, span, align center");
             hide();
@@ -150,9 +177,14 @@ public class TexasPlayer
     {
         return player.getHand();
     }
+    public void newGame()
+    {
+        init();
+    }
     public void newDeal()
     {
         player.init();
+        bet.setText(Integer.toString(player.getBet()));
     }
     public void bet(int bet, int playersLeft, int dealer)
     {
@@ -203,14 +235,22 @@ public class TexasPlayer
     {
         return player.isUser();
     }
-    public void hide()
+    public void youDeal()
+    {
+        deal.setVisible(true);
+    }
+    public void nextDeal()
     {
         deal.setVisible(false);
+    }
+    public void hide()
+    {
+        turn.setVisible(false);
         buttons.setVisible(false);
     }
     public void show()
     {
-        deal.setVisible(true);
+        turn.setVisible(true);
         if(isUser())
             buttons.setVisible(true);
     }
@@ -237,12 +277,22 @@ public class TexasPlayer
         Timer timer = new Timer( delay, new ActionListener(){
             @Override
             public void actionPerformed( ActionEvent e ){
-                System.out.println("timer went off");
                 cleanUp();
             }
         });
         timer.setRepeats( false );
         timer.start();
+    }
+    public void showCards()
+    {
+        if(!isUser())
+        {
+        cardPanel.removeAll();
+        for(JLabel c : this.cards)
+        {
+            cardPanel.add(c);
+        }
+        }
     }
     public void fold()
     {

@@ -27,12 +27,14 @@ public class Deck
     {
         int id = C.size();
         int Value = 2;
+        int nr = 2;
         for(int i = 0; i<13; i++)
         {
-            C.add(new Card(id,"spade",Value));
+            C.add(new Card(id,"spade",Value, nr));
             id++;
             if(Value <10)
             Value++;
+            nr++;
         }
         return C;
     }
@@ -40,12 +42,14 @@ public class Deck
     {
         int id = C.size();
         int Value = 2;
+        int nr = 2;
         for(int i = 0; i<13; i++)
         {
-            C.add(new Card(id,"club",Value));
+            C.add(new Card(id,"club",Value, nr));
             id++;
             if(Value <10)
             Value++;
+            nr++;
         }
         return C;   
     }
@@ -53,12 +57,14 @@ public class Deck
     {
         int id = C.size();
         int Value = 2;
+        int nr = 2;
         for(int i = 0; i<13; i++)
         {
-            C.add(new Card(id,"heart",Value));
+            C.add(new Card(id,"heart",Value, nr));
             id++;
             if(Value <10)
             Value++;
+            nr++;
         }
         return C;
     }
@@ -66,12 +72,14 @@ public class Deck
     {
         int id = C.size();
         int Value = 2;
+        int nr = 2;
         for(int i = 0; i<13; i++)
         {
-            C.add(new Card(id,"diamond",Value));
+            C.add(new Card(id,"diamond",Value, nr));
             id++;
             if(Value <10)
             Value++;
+            nr++;
         }
         return C;
     }

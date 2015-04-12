@@ -90,6 +90,11 @@ public class Bot implements Player
             currentbet = val;
         }
     }
+    @Override
+    public void winCash(int val)
+    {
+        cash = cash + val;
+    }
 
     
 }

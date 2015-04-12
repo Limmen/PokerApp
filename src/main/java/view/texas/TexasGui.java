@@ -58,6 +58,14 @@ public class TexasGui
     {
         return contr.tableDeal(nr, this);
     }
+    public int getTotal(ArrayList<TexasPlayer> players)
+    {
+        return contr.getTotal(players);
+    }
+    public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
+    {
+        contr.whoWins(players, table);
+    }
     
 }
 

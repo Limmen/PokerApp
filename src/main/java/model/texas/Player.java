@@ -24,4 +24,5 @@ public interface Player
     public void call(int val);
     public void raise(int val);
     public boolean isUser();
+    public void winCash(int val);
 }

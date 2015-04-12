@@ -58,7 +58,7 @@ public class HandEvaluator
         {
             for(Card c : hand)
             {
-                if(c.value < 10)
+                if(c.nr < 10)
                     return false;
             }
             return true;
@@ -75,16 +75,17 @@ public class HandEvaluator
     }
     public boolean fourOfAKind(ArrayList<Card> hand)
     {
-        int count = 0;
+        
         for(Card c : hand)
         {
+            int count = 0;
             for(int i = 0; i<hand.size(); i++)
             {
                 if(count == 4)
                 {
                     return true;
                 }
-                if(c.value == hand.get(i).value)
+                if(c.nr == hand.get(i).nr)
                 {
                     count = count + 1;
                 }
@@ -94,33 +95,17 @@ public class HandEvaluator
     }
     public boolean fullHouse(ArrayList<Card> hand)
     {
-        int count = 0;
         for(Card c : hand)
         {
-            for(int i = 0; i<hand.size(); i++)
+            if(specificthreeOfAKind(hand, c))
             {
-                if(count == 3)
-                {
-                    for(Card g: hand)
-                    {
-                        if(c.value == g.value)
-                        {
-                            hand.remove(g);
-                        }
-                    }
-                    if(pair(hand))
-                    {
-                        return true;
-                    }
+                if(pair(hand, c))
+                    return true;
+                else
                     return false;
-                }
-                if(c.value == hand.get(i).value)
-                {
-                    count = count + 1;
-                }
             }
         }
-                return false;
+        return false;
     }
     public boolean flush(ArrayList<Card> hand)
     {
@@ -137,26 +122,26 @@ public class HandEvaluator
     public boolean straight(ArrayList<Card> hand)
     {
         Collections.sort(hand);
-        int prev = hand.get(0).value;
+        int prev = hand.get(0).nr;
         for(int i = 1; i<hand.size(); i++)
         {
-            if((hand.get(i).value - prev) != 1)
+            if((hand.get(i).nr - prev) != 1)
             return false;
         }
             return true;
     }
     public boolean threeOfAKind(ArrayList<Card> hand)
     {
-        int count = 0;
         for(Card c : hand)
         {
+            int count = 0;
             for(int i = 0; i<hand.size(); i++)
             {
                 if(count == 3)
                 {
                     return true;
                 }
-                if(c.value == hand.get(i).value)
+                if(c.nr == hand.get(i).nr)
                 {
                     count = count + 1;
                 }
@@ -164,35 +149,36 @@ public class HandEvaluator
         }
         return false;
     }
-    public boolean twoPair(ArrayList<Card> hand)
+    public boolean specificthreeOfAKind(ArrayList<Card> hand, Card g)
     {
         int count = 0;
         for(Card c : hand)
         {
-            for(int i = 0; i<hand.size(); i++)
-            {
-                if(count == 2)
+               if(count == 3)
                 {
-                    for(Card g: hand)
-                    {
-                        if(c.value == g.value)
-                        {
-                            hand.remove(g);
-                        }
-                    }
-                    if(pair(hand))
-                    {
-                        return true;
-                    }
-                    return false;
+                    return true;
                 }
-                if(c.value == hand.get(i).value)
+                if(c.nr == g.nr)
                 {
                     count = count + 1;
                 }
+            
+        }
+        return false;
+    }
+    public boolean twoPair(ArrayList<Card> hand)
+    {
+        for(Card c : hand)
+        {
+            if(specificPair(hand, c))
+            {
+                if(pair(hand, c))
+                    return true;
+                else
+                    return false;
             }
         }
-                return false;
+        return false;
     }
     public boolean pair(ArrayList<Card> hand)
     {
@@ -205,7 +191,7 @@ public class HandEvaluator
                 {
                     return true;
                 }
-                if(c.value == hand.get(i).value)
+                if(c.nr == hand.get(i).nr)
                 {
                     count = count + 1;
                 }
@@ -213,5 +199,39 @@ public class HandEvaluator
         }
         return false;
     }
-        
+    public boolean pair(ArrayList<Card> hand, Card g)
+    {
+        int count = 0;
+        for(Card c : hand)
+        {
+            for(int i = 0; i<hand.size(); i++)
+            {
+                if(count == 2)
+                {
+                    return true;
+                }
+                if(c.nr == hand.get(i).nr && c.nr != g.nr)
+                {
+                    count = count + 1;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean specificPair(ArrayList<Card> hand, Card g)
+    {
+        int count = 0;
+        for(Card c : hand)
+        {
+            if(count == 2)
+                {
+                    return true;
+                }
+                if(c.nr == g.nr)
+                {
+                    count = count + 1;
+                }
+        }
+        return false;
+    }
 }

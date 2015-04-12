@@ -14,12 +14,14 @@ public class Card implements Comparable
     public int id;
     public String color;
     public int value;
+    public int nr;
     
-    public Card(int id, String color, int value)
+    public Card(int id, String color, int value, int nr)
     {
         this.id = id;
         this.color = color;
         this.value = value;
+        this.nr = nr;
     }
     
     public int getId()
@@ -33,6 +35,10 @@ public class Card implements Comparable
     public int getValue()
     {
         return this.value;
+    }
+    public int getNr()
+    {
+        return this.nr;
     }
     public void print()
     {
