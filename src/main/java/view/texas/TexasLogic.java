@@ -192,7 +192,7 @@ public class TexasLogic
     public void nextDealer()
     {
         tf.getPlayers().get(dealer).nextDeal();
-        if(dealer == 4)
+        if(dealer >= 4)
             dealer = 0;
         else
             dealer++;
@@ -221,10 +221,15 @@ public class TexasLogic
             gui.whoWins(tf.getPlayers(), tf.table.getCards());
             for(TexasPlayer tp : tf.players)
             {
+                tp.hide();
                 tp.showCards();
             }
             pack();
+            nrCards = 0;
+            bets = new Bet();
+            dealer = 0;
             tf.playersdeal = false;
+            return;
         }
         if(nrCards > 0 && nrCards != 5)
         {

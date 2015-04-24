@@ -114,16 +114,8 @@ public class TexasManager
                 evaluate.add(g);
             }
             }
-            System.out.println("Hand+table size: " + evaluate.size());
-            System.out.println("Hand to evaluate: ");
-            for (Card l : evaluate)
-            {
-                System.out.println(l.getNr() +"  " + l.getColor());
-            }
             res = he.evaluate(evaluate);
             
-            System.out.println("res = " + res);
-            System.out.println("win = " + win);
             if(res > win)
             {
                 winner = p;
@@ -132,7 +124,7 @@ public class TexasManager
             res = 0;
             hand = null;
         }
-        winner.cash.setText(Integer.toString(getTotal(players)));
+        winner.cash.setText(Integer.toString(winner.getPlayer().getCash() + getTotal(players)));
         winner.getPlayer().winCash(getTotal(players));
         winner.bet.setText("Congratulations! you won: " + winner.getPlayer().getCash());
         for(TexasPlayer p: players)
