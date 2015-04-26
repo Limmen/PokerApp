@@ -49,7 +49,7 @@ public class TexasPlayer
     private TexasLogic tl;
     private int callAmount = 0;
     private int dealer;
-    private Bet bets;
+    public Bet bets;
     public TexasPlayer(Player player, ArrayList<JLabel> cards, TexasLogic tl, Bet bets)
     {
         this.player = player;
@@ -80,7 +80,10 @@ public class TexasPlayer
            {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    RaiseFrame rf = new RaiseFrame(me);
+                    if(raise())
+                    {
+                        RaiseFrame rf = new RaiseFrame(me);
+                    }
 	        }
            });
             fold.addActionListener(new ActionListener() 
@@ -189,7 +192,7 @@ public class TexasPlayer
     public void bet(int bet, int playersLeft, int dealer)
     {
         this.playersLeft = playersLeft;
-        this.callAmount = bets.getBet();
+        this.callAmount = bets.getCallAmount();
         this.dealer = dealer;
         if(isUser())
         {   
@@ -208,7 +211,7 @@ public class TexasPlayer
         player.call(val);
         cash.setText(Integer.toString(player.getCash()));
         bet.setText(Integer.toString(player.getBet()));
-        bets.setBet(val);
+        bets.addBet(val);
         tl.pack();
     }
     public void userRaise(int val)
@@ -216,7 +219,7 @@ public class TexasPlayer
         player.raise(val);
         cash.setText(Integer.toString(player.getCash()));
         bet.setText(Integer.toString(player.getBet()));
-        bets.setBet(val);
+        bets.raise(val);
         tl.pack();
     }
     public void botBet()
@@ -268,7 +271,7 @@ public class TexasPlayer
         if(res.equalsIgnoreCase("raise"))
         {
             botBet();
-            bets.setBet(player.getBet());
+            bets.raise(player.getBet());
         }
     }
     public void delay()
@@ -293,9 +296,19 @@ public class TexasPlayer
             cardPanel.add(c);
         }
         }
+        hide();
     }
     public void fold()
     {
         tl.fold(me);
+    }
+    public boolean raise()
+    {
+        if(callAmount < player.getCash())
+        {
+            return true;
+        }
+        else
+            return false;
     }
 }

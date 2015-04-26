@@ -24,11 +24,12 @@ public class TexasGui
 {
     private Controller contr;
     private MainFrame main;
-    private TexasFrame tf;
+    public TexasFrame tf;
+    private TexasOptions to;
     public TexasGui(Controller contr)
     {
         this.contr = contr;
-        this.tf = new TexasFrame(this);
+        this.to = new TexasOptions(this);
     }
     public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards,TexasLogic tl, Bet bets)
     {

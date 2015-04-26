@@ -102,15 +102,27 @@ public class TexasLogic
     }
     public void bet(int turn, int bet, int playersLeft)
     {
+        if(tf.getPlayers().size() < 2)
+        {
+            if(tf.getPlayers().size() > 0)
+            {
+                tf.getPlayers().get(0).youDeal();
+            }
+            while(nrCards < 5)
+            {
+                whatsNext();
+            }
+            return;
+        }
         Boolean newRound = false;
         ArrayList<TexasPlayer> players = tf.getPlayers();
         if(turn == -1)
             turn = dealer;
-        if(nrCards > 4)
+        /*if(nrCards > 4)
         {
             delay();
             return;
-        }
+        } */
         if(playersLeft > 0)
         {
             if(turn > players.size()-1)
@@ -121,18 +133,21 @@ public class TexasLogic
         {
             for(TexasPlayer p : players)
             {
-                if (p.getPlayer().getBet() < bets.getBet() && p.getPlayer().getCash() > 0)
+                if (p.getPlayer().getBet() < bets.getCallAmount() && p.getPlayer().getCash() > 0)
                 {
                     newRound = true;
                 }
             }
             if(newRound)
             {
-                bet(-1, bets.getBet(), players.size());
+                bet(-1, bets.getCallAmount(), players.size());
             }
             else
             {
-                nextDealer();
+                if(tf.players.size() > 1)
+                {
+                    nextDealer();
+                }
                 tf.updateTotal();
                 delay();
             }
@@ -148,6 +163,7 @@ public class TexasLogic
     {
         tf.players.remove(p);
         tf.folded.add(p);
+        p.showCards();
     }
     public JLabel getDeal()
     {
@@ -186,13 +202,13 @@ public class TexasLogic
         }
         table.addCards();
         pack();
-        bet(-1, bets.getBet(), tf.getPlayers().size());
+        bet(-1, bets.getCallAmount(), tf.getPlayers().size());
         
     }
     public void nextDealer()
     {
         tf.getPlayers().get(dealer).nextDeal();
-        if(dealer >= 4)
+        if(dealer >= tf.getPlayers().size()-1)
             dealer = 0;
         else
             dealer++;
@@ -207,8 +223,17 @@ public class TexasLogic
         int delay = 3000;
         Timer timer = new Timer( delay, new ActionListener(){
             @Override
-            public void actionPerformed( ActionEvent e ){
-                whatsNext();
+            public void actionPerformed( ActionEvent e )
+            {
+                if(tf.getPlayers().size() < 2)
+                {
+                    while(nrCards < 5)
+                    {
+                        whatsNext();
+                    }
+                }
+                else
+                    whatsNext();
             }        
         });
         timer.setRepeats( false );

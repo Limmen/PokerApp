@@ -129,6 +129,14 @@ public class TexasFrame extends JFrame
                 {   
                     if(!playersdeal)
                     {
+                        for(TexasPlayer p : folded)
+                        {
+                            if(p.getPlayer().getCash() > 0)
+                            {
+                                players.add(p);
+                            }
+                        }
+                        folded = new ArrayList();
                         playersdeal = true;
                         tl.newDeck(players);
                         tl.playersDeal(players);

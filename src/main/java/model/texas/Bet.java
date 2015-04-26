@@ -12,15 +12,27 @@ package model.texas;
 public class Bet 
 {
     private int callAmount;
+    private int totalBet;
     public Bet()
     {
         callAmount = 0;
+        totalBet = 0;
     }
-    public void setBet(int bet)
+    public void addBet(int bet)
     {
-        callAmount = bet;
+        totalBet = totalBet + bet;
     }
-    public int getBet()
+    public void raise(int bet)
+    {
+        totalBet = totalBet - callAmount;
+        callAmount = bet;
+        totalBet = totalBet + callAmount;
+    }
+    public int getTotalBet()
+    {
+        return totalBet;
+    }
+    public int getCallAmount()
     {
         return callAmount;
     }

@@ -10,16 +10,16 @@ import view.texas.TexasFrame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
-import static java.awt.SystemColor.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
-import static sun.security.ssl.Debug.Help;
 import view.blackjack.BlackJackGui;
 
 /**
@@ -42,6 +42,7 @@ public class MainFrame extends JFrame
     private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
     private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     private Menu menu;
+    BufferedImage image;
     public MainFrame(Gui gui)
     {
         super("Poker");
@@ -79,27 +80,30 @@ public class MainFrame extends JFrame
                About();
            }
         });
+        ImageReader ir = new ImageReader();
         title = new JLabel("Welcome to the casino, select a table you would like to visit");
         title.setFont(Title);
-        container.add(title,"span 4");
+        container.add(title,"span 4, align center");
         
-        BlackJack = new JButton("BlackJack");
-        BlackJack.setFont(TBold);
-        BlackJack.setFocusPainted(false);
-        BlackJack.setMargin(new Insets(0, 0, 0, 0));
-        BlackJack.setContentAreaFilled(false);
-        BlackJack.setBorderPainted(false);
-        BlackJack.setOpaque(false);
-        container.add(BlackJack, "span 4, align center");
+        JPanel panel = new JPanel(new MigLayout("wrap 1"));
+        JLabel txt = new JLabel("BlackJack");
+        txt.setFont(PBold);
+        panel.add(txt, "span 1, align center");
+        image = ir.readImage("Blackjack.jpg");
+        BlackJack = new JButton();
+        BlackJack.setIcon(new ImageIcon(image));
+        panel.add(BlackJack, "span 1, align center");
+        container.add(panel, "span 2, align center");
         
-        Texas = new JButton("Texas hold'em");
-        Texas.setFont(TBold);
-        Texas.setFocusPainted(false);
-        Texas.setMargin(new Insets(0, 0, 0, 0));
-        Texas.setContentAreaFilled(false);
-        Texas.setBorderPainted(false);
-        Texas.setOpaque(false);
-        container.add(Texas,"span 4, align center");
+        panel = new JPanel(new MigLayout("wrap 1"));
+        txt = new JLabel("Texas");
+        txt.setFont(PBold);
+        panel.add(txt, "span 1, align center");
+        image = ir.readImage("texas.png");
+        Texas = new JButton();
+        Texas.setIcon(new ImageIcon(image));
+        panel.add(Texas, "span 1, align center");
+        container.add(panel,"span 2, align center");
         
         BlackJack.addActionListener(new ActionListener() 
         {
@@ -117,7 +121,7 @@ public class MainFrame extends JFrame
                     texas();
                 }
 	});
-        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
         txt.setFont(Plain);
         container.add(txt, "span 1, gaptop 20");
         add(container, BorderLayout.CENTER);

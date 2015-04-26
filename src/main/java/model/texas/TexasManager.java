@@ -60,26 +60,52 @@ public class TexasManager
             }
         }
         int res = he.evaluate(evaluate);
-        if(res == 1 && evaluate.size()> 2) //fold
+        if(callAmount > b.getCash() && b.getCash() != 0)
         {
-            return "fold";
-        }
-        if((res > 1 && evaluate.size() < 3) || (res > 2)) //raise
-        {
-            if(callAmount > b.getCash()/5 && evaluate.size() < 3)
+            if(res > 5) //all IN
             {
                 b.call(callAmount);
                 return "call";
             }
-            if(res > 5)
+            if(res <= 5)
             {
-                b.raise(callAmount + ((b.getCash()- callAmount)/3));   
-            }
-            if(res > 7)
-            {
-                b.raise(b.getCash());
-            }
+                return "fold";
+            }  
+        }
+        if(res > 7)
+        {
+            System.out.println("All in, res > 7 ");
+            b.raise(b.getCash()); // All in
             return "raise";
+        }
+        if(res > 5)
+        {
+            b.raise(callAmount + ((b.getCash()- callAmount)/3)); 
+            return "raise";
+        }
+        if(res > 2 && callAmount < b.getCash()/5) //raise
+        {
+            b.raise(callAmount + ((b.getCash()- callAmount)/6));
+            return "raise";
+        }
+        if(res > 1 && evaluate.size() < 3)
+        {
+            b.raise(callAmount + ((b.getCash()- callAmount)/6));
+            return "raise";
+        }
+        if(res == 1 && evaluate.size()> 2) //fold
+        {
+            return "fold";
+        }
+        if((res > 2 && callAmount < b.getCash()/5) || (res > 2 && evaluate.size() < 5 && callAmount < (b.getCash()/2))) //raise
+        {
+            b.call(callAmount);
+            return "call";
+        }
+        if(callAmount > b.getCash()/5 && evaluate.size() < 3)
+        {
+            b.call(callAmount);
+            return "call";
         }
         b.call(callAmount);
         return "call";
@@ -126,7 +152,7 @@ public class TexasManager
         }
         winner.cash.setText(Integer.toString(winner.getPlayer().getCash() + getTotal(players)));
         winner.getPlayer().winCash(getTotal(players));
-        winner.bet.setText("Congratulations! you won: " + winner.getPlayer().getCash());
+        winner.bet.setText("Congratulations! you won: " + (winner.bets.getTotalBet() - winner.getPlayer().getBet()));
         for(TexasPlayer p: players)
         {
             if(p != winner)
