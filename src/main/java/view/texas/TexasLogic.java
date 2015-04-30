@@ -34,12 +34,15 @@ public class TexasLogic
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     int nrCards = 0;
     int dealer;
-    public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc)
+    int cash;
+    boolean folded;
+    public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc, int cash)
     {
         this.gui = gui;
         this.tf = tf;
         this.tc = tc;
         this.bets = new Bet();
+        this.cash = cash;
     }
     public TexasTable generateTable()
     {
@@ -59,13 +62,13 @@ public class TexasLogic
         ArrayList<TexasPlayer> bots = new ArrayList();
         for(int i = 0; i<number; i++)
         {
-            bots.add(gui.newPlayer(i,getPlaceholder(2), this, bets));
+            bots.add(gui.newPlayer(i,getPlaceholder(2), this, bets, cash));
         }
         return bots;
     }
        public TexasPlayer generateUser()
     {
-        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this, bets);
+        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this, bets, cash);
         return user;
         
     }
@@ -102,30 +105,26 @@ public class TexasLogic
     }
     public void bet(int turn, int bet, int playersLeft)
     {
-        if(tf.getPlayers().size() < 2)
-        {
-            if(tf.getPlayers().size() > 0)
-            {
-                tf.getPlayers().get(0).youDeal();
-            }
-            while(nrCards < 5)
-            {
-                whatsNext();
-            }
-            return;
-        }
+        folded = false;
         Boolean newRound = false;
         ArrayList<TexasPlayer> players = tf.getPlayers();
+        if(players.size() < 2 )
+        {
+            for(TexasPlayer p : tf.folded)
+            {
+                p.nextDeal();
+            }
+            for(TexasPlayer p : tf.players)
+            {
+                p.nextDeal();
+            }
+            wrapUp();
+        }
         if(turn == -1)
             turn = dealer;
-        /*if(nrCards > 4)
-        {
-            delay();
-            return;
-        } */
         if(playersLeft > 0)
         {
-            if(turn > players.size()-1)
+            if(turn > players.size()-1 && folded == false)
                 turn = 0;
             players.get(turn).bet(bet, playersLeft-1,turn+1);
         }
@@ -163,7 +162,8 @@ public class TexasLogic
     {
         tf.players.remove(p);
         tf.folded.add(p);
-        p.showCards();
+        folded = true;
+        //p.showCards();
     }
     public JLabel getDeal()
     {
@@ -207,7 +207,14 @@ public class TexasLogic
     }
     public void nextDealer()
     {
-        tf.getPlayers().get(dealer).nextDeal();
+        for(TexasPlayer p : tf.folded)
+        {
+            p.nextDeal();
+        }
+        for(TexasPlayer p : tf.players)
+        {
+            p.nextDeal();
+        }
         if(dealer >= tf.getPlayers().size()-1)
             dealer = 0;
         else
@@ -241,8 +248,31 @@ public class TexasLogic
     }
     public void whatsNext()
     {
+        if(tf.players.size() < 2)
+        {
+            wrapUp();
+            return;
+        }
         if(nrCards == 5)
         {
+            wrapUp();
+            return;
+        }
+        if(nrCards > 0 && nrCards != 5)
+        {
+            deal(1);
+        }
+        if(nrCards == 0)
+        {
+            deal(3);
+        }
+    }
+    public void wrapUp()
+    {
+        if(nrCards != 5)
+        {
+            deals();
+        }
             gui.whoWins(tf.getPlayers(), tf.table.getCards());
             for(TexasPlayer tp : tf.players)
             {
@@ -254,15 +284,21 @@ public class TexasLogic
             bets = new Bet();
             dealer = 0;
             tf.playersdeal = false;
-            return;
-        }
-        if(nrCards > 0 && nrCards != 5)
+        
+        
+    }
+    public void deals()
+    {
+        while(nrCards < 5)
         {
-            deal(1);
-        }
-        if(nrCards == 0)
-        {
-            deal(3);
+            if(nrCards > 0 && nrCards != 5)
+            {
+                deal(1);
+            }
+            if(nrCards == 0)
+            {
+                deal(3);
+            }
         }
     }
     

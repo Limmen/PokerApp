@@ -31,9 +31,9 @@ public class TexasGui
         this.contr = contr;
         this.to = new TexasOptions(this);
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards,TexasLogic tl, Bet bets)
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards,TexasLogic tl, Bet bets, int cash)
     {
-        return contr.newPlayer(id,cards,tl,bets,this);
+        return contr.newPlayer(id,cards,tl,bets,this, cash);
     }
     public TexasTableCard newTableCard(int id, JLabel card)
     {

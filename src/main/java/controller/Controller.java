@@ -96,15 +96,15 @@ public class Controller
     {
         return bm.getVisible();
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl, Bet bets, TexasGui gui)
+    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl, Bet bets, TexasGui gui, int cash)
     {
         Player player;
         if(id == -1)
         {
-            player = tm.newUser();
+            player = tm.newUser(cash);
         }
         else
-            player = tm.newBot(id);
+            player = tm.newBot(id, cash);
         return new TexasPlayer(player,cards, tl, bets);
     }
     public TexasTableCard newTableCard(int id, JLabel card, TexasGui gui)

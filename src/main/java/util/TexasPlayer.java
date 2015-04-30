@@ -92,7 +92,7 @@ public class TexasPlayer
                 {   
                     bet.setText("folded");
                     fold();
-                    cleanUp();
+                   // cleanUp();
 	        }
            });
            call.addActionListener(new ActionListener() 
@@ -113,7 +113,7 @@ public class TexasPlayer
             text = new JLabel("Cash");
             text.setFont(PBold);
             panel.add(text, "span 1, align center");
-            cash = new JLabel("500");
+            cash = new JLabel(Integer.toString(player.getCash()));
             this.cash.setFont(PBold);
             panel.add(cash, "span 1, align center");
             text = new JLabel("Bet");
@@ -301,6 +301,9 @@ public class TexasPlayer
     public void fold()
     {
         tl.fold(me);
+        hide();
+        tl.pack();
+        tl.bet(dealer -1, getBet(), playersLeft);
     }
     public boolean raise()
     {

@@ -49,10 +49,12 @@ public class TexasFrame extends JFrame
     int bet;
     int dealer;
     boolean playersdeal = false;
-    public TexasFrame(TexasGui gui)
+    int cash;
+    public TexasFrame(TexasGui gui, int cash)
     {
         super("Texas Hold'em");
         this.gui = gui;
+        this.cash = cash;
         container = new JPanel(new MigLayout("wrap 4"));
         try 
         {
@@ -83,7 +85,7 @@ public class TexasFrame extends JFrame
     {
         remove(container);
         this.tc = new TexasCards(gui);
-        tl = new TexasLogic(gui, this,tc);
+        tl = new TexasLogic(gui, this,tc, cash);
         players = new ArrayList();
         int bet = 0;
         int dealer = 0;
@@ -134,7 +136,20 @@ public class TexasFrame extends JFrame
                             if(p.getPlayer().getCash() > 0)
                             {
                                 players.add(p);
+                                folded.remove(p);
                             }
+                        }
+                        for(TexasPlayer p : players)
+                        {
+                            if(p.getPlayer().getCash() < 1)
+                            {
+                                players.remove(p);
+                                folded.add(p);
+                            }
+                        }
+                        for(TexasPlayer p : folded)
+                        {
+                            container.remove(p.getPanel());
                         }
                         folded = new ArrayList();
                         playersdeal = true;

@@ -23,13 +23,13 @@ public class TexasManager
     {
         this.he = new HandEvaluator();
     }
-    public Player newBot(int id)
+    public Player newBot(int id, int cash)
     {
-        return new Bot(id);
+        return new Bot(id, cash);
     }
-    public Player newUser()
+    public Player newUser(int cash)
     {
-        return new User();
+        return new User(cash);
     }
     public void newCard(ArrayList<Card> cards, Player p)
     {

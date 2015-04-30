@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.blackjack;
+package model;
 
 import java.util.Collections;
 import java.util.Random;
@@ -36,11 +36,19 @@ public class DeckManager
     }
     public Card getRandomCard()
     {
-        Random rand = new Random();
-        int  n = rand.nextInt(deck.getDeck().size());
-        Card c = deck.getDeck().get(n);
-        deck.deleteCard(c.getId());
-        return c;
+        if(deck.getDeck().size() > 0)
+        {
+            Random rand = new Random();
+            int  n = rand.nextInt(deck.getDeck().size());
+            Card c = deck.getDeck().get(n);
+            deck.deleteCard(c.getId());
+            return c;
+        }
+        else
+        {
+            System.out.println("Deck is empty!");
+            return null;
+        }
     }
     public void newDeck()
     {

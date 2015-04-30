@@ -23,9 +23,9 @@ public class User implements Player
     private int currentbet;
     private ArrayList<Card> hand;
     private String name;
-    public User()
+    public User(int cash)
     {
-        this.cash = 500;
+        this.cash = cash;
         this.currentbet = 0;
         this.hand = new ArrayList<Card>();
         this.name = "You";

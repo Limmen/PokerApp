@@ -22,9 +22,9 @@ public class Bot implements Player
     private ArrayList<Card> hand;
     private String name;
     
-    public Bot(int id)
+    public Bot(int id, int cash)
     {
-        this.cash = 500;
+        this.cash = cash;
         this.currentbet = 0;
         this.hand = new ArrayList<Card>();
         this.name = "Bot" + id;

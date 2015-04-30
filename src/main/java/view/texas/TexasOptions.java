@@ -86,7 +86,7 @@ public class TexasOptions extends JFrame
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    gui.tf = new TexasFrame(gui);
+                    gui.tf = new TexasFrame(gui, Integer.parseInt(Cash.getText()));
                     dispose();
 	        }
 	});
