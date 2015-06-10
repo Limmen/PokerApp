@@ -122,9 +122,9 @@ public class Controller
             cards.add(dm.getRandomCard()); 
             tm.newCard(cards, p);
     }
-    public String botBet(Player p,ArrayList<TexasTableCard> table, int callAmount,TexasGui gui)
+    public String botBet(Player p,ArrayList<TexasTableCard> table, Bet bet)
     {
-        return tm.botBet(p, table, callAmount);
+        return tm.botBet(p, table, bet);
     }
     public ArrayList<Card> tableDeal(int nr, TexasGui gui)
     {

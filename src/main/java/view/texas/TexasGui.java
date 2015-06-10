@@ -52,9 +52,9 @@ public class TexasGui
     {
         contr.newDeck(players, this);
     }
-    public String botBet(Player p, ArrayList<TexasTableCard> table, int callAmount)
+    public String botBet(Player p, ArrayList<TexasTableCard> table, Bet bet)
     {
-        return contr.botBet(p, table,callAmount, this);
+        return contr.botBet(p, table, bet);
     }
     public ArrayList<Card> tableDeal(int nr)
     {

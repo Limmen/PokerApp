@@ -154,6 +154,17 @@ public class TexasBot implements Texas
     {
         turns.setVisible(true);
         tl.pack();
+		System.out.println("cards size: " + tl.tf.table.getCards().size());
+		String result = gui.botBet(player, tl.tf.table.getCards(), bet);
+		if(result.equals("fold"))
+			{
+				this.bet.setText("folded");
+				this.folded = true;
+			}
+		else{
+			this.bet.setText(Integer.toString(player.getBet()));
+			cash.setText(Integer.toString(player.getCash()));
+		}
         delay(r, bet);
     }
     public void newDeal()

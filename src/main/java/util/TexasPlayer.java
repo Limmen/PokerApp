@@ -93,10 +93,6 @@ public class TexasPlayer implements Texas
                 {
                     RaiseFrame rf = new RaiseFrame(me);
                 }
-                buttons.setVisible(false);
-                turns.setVisible(false);
-                pack();
-                round.round(bets);
             }
         });
         fold.addActionListener(new ActionListener()
@@ -104,8 +100,7 @@ public class TexasPlayer implements Texas
             public void actionPerformed(ActionEvent arg0)
             {
                 bet.setText("folded");
-                //fold();
-                // cleanUp();
+				folded = true;
                 buttons.setVisible(false);
                 turns.setVisible(false);
                 pack();
@@ -117,8 +112,19 @@ public class TexasPlayer implements Texas
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                //userCall(callAmount);
-                //cleanUp();
+				if(player.getCash()>=bets.getCallAmount())
+					{
+						player.call(bets.getCallAmount());
+						bets.addBet(bets.getCallAmount());
+					}
+				else
+					{
+						player.call(player.getCash());
+						bets.addBet(player.getCash());
+						//All in (SHow cards?);
+					}
+				updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
+			  
                 buttons.setVisible(false);
                 turns.setVisible(false);
                 pack();
@@ -259,5 +265,21 @@ public class TexasPlayer implements Texas
 		this.callAmount = callz;
 		this.call2.setText(Integer.toString(callz));
 		tl.pack();
+	}
+	public void raise(String val)
+	{
+		player.raise(Integer.parseInt(val));
+		bets.raise(Integer.parseInt(val));
+		updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
+		buttons.setVisible(false);
+		turns.setVisible(false);
+		pack();
+		round.round(bets);
+	}
+	public void updateVals(String betting, String cash)
+	{
+		this.bet.setText(betting);
+		this.cash.setText(cash);
+		pack();
 	}
 }

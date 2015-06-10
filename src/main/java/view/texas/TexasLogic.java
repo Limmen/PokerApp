@@ -26,7 +26,7 @@ import util.TexasTableCard;
 public class TexasLogic 
 {
     TexasGui gui;
-    TexasFrame tf;
+    public TexasFrame tf;
     BufferedImage image;
     TexasCards tc;
     Bet bets;
@@ -57,8 +57,7 @@ public class TexasLogic
             JLabel Card = new JLabel(new ImageIcon(image));
             TexasTableCard tableCard = gui.newTableCard(i, Card);
             tableCards.add(tableCard);
-        }
-        
+        }        
         return gui.newTable(tableCards);
     }
         public void newDeck(ArrayList<Texas> players)

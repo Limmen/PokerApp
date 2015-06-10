@@ -8,25 +8,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 
 
 
 public class RaiseFrame extends JFrame
 {
-        private JPanel container;
+	private JPanel container;
 	private TexasPlayer player;
-        private JLabel amount;
-        private JTextField enter = new JTextField(40);
-        private JButton commit;
-        private Font Title = new Font("Serif", Font.PLAIN, 20);
-        private Font Italic = new Font("Serif", Font.ITALIC, 12);
-        private Font Plain = new Font("Serif", Font.PLAIN, 12);
-        private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
-        private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
-        private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
+	private JLabel amount;
+	private JTextField enter = new JTextField(40);
+	private JButton commit;
+	private Font Title = new Font("Serif", Font.PLAIN, 20);
+	private Font Italic = new Font("Serif", Font.ITALIC, 12);
+	private Font Plain = new Font("Serif", Font.PLAIN, 12);
+	private Font IBold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
+	private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
+	private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
 	public RaiseFrame(TexasPlayer player) 
 	{
 	super("Raise bet");
@@ -59,9 +59,8 @@ public class RaiseFrame extends JFrame
         {
             public void actionPerformed(ActionEvent arg0) 
             {
-            	   addBet(enter.getText());
-                   cleanUp();
-         	   dispose();    
+				raise(enter.getText());
+				dispose();    
             }
         });
         JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
@@ -73,12 +72,9 @@ public class RaiseFrame extends JFrame
         setVisible(true);
 	}
         
-        public void addBet(String val)
+        public void raise(String val)
         {
-           // player.userRaise(Integer.parseInt(val));
+			player.raise(val);
         }
-        public void cleanUp()
-        {
-            //player.cleanUp();
-        }
+        
 }

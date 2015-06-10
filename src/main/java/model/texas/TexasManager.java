@@ -42,8 +42,9 @@ public class TexasManager
            // p.newDeal();
         }
     }
-    public String botBet(Player p, ArrayList<TexasTableCard> table, int callAmount)
+    public String botBet(Player p, ArrayList<TexasTableCard> table, Bet bet)
     {
+		int callAmount = bet.getCallAmount();
         ArrayList<Card> hand = p.getHand();
         ArrayList<Card> evaluate = new ArrayList();
         for(Card k : hand)
@@ -65,6 +66,7 @@ public class TexasManager
             if(res > 5) //all IN
             {
                 b.call(callAmount);
+				bet.addBet(callAmount);
                 return "call";
             }
             if(res <= 5)
@@ -76,21 +78,25 @@ public class TexasManager
         {
             System.out.println("All in, res > 7 ");
             b.raise(b.getCash()); // All in
+			bet.raise(b.getCash());
             return "raise";
         }
         if(res > 5)
         {
             b.raise(callAmount + ((b.getCash()- callAmount)/3)); 
+			bet.raise(callAmount + ((b.getCash()- callAmount)/3));
             return "raise";
         }
         if(res > 2 && callAmount < b.getCash()/5) //raise
         {
             b.raise(callAmount + ((b.getCash()- callAmount)/6));
+            bet.raise(callAmount + ((b.getCash()- callAmount)/6));
             return "raise";
         }
         if(res > 1 && evaluate.size() < 3)
         {
             b.raise(callAmount + ((b.getCash()- callAmount)/6));
+            bet.raise(callAmount + ((b.getCash()- callAmount)/6));
             return "raise";
         }
         if(res == 1 && evaluate.size()> 2) //fold
@@ -100,14 +106,17 @@ public class TexasManager
         if((res > 2 && callAmount < b.getCash()/5) || (res > 2 && evaluate.size() < 5 && callAmount < (b.getCash()/2))) //raise
         {
             b.call(callAmount);
+            bet.addBet(callAmount);
             return "call";
         }
         if(callAmount > b.getCash()/5 && evaluate.size() < 3)
         {
             b.call(callAmount);
+			bet.addBet(callAmount);
             return "call";
         }
         b.call(callAmount);
+		bet.addBet(callAmount);
         return "call";
     }
     public int getTotal(ArrayList<TexasPlayer> players)

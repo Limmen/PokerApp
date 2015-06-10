@@ -32,6 +32,10 @@ public class HandEvaluator
     }
     public int evaluate(ArrayList<Card> hand)
     {
+		if(hand.size() < 1)
+			{
+				return 0;
+			}
         if(royalFlush(hand))
             return ROYAL_FLUSH;
         if(straightFlush(hand))
