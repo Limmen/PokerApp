@@ -4,13 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 
@@ -49,18 +48,23 @@ public class TexasOptions extends JFrame
         }
         this.setLayout(new MigLayout());
         this.gui = gui;
-        startup();
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) 
-            {
-               
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                startup();
+                addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent windowEvent)
+                    {
+                        
+                    }
+                });
+                pack();
+                setLocationRelativeTo(null);    // centers on screen
+                //setDefaultCloseOperation(EXIT_ON_CLOSE);
+                setVisible(true);
             }
         });
-        pack();
-        setLocationRelativeTo(null);    // centers on screen
-        //setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
+        
     }
     public void startup()
     {
@@ -86,7 +90,7 @@ public class TexasOptions extends JFrame
         {
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
-                    gui.tf = new TexasFrame(gui, Integer.parseInt(Cash.getText()));
+                    gui.tf = new TexasFrame(gui, Integer.parseInt(Cash.getText()), Integer.parseInt(Blind.getText()));
                     dispose();
 	        }
 	});

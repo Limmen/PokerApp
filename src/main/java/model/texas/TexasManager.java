@@ -39,7 +39,7 @@ public class TexasManager
     {
         for(TexasPlayer p : players)
         {
-            p.newDeal();
+           // p.newDeal();
         }
     }
     public String botBet(Player p, ArrayList<TexasTableCard> table, int callAmount)
@@ -118,7 +118,7 @@ public class TexasManager
             total = total + p.getPlayer().getBet();
         }
         return total;
-    }
+    }/*
     public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
     {
         TexasPlayer winner = null;
@@ -158,5 +158,5 @@ public class TexasManager
             if(p != winner)
                 p.bet.setText("you lost: " + p.getPlayer().getBet());
         }
-    }
+    }*/
 }

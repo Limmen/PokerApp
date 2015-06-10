@@ -8,7 +8,7 @@ package controller;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import model.blackjack.BlackJackManager;
-import model.blackjack.DeckManager;
+import model.DeckManager;
 import model.texas.Bet;
 import model.texas.Player;
 import model.texas.TexasManager;
@@ -96,7 +96,7 @@ public class Controller
     {
         return bm.getVisible();
     }
-    public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl, Bet bets, TexasGui gui, int cash)
+   /* public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards, TexasLogic tl, Bet bets, TexasGui gui, int cash)
     {
         Player player;
         if(id == -1)
@@ -106,7 +106,7 @@ public class Controller
         else
             player = tm.newBot(id, cash);
         return new TexasPlayer(player,cards, tl, bets);
-    }
+    }*/
     public TexasTableCard newTableCard(int id, JLabel card, TexasGui gui)
     {
         return new TexasTableCard(id, card);
@@ -115,15 +115,12 @@ public class Controller
     {
         return new TexasTable(cards);
     }
-    public void playersDeal(ArrayList<TexasPlayer> players, TexasGui gui)
+    public void texasplayerDeal(Player p)
     {
-        for (TexasPlayer p : players)
-        {
             ArrayList<Card> cards = new ArrayList();
             cards.add(dm.getRandomCard());
             cards.add(dm.getRandomCard()); 
-            tm.newCard(cards, p.getPlayer());
-        }
+            tm.newCard(cards, p);
     }
     public String botBet(Player p,ArrayList<TexasTableCard> table, int callAmount,TexasGui gui)
     {
@@ -142,8 +139,9 @@ public class Controller
     {
         return tm.getTotal(players);
     }
+    /*
     public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
     {
         tm.whoWins(players, table);
-    }
+    }*/
 }

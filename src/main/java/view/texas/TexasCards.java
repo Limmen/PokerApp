@@ -40,11 +40,12 @@ public class TexasCards
     {
         try
         {
-            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+            return ImageIO.read(new File("../src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {
-            System.out.println("Could not read image");
+			e.printStackTrace();
+            System.out.println("Could not read image!!!");
             return null;
         }
     }
@@ -52,11 +53,12 @@ public class TexasCards
     {
          try
         {
-            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+            return ImageIO.read(new File("../src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {
-            System.out.println("Could not read image");
+			e.printStackTrace();
+            System.out.println("Could not read image!");
             return null;
         }
     }

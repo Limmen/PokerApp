@@ -15,9 +15,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import model.texas.Bet;
+import model.texas.Bot;
 import model.texas.Player;
-import model.texas.User;
 import net.miginfocom.swing.MigLayout;
 import view.texas.TexasCards;
 import view.texas.TexasGui;
@@ -27,9 +28,9 @@ import view.texas.TexasLogic;
  *
  * @author kim
  */
-public class TexasPlayer implements Texas 
+public class TexasBot implements Texas 
 {
-    TexasPlayer me = this;
+    TexasBot me = this;
     private Font Title = new Font("Serif", Font.PLAIN, 20);
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Plain = new Font("Serif", Font.PLAIN, 12);
@@ -37,21 +38,17 @@ public class TexasPlayer implements Texas
     private Font PBold = Plain.deriveFont(Plain.getStyle() | Font.BOLD);
     private Font TBold = Title.deriveFont(Title.getStyle() | Font.BOLD);
     JPanel panel;
-    private JButton raise;
-    private JButton call;
-    private JButton fold;
-    JPanel buttons;
     private JPanel cardPanel;
     public JLabel cash;
     public JLabel bet;
-	public JLabel call2;
+    public JLabel call2;
     private JLabel deal;
     private JLabel turn;
     private JPanel dealpanel;
     private Player player;
-    private int callAmount = 0;
-    private BufferedImage image;
     private TexasCards tc;
+	private int callAmount = 0;
+    private BufferedImage image;
     private JLabel card1;
     private JLabel card2;
     private JLabel turns;
@@ -59,24 +56,23 @@ public class TexasPlayer implements Texas
     private boolean folded;
     private TexasGui gui;
     private TexasLogic tl;
-    private Round round;
-    private Bet bets;
-    public TexasPlayer(TexasCards tc, int cash, TexasGui gui, TexasLogic tl)
+    JPanel buttons;
+    public TexasBot(TexasCards tc, int id, int cash, TexasGui gui, TexasLogic tl)
     {
-        this.player = new User(cash);
+        this.player = new Bot(id, cash);
         this.tc = tc;
         this.tl = tl;
-        this.folded = false;
         this.gui = gui;
         image = tc.getTurn();
         turns = new JLabel(new ImageIcon(image));
         image = tc.getDealer();
         dealer = new JLabel(new ImageIcon(image));
-        this.call = new JButton("Call");
+        this.folded = false;
+        JButton call = new JButton("Call");
         call.setFont(PBold);
-        this.fold = new JButton("Fold");
+        JButton fold = new JButton("Fold");
         fold.setFont(PBold);
-        this.raise = new JButton("Raise");
+        JButton raise = new JButton("Raise");
         raise.setFont(PBold);
         buttons = new JPanel(new MigLayout("wrap 3"));
         buttons.add(call, "span 1, align center");
@@ -85,56 +81,11 @@ public class TexasPlayer implements Texas
         dealpanel = new JPanel(new MigLayout("wrap 2"));
         cardPanel = new JPanel(new MigLayout("wrap 2"));
         
-        raise.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent arg0)
-            {
-                if(raise())
-                {
-                    RaiseFrame rf = new RaiseFrame(me);
-                }
-                buttons.setVisible(false);
-                turns.setVisible(false);
-                pack();
-                round.round(bets);
-            }
-        });
-        fold.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent arg0)
-            {
-                bet.setText("folded");
-                //fold();
-                // cleanUp();
-                buttons.setVisible(false);
-                turns.setVisible(false);
-                pack();
-                round.round(bets);
-                
-            }
-        });
-        call.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent arg0)
-            {
-                //userCall(callAmount);
-                //cleanUp();
-                buttons.setVisible(false);
-                turns.setVisible(false);
-                pack();
-                round.round(bets);
-            }
-        });
-        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 init();
             }
         });
-    }
-    public void pack()
-    {
-        tl.pack();
     }
     public void init()
     {
@@ -184,42 +135,48 @@ public class TexasPlayer implements Texas
     {
         return player;
     }
-    public boolean raise()
-    {
-        if(callAmount < player.getCash())
-        {
-            return true;
-        }
-        else
-            return false;
-    }
-    public void placeholders()
+        public void placeholders()
     {
         image = tc.getPlaceholder();
         card1 = new JLabel(new ImageIcon(image));
         card2 = new JLabel(new ImageIcon(image));
         cardPanel.add(card1);
         cardPanel.add(card2);
-        panel.add(cardPanel,  "span");
+        panel.add(cardPanel,  "span");   
     }
     @Override
     public boolean folded()
     {
         return this.folded;
     }
+    @Override
+    public void turn(Bet bet, Round r)
+    {
+        turns.setVisible(true);
+        tl.pack();
+        delay(r, bet);
+    }
     public void newDeal()
     {
         player.init();
         bet.setText(Integer.toString(player.getBet()));
     }
-    @Override
-    public void turn(Bet bet, Round r)
+    public void delay(Round r, Bet bet)
     {
-        this.bets = bet;
-        this.round = r;
-        turns.setVisible(true);
-        buttons.setVisible(true);
-        tl.pack();
+        System.out.println("DELAY!");
+        int delay = 2000;
+        final Round round = r;
+        final Bet bets = bet;
+        Timer timer = new Timer( delay, new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent e ){
+                System.out.println("Delay done!");
+                turns.setVisible(false);
+                round.round(bets);
+            }
+        });
+        timer.setRepeats( false );
+        timer.start();
     }
     @Override
     public void newCards()
@@ -236,7 +193,7 @@ public class TexasPlayer implements Texas
         image = tc.readImage(c.getId());
         Card = new JLabel(new ImageIcon(image));
         this.card2 = Card;
-        
+            
         cardPanel.removeAll();
         cardPanel.add(card1);
         cardPanel.add(card2);

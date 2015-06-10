@@ -75,10 +75,10 @@ public class RaiseFrame extends JFrame
         
         public void addBet(String val)
         {
-            player.userRaise(Integer.parseInt(val));
+           // player.userRaise(Integer.parseInt(val));
         }
         public void cleanUp()
         {
-            player.cleanUp();
+            //player.cleanUp();
         }
 }

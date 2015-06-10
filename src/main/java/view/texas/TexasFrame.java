@@ -15,8 +15,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
+import util.Texas;
+import util.TexasBot;
 import util.TexasPlayer;
 import util.TexasTable;
 
@@ -37,9 +40,9 @@ public class TexasFrame extends JFrame
     TexasLogic tl;
     TexasCards tc;
     private TexasPlayer user;
-    public ArrayList<TexasPlayer> bots;
-    public ArrayList<TexasPlayer> players = new ArrayList();
-    public ArrayList<TexasPlayer> folded = new ArrayList();
+    //public ArrayList<TexasPlayer> bots;
+    public ArrayList<Texas> players = new ArrayList();
+    //public ArrayList<TexasPlayer> folded = new ArrayList();
     private Font Title = new Font("Serif", Font.PLAIN, 20);
     private Font Italic = new Font("Serif", Font.ITALIC, 12);
     private Font Plain = new Font("Serif", Font.PLAIN, 12);
@@ -50,11 +53,14 @@ public class TexasFrame extends JFrame
     int dealer;
     boolean playersdeal = false;
     int cash;
-    public TexasFrame(TexasGui gui, int cash)
+    int  blind;
+    public TexasFrame(TexasGui gui, int cash, int blind)
     {
         super("Texas Hold'em");
         this.gui = gui;
+        this.tc = new TexasCards(gui);
         this.cash = cash;
+        this.blind = blind;
         container = new JPanel(new MigLayout("wrap 4"));
         try 
         {
@@ -70,23 +76,31 @@ public class TexasFrame extends JFrame
         {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        
-        newGame();
-        
-        
-               
-        setBackground(Color.BLACK);
-        pack();
-        setLocationRelativeTo(null);    // centers on screen
-        setVisible(true);
+        tl = new TexasLogic(gui, this,tc, blind);
+        generatePlayers(cash);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                newGame();
+                setBackground(Color.BLACK);
+                pack();
+                setLocationRelativeTo(null);    // centers on screen
+                setVisible(true);
+            }
+        });
+
     }
-    
+    public void generatePlayers(int cash)
+    {
+        this.user = new TexasPlayer(tc, cash, gui, tl);
+        this.players.add(this.user);
+        for(int i = 0; i < 3; i++)
+        {
+            this.players.add(new TexasBot(tc, i+1, cash, gui, tl));
+        }
+    }
     public void newGame()
     {
         remove(container);
-        this.tc = new TexasCards(gui);
-        tl = new TexasLogic(gui, this,tc, cash);
-        players = new ArrayList();
         int bet = 0;
         int dealer = 0;
         container = new JPanel(new MigLayout("wrap 4"));
@@ -101,22 +115,25 @@ public class TexasFrame extends JFrame
         JLabel txt = new JLabel("Total money at stake: ");
         txt.setFont(PBold);
         pp.add(txt, "span 1, align center");
-        total = new JLabel(Integer.toString(gui.getTotal(players)));
+        //total = new JLabel(Integer.toString(gui.getTotal(players)));
+        total = new JLabel("total");
         total.setFont(PBold);
         pp.add(total, "span 1, align center");
         container.add(pp, "span, gaptop 20, gapbottom 20, align center");
         
-        user = tl.generateUser();
-        bots = tl.generateBots(3);
-        players.add(user);
+        //user = tl.generateUser();
+//        bots = tl.generateBots(3);
+  /*      players.add(user);
         for(TexasPlayer p : bots)
         {
             players.add(p);
-        }
-        for(TexasPlayer p: players)
+        } */
+        for(Texas p: players)
         {
+            if(p.getPanel() == null)
+                System.out.println("Null!");
             container.add(p.getPanel(),"span 1, align center");
-        }
+        } 
         buttons = new JPanel(new MigLayout("wrap 2"));
         deal = new JButton("Deal");
         deal.setFont(PBold);
@@ -128,7 +145,7 @@ public class TexasFrame extends JFrame
         deal.addActionListener(new ActionListener() 
         {
 	    public void actionPerformed(ActionEvent arg0) 
-                {   
+                {   /*
                     if(!playersdeal)
                     {
                         for(TexasPlayer p : folded)
@@ -152,12 +169,14 @@ public class TexasFrame extends JFrame
                             container.remove(p.getPanel());
                         }
                         folded = new ArrayList();
-                        playersdeal = true;
-                        tl.newDeck(players);
-                        tl.playersDeal(players);
-                        bet();
-                        pack();
-                    }
+                        playersdeal = true; */
+                      //  tl.newDeck(players);
+                        //tl.playersDeal(players);
+                      //  bet();
+					//                    tl.housedeal(3);
+					tl.firstRound();
+					pack(); 
+                   // } 
 	        }
 	});
         restart.addActionListener(new ActionListener() 
@@ -165,27 +184,34 @@ public class TexasFrame extends JFrame
 	    public void actionPerformed(ActionEvent arg0) 
                 {   
                     playersdeal = false;
-                    newGame();
-                    pack();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            //tl = new TexasLogic(gui, this,tc, blind);
+                            newGame();
+                            pack();
+                        }
+                    });
+                   
 	        }
 	});
         txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
         txt.setFont(Plain);
         container.add(txt, "span 1, gaptop 20");
         add(container, BorderLayout.CENTER);
+        pack();
     }
-    public ArrayList<TexasPlayer> getPlayers()
+    public ArrayList<Texas> getPlayers()
     {
         return players;
     }
     public void bet()
     {
-        tl.chooseDealer();
-        tl.bet(dealer, bet, players.size());
+//        tl.chooseDealer();
+  //      tl.bet(dealer, bet, players.size());
     }
     public void updateTotal()
     {
-         total.setText(Integer.toString(gui.getTotal(players)));
-         pack();
+    //     total.setText(Integer.toString(gui.getTotal(players)));
+      //   pack();
     }
 }

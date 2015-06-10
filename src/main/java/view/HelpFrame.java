@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 
@@ -38,11 +39,15 @@ public class HelpFrame extends JFrame
         {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
-        startup();
-        
-        pack();
-        setLocationRelativeTo(null);    // centers on screen
-        setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                startup();
+                pack();
+                setLocationRelativeTo(null);    // centers on screen
+                setVisible(true);
+            }
+        });
+
     }
     public void startup()
     {

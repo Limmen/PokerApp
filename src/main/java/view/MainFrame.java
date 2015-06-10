@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import view.texas.TexasFrame;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -18,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 import view.blackjack.BlackJackGui;
@@ -124,12 +124,18 @@ public class MainFrame extends JFrame
         txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
         txt.setFont(Plain);
         container.add(txt, "span 1, gaptop 20");
-        add(container, BorderLayout.CENTER);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(Color.BLACK);
-        pack();
-        setLocationRelativeTo(null);    // centers on screen
-        setVisible(true);
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                add(container, BorderLayout.CENTER);
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                setBackground(Color.BLACK);
+                pack();
+                setLocationRelativeTo(null);    // centers on screen
+                setVisible(true);
+            }
+        });
+        
     }
     public void blackjack()
     {

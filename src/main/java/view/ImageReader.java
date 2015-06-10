@@ -25,7 +25,7 @@ public class ImageReader
     {
          try
         {
-            return ImageIO.read(new File("src/main/resources/images/" + id));
+            return ImageIO.read(new File("../src/main/resources/images/" + id));
         }
         catch(Exception e)
         {

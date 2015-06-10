@@ -11,8 +11,8 @@ package model.texas;
  */
 public class Bet 
 {
-    private int callAmount;
-    private int totalBet;
+    public int callAmount;
+    public int totalBet;
     public Bet()
     {
         callAmount = 0;

@@ -31,10 +31,11 @@ public class TexasGui
         this.contr = contr;
         this.to = new TexasOptions(this);
     }
+    /*
     public TexasPlayer newPlayer(int id, ArrayList<JLabel> cards,TexasLogic tl, Bet bets, int cash)
     {
         return contr.newPlayer(id,cards,tl,bets,this, cash);
-    }
+    } */
     public TexasTableCard newTableCard(int id, JLabel card)
     {
         return contr.newTableCard(id, card, this);
@@ -43,9 +44,9 @@ public class TexasGui
     {
         return contr.newTable(cards, this);
     }
-    public void playersDeal(ArrayList<TexasPlayer> players)
+    public void texasplayerDeal(Player p)
     {
-        contr.playersDeal(players,this);
+        contr.texasplayerDeal(p);
     }
     public void newDeck(ArrayList<TexasPlayer> players)
     {
@@ -62,11 +63,11 @@ public class TexasGui
     public int getTotal(ArrayList<TexasPlayer> players)
     {
         return contr.getTotal(players);
-    }
+    }/*
     public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
     {
         contr.whoWins(players, table);
-    }
+    } */
     
 }
 

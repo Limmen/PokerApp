@@ -6,15 +6,15 @@
 package view.texas;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.Timer;
+import javax.swing.SwingUtilities;
 import model.texas.Bet;
 import util.Card;
+import util.Round;
+import util.Texas;
 import util.TexasPlayer;
 import util.TexasTable;
 import util.TexasTableCard;
@@ -34,17 +34,21 @@ public class TexasLogic
     Font Bold = Italic.deriveFont(Italic.getStyle() | Font.BOLD);
     int nrCards = 0;
     int dealer;
-    int cash;
     boolean folded;
-    public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc, int cash)
+    TexasPlayer player;
+	int callAmount;
+    public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc, int blind)
     {
         this.gui = gui;
         this.tf = tf;
         this.tc = tc;
         this.bets = new Bet();
-        this.cash = cash;
+        this.callAmount = blind;
+        bets.raise(blind);
+        dealer = 0;
     }
-    public TexasTable generateTable()
+
+       public TexasTable generateTable()
     {
         ArrayList<TexasTableCard> tableCards = new ArrayList();
         for(int i = 0; i<5; i++)
@@ -57,251 +61,74 @@ public class TexasLogic
         
         return gui.newTable(tableCards);
     }
-    public ArrayList<TexasPlayer> generateBots(int number)
+        public void newDeck(ArrayList<Texas> players)
     {
-        ArrayList<TexasPlayer> bots = new ArrayList();
-        for(int i = 0; i<number; i++)
-        {
-            bots.add(gui.newPlayer(i,getPlaceholder(2), this, bets, cash));
-        }
-        return bots;
+//        gui.newDeck(players);
     }
-       public TexasPlayer generateUser()
-    {
-        TexasPlayer user = gui.newPlayer(-1, getPlaceholder(2), this, bets, cash);
-        return user;
-        
-    }
-    public ArrayList<JLabel>  getPlaceholder(int n)
-    {
-        ArrayList<JLabel> cards = new ArrayList();
-        for(int i = 0; i<2; i++)
+        public void housedeal(int nr)
         {
-            image = tc.getPlaceholder();
-            JLabel Card = new JLabel(new ImageIcon(image));
-            cards.add(Card);
-        }
-        return cards;
-    }
-    public void playersDeal(ArrayList<TexasPlayer> players)
-    {
-        gui.playersDeal(players);
-        for(TexasPlayer p : players)
-        {
-            ArrayList<Card> cards = p.getCards();
-            ArrayList<JLabel> newCards = new ArrayList();
+            TexasTable table = tf.table;
+            ArrayList<Card> cards = gui.tableDeal(nr);
+            ArrayList<JLabel> Vcards = new ArrayList();
             for(Card c : cards)
-            {
-                image = tc.readImage(c.getId());
-                JLabel Card = new JLabel(new ImageIcon(image));
-                newCards.add(Card);
-            }
-            p.setCards(newCards);
-        }
-    }
-    public void newDeck(ArrayList<TexasPlayer> players)
-    {
-        gui.newDeck(players);
-    }
-    public void bet(int turn, int bet, int playersLeft)
-    {
-        folded = false;
-        Boolean newRound = false;
-        ArrayList<TexasPlayer> players = tf.getPlayers();
-        if(players.size() < 2 )
-        {
-            for(TexasPlayer p : tf.folded)
-            {
-                p.nextDeal();
-            }
-            for(TexasPlayer p : tf.players)
-            {
-                p.nextDeal();
-            }
-            wrapUp();
-        }
-        if(turn == -1)
-            turn = dealer;
-        if(playersLeft > 0)
-        {
-            if(turn > players.size()-1 && folded == false)
-                turn = 0;
-            players.get(turn).bet(bet, playersLeft-1,turn+1);
-        }
-        else
-        {
-            for(TexasPlayer p : players)
-            {
-                if (p.getPlayer().getBet() < bets.getCallAmount() && p.getPlayer().getCash() > 0)
-                {
-                    newRound = true;
-                }
-            }
-            if(newRound)
-            {
-                bet(-1, bets.getCallAmount(), players.size());
-            }
-            else
-            {
-                if(tf.players.size() > 1)
-                {
-                    nextDealer();
-                }
-                tf.updateTotal();
-                delay();
-            }
-            
-        }
-            
-    }
-    public void pack()
-    {
-        tf.pack();
-    }
-    public void fold(TexasPlayer p)
-    {
-        tf.players.remove(p);
-        tf.folded.add(p);
-        folded = true;
-        //p.showCards();
-    }
-    public JLabel getDeal()
-    {
-        image = tc.getDealer();
-        return new JLabel(new ImageIcon(image));
-    }
-    public JLabel getTurn()
-    {
-        image = tc.getTurn();
-        return new JLabel(new ImageIcon(image));
-    }
-    public JLabel getBackCard()
-    {
-        image = tc.getBackCard();
-        return new JLabel(new ImageIcon(image));
-    }
-    public String botBet(TexasPlayer p, int callAmount)
-    {
-        return gui.botBet(p.getPlayer(), tf.table.getCards(), callAmount);
-    }
-    public void deal(int nr)
-    {
-        TexasTable table = tf.table;
-        ArrayList<Card> cards = gui.tableDeal(nr);
-        ArrayList<JLabel> Vcards = new ArrayList();
-        for(Card c : cards)
             {
                 image = tc.readImage(c.getId());
                 JLabel Card = new JLabel(new ImageIcon(image));
                 Vcards.add(Card);
             }
-        for(int i = 0; i < cards.size(); i++)
-        {
-            table.Deal(Vcards,cards, nrCards +1, i);
-            nrCards++;
-        }
-        table.addCards();
-        pack();
-        bet(-1, bets.getCallAmount(), tf.getPlayers().size());
-        
-    }
-    public void nextDealer()
-    {
-        for(TexasPlayer p : tf.folded)
-        {
-            p.nextDeal();
-        }
-        for(TexasPlayer p : tf.players)
-        {
-            p.nextDeal();
-        }
-        if(dealer >= tf.getPlayers().size()-1)
-            dealer = 0;
-        else
-            dealer++;
-        chooseDealer();
-    }
-    public void chooseDealer()
-    {
-        tf.getPlayers().get(dealer).youDeal();
-    }
-    public void delay()
-    {
-        int delay = 3000;
-        Timer timer = new Timer( delay, new ActionListener(){
-            @Override
-            public void actionPerformed( ActionEvent e )
+            for(int i = 0; i < cards.size(); i++)
             {
-                if(tf.getPlayers().size() < 2)
-                {
-                    while(nrCards < 5)
-                    {
-                        whatsNext();
-                    }
-                }
-                else
-                    whatsNext();
-            }        
+                table.Deal(Vcards,cards, nrCards +1, i);
+                nrCards++;
+            }
+            table.addCards();
+            SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                pack();
+            }
         });
-        timer.setRepeats( false );
-        timer.start();
-    }
-    public void whatsNext()
-    {
-        if(tf.players.size() < 2)
-        {
-            wrapUp();
-            return;
+			Bet betz = bets;
+            new Round(this, tf, dealer, betz).round(betz);
+            dealer++;
         }
-        if(nrCards == 5)
-        {
-            wrapUp();
-            return;
-        }
-        if(nrCards > 0 && nrCards != 5)
-        {
-            deal(1);
-        }
-        if(nrCards == 0)
-        {
-            deal(3);
-        }
-    }
-    public void wrapUp()
-    {
-        if(nrCards != 5)
-        {
-            deals();
-        }
-            gui.whoWins(tf.getPlayers(), tf.table.getCards());
-            for(TexasPlayer tp : tf.players)
-            {
-                tp.hide();
-                tp.showCards();
-            }
-            pack();
-            nrCards = 0;
-            bets = new Bet();
-            dealer = 0;
-            tf.playersdeal = false;
+	public void firstRound()
+	{
+		Bet betz = bets;
+		new Round(this, tf, dealer, betz).round(betz);
+		dealer++;
+	}
         
-        
-    }
-    public void deals()
-    {
-        while(nrCards < 5)
+       
+        public void whatsNext()
         {
-            if(nrCards > 0 && nrCards != 5)
+			System.out.println("What's next?!");
+			if(nrCards == 0)
+				{
+					housedeal(3);
+				}
+            if(nrCards == 3)
             {
-                deal(1);
-            }
-            if(nrCards == 0)
-            {
-                deal(3);
+                playersDeal();
             }
         }
-    }
-    
-
-   
+        public void playersDeal()
+        {
+            for(Texas t : tf.players)
+            {
+                if(!t.folded())
+                {
+                    t.newCards();
+                    pack();
+                }
+            }
+        }
+        public void pack()
+        {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    tf.pack();
+                }
+            });
+        }
+        
 }
