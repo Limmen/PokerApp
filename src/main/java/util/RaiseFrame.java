@@ -59,7 +59,7 @@ public class RaiseFrame extends JFrame
         {
             public void actionPerformed(ActionEvent arg0) 
             {
-				raise(enter.getText());
+				if(raise(enter.getText()))
 				dispose();    
             }
         });
@@ -72,9 +72,9 @@ public class RaiseFrame extends JFrame
         setVisible(true);
 	}
         
-        public void raise(String val)
+        public boolean raise(String val)
         {
-			player.raise(val);
+			return player.raise(val);
         }
         
 }

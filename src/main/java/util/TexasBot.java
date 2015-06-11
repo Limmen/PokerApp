@@ -154,7 +154,6 @@ public class TexasBot implements Texas
     {
         turns.setVisible(true);
         tl.pack();
-		System.out.println("cards size: " + tl.tf.table.getCards().size());
 		String result = gui.botBet(player, tl.tf.table.getCards(), bet);
 		if(result.equals("fold"))
 			{
@@ -174,15 +173,15 @@ public class TexasBot implements Texas
     }
     public void delay(Round r, Bet bet)
     {
-        System.out.println("DELAY!");
         int delay = 2000;
         final Round round = r;
         final Bet bets = bet;
         Timer timer = new Timer( delay, new ActionListener(){
             @Override
             public void actionPerformed( ActionEvent e ){
-                System.out.println("Delay done!");
                 turns.setVisible(false);
+				round.checkChanges(bets);
+				System.out.println("bot calling round and round count is: " + round.count);
                 round.round(bets);
             }
         });

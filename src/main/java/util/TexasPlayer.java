@@ -128,6 +128,8 @@ public class TexasPlayer implements Texas
                 buttons.setVisible(false);
                 turns.setVisible(false);
                 pack();
+				round.checkChanges(bets);
+				System.out.println("User calling round and round count is: " + round.count);
                 round.round(bets);
             }
         });
@@ -266,15 +268,26 @@ public class TexasPlayer implements Texas
 		this.call2.setText(Integer.toString(callz));
 		tl.pack();
 	}
-	public void raise(String val)
+	public boolean raise(String val)
 	{
-		player.raise(Integer.parseInt(val));
-		bets.raise(Integer.parseInt(val));
-		updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
-		buttons.setVisible(false);
-		turns.setVisible(false);
-		pack();
-		round.round(bets);
+		int raiseAmount = Integer.parseInt(val) + bets.getCallAmount();
+		if(raiseAmount > player.getCash())
+			{
+				return false;
+			}
+		else
+			{
+				player.raise(Integer.parseInt(val) + (bets.getCallAmount() - player.getBet()));
+				bets.raise(Integer.parseInt(val));
+				updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
+				buttons.setVisible(false);
+				turns.setVisible(false);
+				pack();
+				round.checkChanges(bets);
+				System.out.println("User calling round and round count is: " + round.count);
+				round.round(bets); 
+						   return true;		   
+			}
 	}
 	public void updateVals(String betting, String cash)
 	{

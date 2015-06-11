@@ -20,14 +20,17 @@ public class Round
     TexasFrame tf;
     int count;
     int turn;
+	int oldCall;
     ArrayList<Texas> copy;
     int dealer;
-    public Round(TexasLogic tl, TexasFrame tf, int dealer, Bet bets){
+	int blind;
+    public Round(TexasLogic tl, TexasFrame tf, int dealer, Bet bets, int blind){
         this.tl = tl;
         this.tf = tf;
         this.count = 0;
         this.dealer = dealer;
         this.turn  = dealer+1;
+		this.blind = blind;
         copy = new ArrayList();
             for(Texas t : tf.players)
             {
@@ -42,14 +45,15 @@ public class Round
     
      public void round(Bet bets)
         {
-            if(count >= copy.size())
+            if(count >= copy.size()-1)
             {
                 copy.get(dealer).dealDone();
-                tl.whatsNext();
+				bets.callAmount = blind + bets.callAmount;
+				setCall(bets.getCallAmount());
+                tl.whatsNext(bets);
             }
             else
             {
-                int oldCall = bets.getCallAmount();
                 if(turn == copy.size())
                 {
                     turn = 0;
@@ -59,15 +63,8 @@ public class Round
                 {
                    p.turn(bets, this);
                 }
-                
-                if(oldCall != bets.getCallAmount())
-                {
-                    count = 0;
-					setCall(bets.getCallAmount());
-                }
-                else
-                    count++;
                 turn++;
+				//                oldCall = bets.getCallAmount();
                 return;
             }
             
@@ -81,5 +78,18 @@ public class Round
 						t.setCall(callz);	
 					}
 			}
+	}
+	public void checkChanges(Bet bets)
+	{	
+		if(oldCall != bets.getCallAmount())
+			{
+				count = 0;
+				setCall(bets.getCallAmount());
+			}
+		if(oldCall == bets.getCallAmount())
+			{
+				count++;	
+			}	
+		oldCall = bets.getCallAmount();
 	}
 }

@@ -36,14 +36,14 @@ public class TexasLogic
     int dealer;
     boolean folded;
     TexasPlayer player;
-	int callAmount;
+	int blind;
     public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc, int blind)
     {
         this.gui = gui;
         this.tf = tf;
         this.tc = tc;
         this.bets = new Bet();
-        this.callAmount = blind;
+        this.blind = blind;
         bets.raise(blind);
         dealer = 0;
     }
@@ -86,21 +86,19 @@ public class TexasLogic
                 pack();
             }
         });
-			Bet betz = bets;
-            new Round(this, tf, dealer, betz).round(betz);
+            new Round(this, tf, dealer, bets, blind).round(bets);
             dealer++;
         }
 	public void firstRound()
 	{
-		Bet betz = bets;
-		new Round(this, tf, dealer, betz).round(betz);
+		new Round(this, tf, dealer, bets,blind).round(bets);
 		dealer++;
 	}
         
        
-        public void whatsNext()
+        public void whatsNext(Bet betz)
         {
-			System.out.println("What's next?!");
+			this.bets = betz;
 			if(nrCards == 0)
 				{
 					housedeal(3);

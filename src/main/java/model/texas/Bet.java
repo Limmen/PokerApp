@@ -25,7 +25,7 @@ public class Bet
     public void raise(int bet)
     {
         totalBet = totalBet - callAmount;
-        callAmount = bet;
+        callAmount = callAmount + bet;
         totalBet = totalBet + callAmount;
     }
     public int getTotalBet()
