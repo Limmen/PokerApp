@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package util;
 
 import java.util.ArrayList;
@@ -14,82 +14,99 @@ import view.texas.TexasLogic;
  *
  * @author kim
  */
-public class Round 
+public class Round
 {
     TexasLogic tl;
     TexasFrame tf;
     int count;
     int turn;
-	int oldCall;
+    int oldCall;
     ArrayList<Texas> copy;
     int dealer;
-	int blind;
+    Texas delah;
+    int blind;
     public Round(TexasLogic tl, TexasFrame tf, int dealer, Bet bets, int blind){
         this.tl = tl;
         this.tf = tf;
         this.count = 0;
         this.dealer = dealer;
         this.turn  = dealer+1;
-		this.blind = blind;
+        this.blind = blind;
         copy = new ArrayList();
-            for(Texas t : tf.players)
+        for(Texas t : tf.players)
+        {
+            if(!t.folded())
             {
-                if(!t.folded())
-                {
-                    copy.add(t);
-                }
+                copy.add(t);
             }
-        copy.get(dealer).youDeal();
-		setCall(bets.getCallAmount());
+        }
+        if(copy.size() == 0)
+            return;
+        if(dealer >= copy.size())
+        {
+            dealer = 0;
+        }
+        delah = copy.get(dealer);
+        delah.youDeal();
+        setCall(bets.getCallAmount());
     }
     
-     public void round(Bet bets)
+    public void round(Bet bets)
+    {
+        if(count >= copy.size()-1)
         {
-            if(count >= copy.size()-1)
+            System.out.println("What's next!");
+            delah.dealDone();
+            if(copy.size() > 1)
             {
-                copy.get(dealer).dealDone();
-				bets.callAmount = blind + bets.callAmount;
-				setCall(bets.getCallAmount());
-                tl.whatsNext(bets);
-            }
-            else
-            {
-                if(turn == copy.size())
+                boolean addblind = false;
+                for(Texas t : copy)
                 {
-                    turn = 0;
+                   if(t.getCash() >= (blind + bets.callAmount))
+                       addblind = true;
                 }
-                Texas p = copy.get(turn);
-                if(!p.folded())
+                if(addblind)
                 {
-                   p.turn(bets, this);
+                    bets.callAmount = blind + bets.callAmount;
                 }
-                turn++;
-				//                oldCall = bets.getCallAmount();
-                return;
             }
-            
+            setCall(bets.getCallAmount());
+            tl.updateTotal(bets);
+            tl.whatsNext(bets);
         }
-	public void setCall(int callz)
-	{
-		for(Texas t : copy)
-			{
-				if(!t.folded())
-					{
-						t.setCall(callz);	
-					}
-			}
-	}
-	public void checkChanges(Bet bets)
-	{	
-		if(oldCall != bets.getCallAmount())
-			{
-				count = 0;
-				setCall(bets.getCallAmount());
-			}
-		if(oldCall == bets.getCallAmount())
-			{
-				count++;	
-			}	
-		oldCall = bets.getCallAmount();
-	}
+        else
+        {
+            if(turn >= copy.size())
+            {
+                turn = 0;
+            }
+            Texas p = copy.get(turn);
+            if(!p.folded())
+            {
+                p.turn(bets, this);
+            }
+            turn++;
+            //                oldCall = bets.getCallAmount();
+            return;
+        }
+        
+    }
+    public void setCall(int callz)
+    {
+        tf.setCall(callz);
+    }
+    public void checkChanges(Bet bets)
+    {
+        if(oldCall != bets.getCallAmount())
+        {
+            count = 0;
+            setCall(bets.getCallAmount());
+        }
+        if(oldCall == bets.getCallAmount())
+        {
+            count++;
+        }
+        oldCall = bets.getCallAmount();
+        tl.updateTotal(bets);
+    }
 }

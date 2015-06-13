@@ -76,9 +76,10 @@ public class Bot implements Player
     {
         if(raise > cash)
             raise = cash;
-        
+        System.out.println("Bot raising with " + raise + " old bet was " + currentbet);
         currentbet = currentbet + raise;
         cash = cash - raise;
+        System.out.println("Bots new bet is: " + currentbet);
         
     }
     @Override
@@ -86,14 +87,30 @@ public class Bot implements Player
     {
         if(val > currentbet)
         {
-            cash = cash - (val-currentbet);
-            currentbet = val;
+            if((val- currentbet) <= cash)
+            {
+                cash = cash - (val-currentbet);
+                currentbet = val;
+            }
+            else
+            {
+                val = cash + currentbet;
+                cash = cash - (val-currentbet);
+                currentbet = val;
+            }
+
         }
     }
     @Override
     public void winCash(int val)
     {
         cash = cash + val;
+    }
+    @Override
+    public void newRound()
+    {
+        this.currentbet = 0;
+        this.hand = new ArrayList<Card>();
     }
 
     

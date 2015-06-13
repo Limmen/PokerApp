@@ -17,12 +17,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import model.texas.Bet;
 import net.miginfocom.swing.MigLayout;
 import util.Texas;
 import util.TexasBot;
 import util.TexasPlayer;
 import util.TexasTable;
-
 /**
  *
  * @author kim
@@ -37,6 +37,8 @@ public class TexasFrame extends JFrame
     private JButton restart;
     public TexasTable table;
     public JLabel total;
+    public JLabel blindlabel;
+    public JLabel calllabel;
     TexasLogic tl;
     TexasCards tc;
     private TexasPlayer user;
@@ -111,72 +113,59 @@ public class TexasFrame extends JFrame
         table = tl.generateTable();
         container.add(table.getPanel(), "span 4, align center");
         
-        JPanel pp = new JPanel(new MigLayout("wrap 2"));
-        JLabel txt = new JLabel("Total money at stake: ");
+        JPanel pp = new JPanel(new MigLayout("wrap 6"));
+        JLabel txt = new JLabel("Cash in pot: ");
         txt.setFont(PBold);
         pp.add(txt, "span 1, align center");
-        //total = new JLabel(Integer.toString(gui.getTotal(players)));
-        total = new JLabel("total");
+        total = new JLabel("0");
         total.setFont(PBold);
         pp.add(total, "span 1, align center");
+        txt = new JLabel("Blind: ");
+        txt.setFont(PBold);
+        pp.add(txt, "span 1, align center, gapleft 20");
+        blindlabel = new JLabel(Integer.toString(blind));
+        blindlabel.setFont(PBold);
+        pp.add(blindlabel, "span 1, align center");
+        txt = new JLabel("Call amount: ");
+        txt.setFont(PBold);
+        pp.add(txt, "span 1, align center, gapleft 20");
+        calllabel = new JLabel(Integer.toString(blind));
+        calllabel.setFont(PBold);
+        pp.add(calllabel, "span 1, align center");
         container.add(pp, "span, gaptop 20, gapbottom 20, align center");
-        
-        //user = tl.generateUser();
-//        bots = tl.generateBots(3);
-  /*      players.add(user);
-        for(TexasPlayer p : bots)
-        {
-            players.add(p);
-        } */
+
         for(Texas p: players)
         {
             if(p.getPanel() == null)
-                System.out.println("Null!");
+                System.out.println("Players panel is Null!");
+			if (container == null)
+				System.out.println("Container is Null!");
+			if(p == null)
+				System.out.println("Player is Null!");
             container.add(p.getPanel(),"span 1, align center");
         } 
         buttons = new JPanel(new MigLayout("wrap 2"));
-        deal = new JButton("Deal");
+        deal = new JButton("Begin new round");
         deal.setFont(PBold);
         buttons.add(deal,"span 1");
         restart = new JButton("New game");
         restart.setFont(PBold);
         buttons.add(restart, "span 1");
-        container.add(buttons,"span, align center");
+        container.add(buttons,"wrap, span, align center");
         deal.addActionListener(new ActionListener() 
         {
 	    public void actionPerformed(ActionEvent arg0) 
-                {   /*
-                    if(!playersdeal)
-                    {
-                        for(TexasPlayer p : folded)
-                        {
-                            if(p.getPlayer().getCash() > 0)
+			{   
+                            for(Texas t : players)
                             {
-                                players.add(p);
-                                folded.remove(p);
+                                if(t.getCash() <= 0)
+                                {
+                                    container.remove(t.getPanel());
+                                }
                             }
-                        }
-                        for(TexasPlayer p : players)
-                        {
-                            if(p.getPlayer().getCash() < 1)
-                            {
-                                players.remove(p);
-                                folded.add(p);
-                            }
-                        }
-                        for(TexasPlayer p : folded)
-                        {
-                            container.remove(p.getPanel());
-                        }
-                        folded = new ArrayList();
-                        playersdeal = true; */
-                      //  tl.newDeck(players);
-                        //tl.playersDeal(players);
-                      //  bet();
-					//                    tl.housedeal(3);
-					tl.firstRound();
-					pack(); 
-                   // } 
+                            tl.newRound();
+				//tl.firstRound();
+				//pack(); 
 	        }
 	});
         restart.addActionListener(new ActionListener() 
@@ -186,9 +175,7 @@ public class TexasFrame extends JFrame
                     playersdeal = false;
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            //tl = new TexasLogic(gui, this,tc, blind);
-                            newGame();
-                            pack();
+							reset();
                         }
                     });
                    
@@ -209,9 +196,64 @@ public class TexasFrame extends JFrame
 //        tl.chooseDealer();
   //      tl.bet(dealer, bet, players.size());
     }
-    public void updateTotal()
+    public void updateTotal(Bet bets)
     {
-    //     total.setText(Integer.toString(gui.getTotal(players)));
-      //   pack();
+		total.setText(Integer.toString(bets.getTotalBet()));
+        SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});
     }
+    public void updateBlind(int b)
+    {
+		blindlabel.setText(Integer.toString(b));
+        SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});
+    }
+	public void reset()
+	{
+		new TexasOptions(gui);
+		dispose();
+	}
+	public void dealText(String txt)
+	{
+		deal.setText(txt);
+        SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});
+	}
+	public void hideButton()
+	{
+	deal.setVisible(false);
+        SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});		
+	}
+        public void showButton()
+	{
+	deal.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});		
+	}
+        public void setCall(int call)
+        {
+            calllabel.setText(Integer.toString(call));
+            SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					pack();
+				}
+			});	
+            
+        }
 }

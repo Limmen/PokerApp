@@ -25,4 +25,5 @@ public interface Player
     public void raise(int val);
     public boolean isUser();
     public void winCash(int val);
+    public void newRound();
 }

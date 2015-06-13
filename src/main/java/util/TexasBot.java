@@ -41,8 +41,9 @@ public class TexasBot implements Texas
     private JPanel cardPanel;
     public JLabel cash;
     public JLabel bet;
-    public JLabel call2;
     private JLabel deal;
+    private ArrayList<JLabel> realcards;
+    private ArrayList<JLabel> backcards;
     private JLabel turn;
     private JPanel dealpanel;
     private Player player;
@@ -63,6 +64,7 @@ public class TexasBot implements Texas
         this.tc = tc;
         this.tl = tl;
         this.gui = gui;
+        backcards(); 
         image = tc.getTurn();
         turns = new JLabel(new ImageIcon(image));
         image = tc.getDealer();
@@ -80,12 +82,7 @@ public class TexasBot implements Texas
         buttons.add(raise, "span 1, align center");
         dealpanel = new JPanel(new MigLayout("wrap 2"));
         cardPanel = new JPanel(new MigLayout("wrap 2"));
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                init();
-            }
-        });
+        init();
     }
     public void init()
     {
@@ -105,12 +102,7 @@ public class TexasBot implements Texas
             bet = new JLabel("0");
             this.bet.setFont(PBold);
             panel.add(bet, "span 1, align center");
-			text = new JLabel("Call amount");
-			text.setFont(PBold);
-			panel.add(text, "span 1, align center");
-			call2 = new JLabel("0");
-			call2.setFont(PBold);
-			panel.add(call2, "span 1, align center");
+            panel.add(cardPanel, "span");
             placeholders();
             dealpanel.add(dealer, "span 1, align center");
             dealpanel.add(turns, "span 1, align center");
@@ -140,9 +132,19 @@ public class TexasBot implements Texas
         image = tc.getPlaceholder();
         card1 = new JLabel(new ImageIcon(image));
         card2 = new JLabel(new ImageIcon(image));
+        cardPanel.removeAll();
         cardPanel.add(card1);
-        cardPanel.add(card2);
-        panel.add(cardPanel,  "span");   
+        cardPanel.add(card2);  
+    }
+    public void backcards()
+    {
+        backcards = new ArrayList();
+        image = tc.getBackCard();
+        JLabel backcard1 = new JLabel(new ImageIcon(image));
+        JLabel backcard2 = new JLabel(new ImageIcon(image));
+        backcards.add(backcard1);
+        backcards.add(backcard2);
+        
     }
     @Override
     public boolean folded()
@@ -163,6 +165,8 @@ public class TexasBot implements Texas
 		else{
 			this.bet.setText(Integer.toString(player.getBet()));
 			cash.setText(Integer.toString(player.getCash()));
+			System.out.println("Botbet is: " + player.getBet() + "\n Betcall is: " + bet.getCallAmount());
+			tl.pack();
 		}
         delay(r, bet);
     }
@@ -191,6 +195,7 @@ public class TexasBot implements Texas
     @Override
     public void newCards()
     {
+        realcards = new ArrayList();
         gui.texasplayerDeal(player);
         ArrayList<Card> cards = player.getHand();
         
@@ -207,6 +212,8 @@ public class TexasBot implements Texas
         cardPanel.removeAll();
         cardPanel.add(card1);
         cardPanel.add(card2);
+        realcards.add(card1);
+        realcards.add(card2);
     }
     @Override
     public void youDeal()
@@ -220,11 +227,48 @@ public class TexasBot implements Texas
         dealer.setVisible(false);
         tl.pack();
     }
-	@Override
-	public void setCall(int callz)
-	{
-		this.callAmount = callz;
-		this.call2.setText(Integer.toString(callz));
-		tl.pack();
-	}
+        @Override
+        public void youWin(int amount)
+        {
+            player.winCash(amount);
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText("<html> Congratulations! <font color=green>you won " + (amount - player.getBet()) + "</font></html>");
+        }
+        @Override
+        public void youLoose()
+        {
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText("<html> <font color=red> You lost " + player.getBet() + "</font> </html>");
+        }
+        @Override public int getCash()
+        {
+            return player.getCash();
+        }
+        @Override
+        public void hideCards()
+        {
+            cardPanel.removeAll();
+            for(JLabel b : backcards)
+            {
+                cardPanel.add(b);
+            }
+        }
+        @Override
+        public void showCards()
+        {
+            cardPanel.removeAll();
+            for(JLabel c : realcards)
+            {
+                cardPanel.add(c);
+            }
+        }
+        @Override
+        public void newRound()
+        {
+            player.newRound();
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText(Integer.toString(player.getBet()));
+            this.folded = false;
+            placeholders();
+        }
 }

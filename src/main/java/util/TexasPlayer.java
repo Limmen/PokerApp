@@ -44,16 +44,16 @@ public class TexasPlayer implements Texas
     private JPanel cardPanel;
     public JLabel cash;
     public JLabel bet;
-	public JLabel call2;
     private JLabel deal;
     private JLabel turn;
     private JPanel dealpanel;
     private Player player;
-    private int callAmount = 0;
     private BufferedImage image;
     private TexasCards tc;
     private JLabel card1;
     private JLabel card2;
+    private ArrayList<JLabel> realcards;
+    private ArrayList<JLabel> backcards;
     private JLabel turns;
     private JLabel dealer;
     private boolean folded;
@@ -68,6 +68,7 @@ public class TexasPlayer implements Texas
         this.tl = tl;
         this.folded = false;
         this.gui = gui;
+        backcards();
         image = tc.getTurn();
         turns = new JLabel(new ImageIcon(image));
         image = tc.getDealer();
@@ -112,15 +113,16 @@ public class TexasPlayer implements Texas
         {
             public void actionPerformed(ActionEvent arg0)
             {
+				int oldBet = player.getBet();
 				if(player.getCash()>=bets.getCallAmount())
 					{
 						player.call(bets.getCallAmount());
-						bets.addBet(bets.getCallAmount());
+						bets.addBet(bets.getCallAmount() - oldBet);
 					}
 				else
 					{
 						player.call(player.getCash());
-						bets.addBet(player.getCash());
+						bets.addBet(player.getCash() - oldBet);
 						//All in (SHow cards?);
 					}
 				updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
@@ -129,16 +131,11 @@ public class TexasPlayer implements Texas
                 turns.setVisible(false);
                 pack();
 				round.checkChanges(bets);
-				System.out.println("User calling round and round count is: " + round.count);
                 round.round(bets);
             }
         });
         
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                init();
-            }
-        });
+		init();
     }
     public void pack()
     {
@@ -162,12 +159,7 @@ public class TexasPlayer implements Texas
             bet = new JLabel("0");
             this.bet.setFont(PBold);
             panel.add(bet, "span 1, align center");
-			text = new JLabel("Call amount");
-			text.setFont(PBold);
-			panel.add(text, "span 1, align center");
-			call2 = new JLabel("0");
-			call2.setFont(PBold);
-			panel.add(call2, "span 1, align center");
+            panel.add(cardPanel, "span");
             placeholders();
             dealpanel.add(dealer, "span 1, align center");
             dealpanel.add(turns, "span 1, align center");
@@ -194,7 +186,7 @@ public class TexasPlayer implements Texas
     }
     public boolean raise()
     {
-        if(callAmount < player.getCash())
+        if(bets.getCallAmount() < player.getCash())
         {
             return true;
         }
@@ -206,9 +198,19 @@ public class TexasPlayer implements Texas
         image = tc.getPlaceholder();
         card1 = new JLabel(new ImageIcon(image));
         card2 = new JLabel(new ImageIcon(image));
+        cardPanel.removeAll();
         cardPanel.add(card1);
         cardPanel.add(card2);
-        panel.add(cardPanel,  "span");
+    }
+    public void backcards()
+    {
+        backcards = new ArrayList();
+        image = tc.getBackCard();
+        JLabel backcard1 = new JLabel(new ImageIcon(image));
+        JLabel backcard2 = new JLabel(new ImageIcon(image));
+        backcards.add(backcard1);
+        backcards.add(backcard2);
+        
     }
     @Override
     public boolean folded()
@@ -232,6 +234,7 @@ public class TexasPlayer implements Texas
     @Override
     public void newCards()
     {
+        realcards = new ArrayList();
         gui.texasplayerDeal(player);
         ArrayList<Card> cards = player.getHand();
         
@@ -248,6 +251,8 @@ public class TexasPlayer implements Texas
         cardPanel.removeAll();
         cardPanel.add(card1);
         cardPanel.add(card2);
+        realcards.add(card1);
+        realcards.add(card2);
     }
     @Override
     public void youDeal()
@@ -261,13 +266,6 @@ public class TexasPlayer implements Texas
         dealer.setVisible(false);
         tl.pack();
     }
-	@Override
-	public void setCall(int callz)
-	{
-		this.callAmount = callz;
-		this.call2.setText(Integer.toString(callz));
-		tl.pack();
-	}
 	public boolean raise(String val)
 	{
 		int raiseAmount = Integer.parseInt(val) + bets.getCallAmount();
@@ -284,7 +282,6 @@ public class TexasPlayer implements Texas
 				turns.setVisible(false);
 				pack();
 				round.checkChanges(bets);
-				System.out.println("User calling round and round count is: " + round.count);
 				round.round(bets); 
 						   return true;		   
 			}
@@ -295,4 +292,48 @@ public class TexasPlayer implements Texas
 		this.cash.setText(cash);
 		pack();
 	}
+        @Override
+        public void youWin(int amount)
+        {
+            player.winCash(amount);
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText("<html> Congratulations! <font color=green>you won " + (amount - player.getBet()) + "</font></html>");
+        }
+        @Override
+        public void youLoose()
+        {
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText("<html> <font color=red> You lost " + player.getBet() + "</font> </html>");
+        }
+        @Override public int getCash()
+        {
+            return player.getCash();
+        }
+        @Override
+        public void hideCards()
+        {
+            cardPanel.removeAll();
+            for(JLabel b : backcards)
+            {
+                cardPanel.add(b);
+            }
+        }
+        @Override
+        public void showCards()
+        {
+            cardPanel.removeAll();
+            for(JLabel c : realcards)
+            {
+                cardPanel.add(c);
+            }
+        }
+        @Override
+        public void newRound()
+        {
+            player.newRound();
+            cash.setText(Integer.toString(player.getCash()));
+            bet.setText(Integer.toString(player.getBet()));
+            this.folded = false;
+            placeholders();
+        }
 }

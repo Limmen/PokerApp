@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import model.texas.Bet;
 import model.texas.Player;
 import util.Card;
+import util.Texas;
 import util.TexasPlayer;
 import util.TexasTable;
 import util.TexasTableCard;
@@ -48,7 +49,7 @@ public class TexasGui
     {
         contr.texasplayerDeal(p);
     }
-    public void newDeck(ArrayList<TexasPlayer> players)
+    public void newDeck(ArrayList<Texas> players)
     {
         contr.newDeck(players, this);
     }
@@ -60,14 +61,14 @@ public class TexasGui
     {
         return contr.tableDeal(nr, this);
     }
-    public int getTotal(ArrayList<TexasPlayer> players)
+    public int getTotal(ArrayList<Texas> players)
     {
         return contr.getTotal(players);
-    }/*
-    public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
+    }
+    public void whoWins(ArrayList<Texas> players, ArrayList<TexasTableCard> table)
     {
         contr.whoWins(players, table);
-    } */
+    } 
     
 }
 

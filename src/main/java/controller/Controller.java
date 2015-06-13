@@ -13,12 +13,12 @@ import model.texas.Bet;
 import model.texas.Player;
 import model.texas.TexasManager;
 import util.Card;
+import util.Texas;
 import util.TexasPlayer;
 import util.TexasTable;
 import util.TexasTableCard;
 import view.blackjack.BlackJackGui;
 import view.texas.TexasGui;
-import view.texas.TexasLogic;
 
 /**
  *
@@ -62,7 +62,7 @@ public class Controller
         dm.newDeck();
         bm.newDeck();
     }
-    public void newDeck(ArrayList<TexasPlayer> players, TexasGui g)
+    public void newDeck(ArrayList<Texas> players, TexasGui g)
     {
         dm.newDeck();
         tm.newDeck(players);
@@ -135,13 +135,13 @@ public class Controller
         }
         return cards;
     }
-    public int getTotal(ArrayList<TexasPlayer> players)
+    public int getTotal(ArrayList<Texas> players)
     {
         return tm.getTotal(players);
     }
-    /*
-    public void whoWins(ArrayList<TexasPlayer> players, ArrayList<TexasTableCard> table)
+    
+    public void whoWins(ArrayList<Texas> players, ArrayList<TexasTableCard> table)
     {
         tm.whoWins(players, table);
-    }*/
+    }
 }

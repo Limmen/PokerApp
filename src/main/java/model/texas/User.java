@@ -91,5 +91,10 @@ public class User implements Player
     {
         cash = cash + val;
     }
+    public void newRound()
+    {
+        this.currentbet = 0;
+        this.hand = new ArrayList<Card>();
+    }
     
 }

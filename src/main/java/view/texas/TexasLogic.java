@@ -15,6 +15,7 @@ import model.texas.Bet;
 import util.Card;
 import util.Round;
 import util.Texas;
+import util.TexasBot;
 import util.TexasPlayer;
 import util.TexasTable;
 import util.TexasTableCard;
@@ -37,6 +38,7 @@ public class TexasLogic
     boolean folded;
     TexasPlayer player;
 	int blind;
+	boolean playersdeal;
     public TexasLogic(TexasGui gui, TexasFrame tf, TexasCards tc, int blind)
     {
         this.gui = gui;
@@ -44,8 +46,9 @@ public class TexasLogic
         this.tc = tc;
         this.bets = new Bet();
         this.blind = blind;
-        bets.raise(blind);
+        bets.callAmount = blind;
         dealer = 0;
+	playersdeal = false;
     }
 
        public TexasTable generateTable()
@@ -81,16 +84,13 @@ public class TexasLogic
                 nrCards++;
             }
             table.addCards();
-            SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                pack();
-            }
-        });
+			pack();
             new Round(this, tf, dealer, bets, blind).round(bets);
             dealer++;
         }
 	public void firstRound()
 	{
+		tf.hideButton();
 		new Round(this, tf, dealer, bets,blind).round(bets);
 		dealer++;
 	}
@@ -99,14 +99,25 @@ public class TexasLogic
         public void whatsNext(Bet betz)
         {
 			this.bets = betz;
+			if(nrCards == 5)
+				{
+					results();
+                                        return;
+				}
+            if(nrCards == 0 && !playersdeal)
+				{
+					playersDeal();
+					return;
+				}
 			if(nrCards == 0)
 				{
 					housedeal(3);
+					return;
 				}
-            if(nrCards == 3)
-            {
-                playersDeal();
-            }
+            if(nrCards >= 3 &&  playersdeal)
+				{
+					housedeal(1);
+				}
         }
         public void playersDeal()
         {
@@ -115,9 +126,16 @@ public class TexasLogic
                 if(!t.folded())
                 {
                     t.newCards();
+                    if(t instanceof TexasBot)
+                    {
+                        t.hideCards();
+                    }
                     pack();
                 }
             }
+			playersdeal = true;
+			new Round(this, tf, dealer, bets, blind).round(bets);
+            dealer++;
         }
         public void pack()
         {
@@ -126,6 +144,39 @@ public class TexasLogic
                     tf.pack();
                 }
             });
+        }
+	public void updateTotal(Bet bets)
+	{
+		tf.updateTotal(bets);
+	}
+	public void results()
+	{
+            for(Texas t : tf.players)
+            {
+                if(t instanceof TexasBot)
+                {
+                    t.showCards();
+                }
+            }
+		gui.whoWins(tf.players, tf.table.getCards());
+                tf.showButton();
+                pack();
+	}
+        public void newRound()
+        {
+            this.bets = new Bet();
+            this.blind = blind;
+            bets.callAmount = blind;
+            dealer = 0;
+            playersdeal = false;
+            for(Texas t : tf.players)
+            {
+                if(!t.folded())
+                    t.newRound();
+            }
+            pack();
+            firstRound();
+            
         }
         
 }
