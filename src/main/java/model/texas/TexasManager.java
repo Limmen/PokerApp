@@ -79,7 +79,7 @@ public class TexasManager
         if(res > 7)
         {
             System.out.println("All in, res > 7 ");
-			bet.raise(b.getCash());
+			bet.raise(b.getCash() - (bet.getCallAmount() - b.getBet()));
             b.raise(b.getCash()); // All in
             return "raise";
         }

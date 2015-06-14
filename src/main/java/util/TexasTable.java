@@ -70,5 +70,10 @@ public class TexasTable
             panel.add(t.getVCard());
         }
     }
+    public void setCards(ArrayList<TexasTableCard> cards)
+    {
+        this.cards = cards;
+        addCards();
+    }
 
 }

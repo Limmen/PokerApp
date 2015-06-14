@@ -45,9 +45,9 @@ public class Round
         }
         for(Texas t : copy)
         {
-            if(t.getCash() == 0)
+            if(t instanceof TexasBot && t.getCash() == 0)
             {
-                t.allIn();
+                t.showCards();
             }
         }
         if(copy.size() == 0)
@@ -75,13 +75,11 @@ public class Round
                 turn = 0;
             }
             Texas p = copy.get(turn);
+            turn++;
             if(!p.folded())
             {
                 p.turn(bets, this);
             }
-            turn++;
-            //                oldCall = bets.getCallAmount();
-            return;
         }
         
     }
@@ -111,12 +109,14 @@ public class Round
             boolean addblind = false;
             for(Texas t : copy)
             {
-                if(t.getCash() >= (blind + bets.callAmount))
+                if(t.getCash() >= (blind + (bets.getCallAmount() - t.getBet())))
                     addblind = true;
             }
             if(addblind)
             {
+                System.out.println("Updating callAmount from: " + bets.getCallAmount());
                 bets.callAmount = blind + bets.callAmount;
+                System.out.println("To: " + bets.getCallAmount());
             }
         }
         setCall(bets.getCallAmount());
@@ -135,5 +135,16 @@ public class Round
         });
         timer.setRepeats( false );
         timer.start();
+    }
+    public void iFolded(Texas g)
+    {
+        count--;
+        System.out.println("I folded and the turn was: " + turn + "And the copy sice was: " + copy.size()); 
+        if(turn <= copy.size()-1)
+        {
+            turn --;
+        }
+        copy.remove(g);
+        System.out.println("And the turn is now: " + turn + "and the  copy sice is now:" + copy.size());
     }
 }

@@ -63,6 +63,18 @@ public class TexasLogic
         }        
         return gui.newTable(tableCards);
     }
+    public void resetTable(TexasTable tbl)
+    {
+        ArrayList<TexasTableCard> tableCards = new ArrayList();
+        for(int i = 0; i<5; i++)
+        {
+            image = tc.getPlaceholder();
+            JLabel Card = new JLabel(new ImageIcon(image));
+            TexasTableCard tableCard = gui.newTableCard(i, Card);
+            tableCards.add(tableCard);
+        }
+        tbl.setCards(tableCards);
+    }
         public void newDeck(ArrayList<Texas> players)
     {
 //        gui.newDeck(players);
@@ -84,7 +96,7 @@ public class TexasLogic
                 nrCards++;
             }
             table.addCards();
-			pack();
+            pack();
             new Round(this, tf, dealer, bets, blind).round(bets);
             dealer++;
         }
@@ -99,6 +111,7 @@ public class TexasLogic
         public void whatsNext(Bet betz)
         {
 			this.bets = betz;
+                        System.out.println("Aight whatsnext stats: nrCards: " + nrCards);
 			if(nrCards == 5)
 				{
 					results();
@@ -155,7 +168,8 @@ public class TexasLogic
             {
                 if(t instanceof TexasBot)
                 {
-                    t.showCards();
+                    if(!t.folded())
+                        t.showCards();
                 }
             }
 		gui.whoWins(tf.players, tf.table.getCards());
@@ -169,9 +183,10 @@ public class TexasLogic
             bets.callAmount = blind;
             dealer = 0;
             playersdeal = false;
+            resetTable(tf.table);
+            nrCards = 0;
             for(Texas t : tf.players)
             {
-                if(!t.folded())
                     t.newRound();
             }
             pack();

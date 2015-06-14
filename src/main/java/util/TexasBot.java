@@ -162,11 +162,13 @@ public class TexasBot implements Texas
         }
         turns.setVisible(true);
         tl.pack();
+        System.out.println("Betcall BEFORE bot bet: " + bet.getCallAmount());
 		String result = gui.botBet(player, tl.tf.table.getCards(), bet);
 		if(result.equals("fold"))
 			{
 				this.bet.setText("folded");
 				this.folded = true;
+                                r.iFolded(this);
                                 tl.pack();
 			}
 		else{
@@ -174,7 +176,7 @@ public class TexasBot implements Texas
 			cash.setText(Integer.toString(player.getCash()));
                         if(player.getCash() == 0)
                             allIn();
-			System.out.println("Botbet is: " + player.getBet() + "\n Betcall is: " + bet.getCallAmount());
+			System.out.println("AFTER: Botbet is: " + player.getBet() + "\n Betcall is: " + bet.getCallAmount());
 			tl.pack();
 		}
         delay(r, bet);
@@ -284,6 +286,6 @@ public class TexasBot implements Texas
         public void allIn()
         {
             cash.setText("All in");
-            showCards();
+            //showCards();
         }
 }

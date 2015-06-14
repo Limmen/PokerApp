@@ -161,6 +161,7 @@ public class TexasFrame extends JFrame
                                 if(t.getCash() <= 0)
                                 {
                                     container.remove(t.getPanel());
+                                    players.remove(t);
                                 }
                             }
                             tl.newRound();

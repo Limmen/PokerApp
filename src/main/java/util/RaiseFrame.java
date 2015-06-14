@@ -46,6 +46,10 @@ public class RaiseFrame extends JFrame
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
         container = new JPanel(new MigLayout("wrap 2"));
+        JLabel txt = new JLabel("Maximum amount to raise with (All in): " + Integer.toString(player.getCash() - 
+                (player.bets.getCallAmount() - player.getBet())));
+        txt.setFont(PBold);
+        container.add(txt, "span 2, align center");
         amount = new JLabel("Amount");
         amount.setFont(PBold);
         enter.setFont(Italic);
@@ -60,10 +64,14 @@ public class RaiseFrame extends JFrame
             public void actionPerformed(ActionEvent arg0) 
             {
 				if(raise(enter.getText()))
-				dispose();    
+				dispose();
+                                else
+                                {
+                                    enter.setText("Invalid raise amount");
+                                }
             }
         });
-        JLabel txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
+        txt = new JLabel("Copyright \u00a9 Kim Hammar all rights reserved");
         txt.setFont(Plain);
         container.add(txt, "span 1, gaptop 20");
         add(container);

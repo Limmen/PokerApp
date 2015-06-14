@@ -60,7 +60,7 @@ public class TexasPlayer implements Texas
     private TexasGui gui;
     private TexasLogic tl;
     private Round round;
-    private Bet bets;
+    public Bet bets;
     public TexasPlayer(TexasCards tc, int cash, TexasGui gui, TexasLogic tl)
     {
         this.player = new User(cash);
@@ -73,7 +73,7 @@ public class TexasPlayer implements Texas
         turns = new JLabel(new ImageIcon(image));
         image = tc.getDealer();
         dealer = new JLabel(new ImageIcon(image));
-        this.call = new JButton("Call");
+        this.call = new JButton("Call (XXX)");
         call.setFont(PBold);
         this.fold = new JButton("Fold");
         fold.setFont(PBold);
@@ -105,6 +105,7 @@ public class TexasPlayer implements Texas
                 buttons.setVisible(false);
                 turns.setVisible(false);
                 pack();
+                round.iFolded(me);
                 round.round(bets);
                 
             }
@@ -114,14 +115,14 @@ public class TexasPlayer implements Texas
             public void actionPerformed(ActionEvent arg0)
             {
                 int oldBet = player.getBet();
-                if(player.getCash()>=bets.getCallAmount())
+                if(player.getCash()>=bets.getCallAmount() - oldBet)
                 {
                     player.call(bets.getCallAmount());
                     bets.addBet(bets.getCallAmount() - oldBet);
                 }
                 else
                 {
-                    player.call(player.getCash());
+                    player.call(player.getCash() + oldBet);
                     bets.addBet(player.getCash() - oldBet);
                     //All in (SHow cards?);
                 }
@@ -188,7 +189,7 @@ public class TexasPlayer implements Texas
     }
     public boolean raise()
     {
-        if(bets.getCallAmount() < player.getCash())
+        if((bets.getCallAmount() - player.getBet()) < player.getCash())
         {
             return true;
         }
@@ -233,7 +234,7 @@ public class TexasPlayer implements Texas
         }
         else
         {
-            call.setText("Call");
+            call.setText("Call" + " (" + Integer.toString(bet.getCallAmount()) + ")");
         }
         this.bets = bet;
         this.round = r;
@@ -278,7 +279,7 @@ public class TexasPlayer implements Texas
     }
 	public boolean raise(String val)
 	{
-		int raiseAmount = Integer.parseInt(val) + bets.getCallAmount();
+		int raiseAmount = (Integer.parseInt(val) + bets.getCallAmount() - player.getBet());
 		if(raiseAmount > player.getCash())
 			{
 				return false;
