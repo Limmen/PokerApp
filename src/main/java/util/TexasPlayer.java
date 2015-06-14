@@ -113,29 +113,31 @@ public class TexasPlayer implements Texas
         {
             public void actionPerformed(ActionEvent arg0)
             {
-				int oldBet = player.getBet();
-				if(player.getCash()>=bets.getCallAmount())
-					{
-						player.call(bets.getCallAmount());
-						bets.addBet(bets.getCallAmount() - oldBet);
-					}
-				else
-					{
-						player.call(player.getCash());
-						bets.addBet(player.getCash() - oldBet);
-						//All in (SHow cards?);
-					}
-				updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
-			  
+                int oldBet = player.getBet();
+                if(player.getCash()>=bets.getCallAmount())
+                {
+                    player.call(bets.getCallAmount());
+                    bets.addBet(bets.getCallAmount() - oldBet);
+                }
+                else
+                {
+                    player.call(player.getCash());
+                    bets.addBet(player.getCash() - oldBet);
+                    //All in (SHow cards?);
+                }
+                updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
+                if(player.getCash() == 0)
+                    allIn();
+                
                 buttons.setVisible(false);
                 turns.setVisible(false);
                 pack();
-				round.checkChanges(bets);
+                round.checkChanges(bets);
                 round.round(bets);
             }
         });
         
-		init();
+        init();
     }
     public void pack()
     {
@@ -225,6 +227,14 @@ public class TexasPlayer implements Texas
     @Override
     public void turn(Bet bet, Round r)
     {
+        if(bet.getCallAmount() == player.getBet())
+        {
+            call.setText("Check");
+        }
+        else
+        {
+            call.setText("Call");
+        }
         this.bets = bet;
         this.round = r;
         turns.setVisible(true);
@@ -278,6 +288,8 @@ public class TexasPlayer implements Texas
 				player.raise(Integer.parseInt(val) + (bets.getCallAmount() - player.getBet()));
 				bets.raise(Integer.parseInt(val));
 				updateVals(Integer.toString(player.getBet()), Integer.toString(player.getCash()));
+                                if(player.getCash() == 0)
+                                    allIn();
 				buttons.setVisible(false);
 				turns.setVisible(false);
 				pack();
@@ -297,7 +309,7 @@ public class TexasPlayer implements Texas
         {
             player.winCash(amount);
             cash.setText(Integer.toString(player.getCash()));
-            bet.setText("<html> Congratulations! <font color=green>you won " + (amount - player.getBet()) + "</font></html>");
+            bet.setText("<html><font color=green>You won " + (amount - player.getBet()) + "</font></html>");
         }
         @Override
         public void youLoose()
@@ -335,5 +347,10 @@ public class TexasPlayer implements Texas
             bet.setText(Integer.toString(player.getBet()));
             this.folded = false;
             placeholders();
+        }
+        @Override
+        public void allIn()
+        {
+            cash.setText("All in");
         }
 }

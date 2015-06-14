@@ -154,6 +154,12 @@ public class TexasBot implements Texas
     @Override
     public void turn(Bet bet, Round r)
     {
+        r.checkChanges(bet);
+        if(r.count >= r.copy.size())
+        {
+            r.round(bet);
+            return;
+        }
         turns.setVisible(true);
         tl.pack();
 		String result = gui.botBet(player, tl.tf.table.getCards(), bet);
@@ -161,10 +167,13 @@ public class TexasBot implements Texas
 			{
 				this.bet.setText("folded");
 				this.folded = true;
+                                tl.pack();
 			}
 		else{
 			this.bet.setText(Integer.toString(player.getBet()));
 			cash.setText(Integer.toString(player.getCash()));
+                        if(player.getCash() == 0)
+                            allIn();
 			System.out.println("Botbet is: " + player.getBet() + "\n Betcall is: " + bet.getCallAmount());
 			tl.pack();
 		}
@@ -184,7 +193,7 @@ public class TexasBot implements Texas
             @Override
             public void actionPerformed( ActionEvent e ){
                 turns.setVisible(false);
-				round.checkChanges(bets);
+
 				System.out.println("bot calling round and round count is: " + round.count);
                 round.round(bets);
             }
@@ -232,7 +241,7 @@ public class TexasBot implements Texas
         {
             player.winCash(amount);
             cash.setText(Integer.toString(player.getCash()));
-            bet.setText("<html> Congratulations! <font color=green>you won " + (amount - player.getBet()) + "</font></html>");
+            bet.setText("<html><font color=green>You won " + (amount - player.getBet()) + "</font></html>");
         }
         @Override
         public void youLoose()
@@ -270,5 +279,11 @@ public class TexasBot implements Texas
             bet.setText(Integer.toString(player.getBet()));
             this.folded = false;
             placeholders();
+        }
+        @Override
+        public void allIn()
+        {
+            cash.setText("All in");
+            showCards();
         }
 }

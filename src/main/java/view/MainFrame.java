@@ -89,7 +89,7 @@ public class MainFrame extends JFrame
         JLabel txt = new JLabel("BlackJack");
         txt.setFont(PBold);
         panel.add(txt, "span 1, align center");
-        image = ir.readImage("Blackjack.jpg");
+        image = ir.readImage("blackjack3.png");
         BlackJack = new JButton();
         BlackJack.setIcon(new ImageIcon(image));
         panel.add(BlackJack, "span 1, align center");
@@ -99,7 +99,7 @@ public class MainFrame extends JFrame
         txt = new JLabel("Texas");
         txt.setFont(PBold);
         panel.add(txt, "span 1, align center");
-        image = ir.readImage("texas.png");
+        image = ir.readImage("texas4.png");
         Texas = new JButton();
         Texas.setIcon(new ImageIcon(image));
         panel.add(Texas, "span 1, align center");

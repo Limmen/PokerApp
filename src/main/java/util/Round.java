@@ -5,7 +5,10 @@
 */
 package util;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.Timer;
 import model.texas.Bet;
 import view.texas.TexasFrame;
 import view.texas.TexasLogic;
@@ -40,6 +43,13 @@ public class Round
                 copy.add(t);
             }
         }
+        for(Texas t : copy)
+        {
+            if(t.getCash() == 0)
+            {
+                t.allIn();
+            }
+        }
         if(copy.size() == 0)
             return;
         if(dealer >= copy.size())
@@ -53,26 +63,10 @@ public class Round
     
     public void round(Bet bets)
     {
-        if(count >= copy.size()-1)
+        if(count >= copy.size() || copy.size() < 2)
         {
-            System.out.println("What's next!");
             delah.dealDone();
-            if(copy.size() > 1)
-            {
-                boolean addblind = false;
-                for(Texas t : copy)
-                {
-                   if(t.getCash() >= (blind + bets.callAmount))
-                       addblind = true;
-                }
-                if(addblind)
-                {
-                    bets.callAmount = blind + bets.callAmount;
-                }
-            }
-            setCall(bets.getCallAmount());
-            tl.updateTotal(bets);
-            tl.whatsNext(bets);
+            delay(bets);
         }
         else
         {
@@ -108,5 +102,38 @@ public class Round
         }
         oldCall = bets.getCallAmount();
         tl.updateTotal(bets);
+    }
+    public void whatsNext(Bet bets)
+    {
+        System.out.println("What's next!");
+        if(copy.size() > 1)
+        {
+            boolean addblind = false;
+            for(Texas t : copy)
+            {
+                if(t.getCash() >= (blind + bets.callAmount))
+                    addblind = true;
+            }
+            if(addblind)
+            {
+                bets.callAmount = blind + bets.callAmount;
+            }
+        }
+        setCall(bets.getCallAmount());
+        tl.updateTotal(bets);
+        tl.whatsNext(bets);
+    }
+    public void delay(Bet bets)
+    {
+        int delay = 2000;
+        final Bet bet = bets;
+        Timer timer = new Timer( delay, new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent e ){
+                whatsNext(bet);
+            }
+        });
+        timer.setRepeats( false );
+        timer.start();
     }
 }

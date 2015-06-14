@@ -32,7 +32,7 @@ public class BlackJackCards
     {
         try
         {
-            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+            return ImageIO.read(new File("../src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {
@@ -44,7 +44,7 @@ public class BlackJackCards
     {
          try
         {
-            return ImageIO.read(new File("src/main/resources/images/card_" + id + ".png"));
+            return ImageIO.read(new File("../src/main/resources/images/card_" + id + ".png"));
         }
         catch(Exception e)
         {

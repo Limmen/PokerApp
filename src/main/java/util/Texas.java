@@ -28,4 +28,5 @@ public interface Texas {
     public void showCards();
     public void hideCards();
     public void newRound();
+    public void allIn();
 }
