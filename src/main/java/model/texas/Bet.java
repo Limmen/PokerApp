@@ -24,11 +24,9 @@ public class Bet
     }
     public void raise(int bet)
     {
-		System.out.println("Bet raising with : " + bet + " old call was: " + callAmount);
         totalBet = totalBet - callAmount;
         callAmount = callAmount + bet;
         totalBet = totalBet + callAmount;
-		System.out.println("Now callAmount is raised to: " + callAmount);
     }
     public int getTotalBet()
     {

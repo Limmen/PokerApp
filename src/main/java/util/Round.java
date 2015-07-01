@@ -1,8 +1,8 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package util;
 
 import java.awt.event.ActionEvent;
@@ -37,25 +37,25 @@ public class Round
         this.blind = blind;
         copy = new ArrayList();
         for(Texas t : tf.players)
-        {
-            if(!t.folded())
             {
-                copy.add(t);
+                if(!t.folded())
+                    {
+                        copy.add(t);
+                    }
             }
-        }
         for(Texas t : copy)
-        {
-            if(t instanceof TexasBot && t.getCash() == 0)
             {
-                t.showCards();
+                if(t instanceof TexasBot && t.getCash() == 0)
+                    {
+                        t.showCards();
+                    }
             }
-        }
         if(copy.size() == 0)
             return;
         if(dealer >= copy.size())
-        {
-            dealer = 0;
-        }
+            {
+                dealer = 0;
+            }
         delah = copy.get(dealer);
         delah.youDeal();
         setCall(bets.getCallAmount());
@@ -64,23 +64,23 @@ public class Round
     public void round(Bet bets)
     {
         if(count >= copy.size() || copy.size() < 2)
-        {
-            delah.dealDone();
-            delay(bets);
-        }
+            {
+                delah.dealDone();
+                delay(bets);
+            }
         else
-        {
-            if(turn >= copy.size())
             {
-                turn = 0;
+                if(turn >= copy.size())
+                    {
+                        turn = 0;
+                    }
+                Texas p = copy.get(turn);
+                turn++;
+                if(!p.folded())
+                    {
+                        p.turn(bets, this);
+                    }
             }
-            Texas p = copy.get(turn);
-            turn++;
-            if(!p.folded())
-            {
-                p.turn(bets, this);
-            }
-        }
         
     }
     public void setCall(int callz)
@@ -90,35 +90,32 @@ public class Round
     public void checkChanges(Bet bets)
     {
         if(oldCall != bets.getCallAmount())
-        {
-            count = 0;
-            setCall(bets.getCallAmount());
-        }
+            {
+                count = 0;
+                setCall(bets.getCallAmount());
+            }
         if(oldCall == bets.getCallAmount())
-        {
-            count++;
-        }
+            {
+                count++;
+            }
         oldCall = bets.getCallAmount();
         tl.updateTotal(bets);
     }
     public void whatsNext(Bet bets)
     {
-        System.out.println("What's next!");
         if(copy.size() > 1)
-        {
-            boolean addblind = false;
-            for(Texas t : copy)
             {
-                if(t.getCash() >= (blind + (bets.getCallAmount() - t.getBet())))
-                    addblind = true;
+                boolean addblind = false;
+                for(Texas t : copy)
+                    {
+                        if(t.getCash() >= (blind + (bets.getCallAmount() - t.getBet())))
+                            addblind = true;
+                    }
+                if(addblind)
+                    {
+                        bets.callAmount = blind + bets.callAmount;
+                    }
             }
-            if(addblind)
-            {
-                System.out.println("Updating callAmount from: " + bets.getCallAmount());
-                bets.callAmount = blind + bets.callAmount;
-                System.out.println("To: " + bets.getCallAmount());
-            }
-        }
         setCall(bets.getCallAmount());
         tl.updateTotal(bets);
         tl.whatsNext(bets);
@@ -128,23 +125,21 @@ public class Round
         int delay = 2000;
         final Bet bet = bets;
         Timer timer = new Timer( delay, new ActionListener(){
-            @Override
-            public void actionPerformed( ActionEvent e ){
-                whatsNext(bet);
-            }
-        });
+                @Override
+                public void actionPerformed( ActionEvent e ){
+                    whatsNext(bet);
+                }
+            });
         timer.setRepeats( false );
         timer.start();
     }
     public void iFolded(Texas g)
     {
         count--;
-        System.out.println("I folded and the turn was: " + turn + "And the copy sice was: " + copy.size()); 
         if(turn <= copy.size()-1)
-        {
-            turn --;
-        }
+            {
+                turn --;
+            }
         copy.remove(g);
-        System.out.println("And the turn is now: " + turn + "and the  copy sice is now:" + copy.size());
     }
 }

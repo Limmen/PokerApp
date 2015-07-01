@@ -45,7 +45,6 @@ public class TexasCards
         catch(Exception e)
         {
 			e.printStackTrace();
-            System.out.println("Could not read image!!!");
             return null;
         }
     }
@@ -58,7 +57,6 @@ public class TexasCards
         catch(Exception e)
         {
 			e.printStackTrace();
-            System.out.println("Could not read image!");
             return null;
         }
     }

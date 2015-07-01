@@ -136,12 +136,6 @@ public class TexasFrame extends JFrame
 
         for(Texas p: players)
         {
-            if(p.getPanel() == null)
-                System.out.println("Players panel is Null!");
-			if (container == null)
-				System.out.println("Container is Null!");
-			if(p == null)
-				System.out.println("Player is Null!");
             container.add(p.getPanel(),"span 1, align center");
         } 
         buttons = new JPanel(new MigLayout("wrap 2"));

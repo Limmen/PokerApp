@@ -76,10 +76,8 @@ public class Bot implements Player
     {
         if(raise > cash)
             raise = cash;
-        System.out.println("Bot raising with " + raise + " old bet was " + currentbet);
         currentbet = currentbet + raise;
         cash = cash - raise;
-        System.out.println("Bots new bet is: " + currentbet);
         
     }
     @Override

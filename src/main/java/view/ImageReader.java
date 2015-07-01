@@ -29,7 +29,6 @@ public class ImageReader
         }
         catch(Exception e)
         {
-            System.out.println("Could not read image");
             return null;
         }
     }

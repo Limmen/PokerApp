@@ -36,7 +36,6 @@ public class BlackJackCards
         }
         catch(Exception e)
         {
-            System.out.println("Could not read image");
             return null;
         }
     }
@@ -48,7 +47,6 @@ public class BlackJackCards
         }
         catch(Exception e)
         {
-            System.out.println("Could not read image");
             return null;
         }
     }

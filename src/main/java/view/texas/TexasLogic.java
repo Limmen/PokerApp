@@ -111,7 +111,6 @@ public class TexasLogic
         public void whatsNext(Bet betz)
         {
 			this.bets = betz;
-                        System.out.println("Aight whatsnext stats: nrCards: " + nrCards);
 			if(nrCards == 5)
 				{
 					results();

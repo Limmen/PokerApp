@@ -46,7 +46,6 @@ public class DeckManager
         }
         else
         {
-            System.out.println("Deck is empty!");
             return null;
         }
     }

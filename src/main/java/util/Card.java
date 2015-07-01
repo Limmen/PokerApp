@@ -42,8 +42,6 @@ public class Card implements Comparable
     }
     public void print()
     {
-        System.out.println("Card: " + "Id: " + this.id + " color: " 
-                    + this.color + " value: " + this.value);
     }
 
     @Override
